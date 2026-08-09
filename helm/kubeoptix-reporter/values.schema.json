@@ -46,11 +46,12 @@
     },
     "persistence": {
       "type": "object",
-      "required": ["enabled", "existingClaim", "mountPath"],
+      "required": ["enabled", "existingClaim", "mountPath", "reportsPath"],
       "properties": {
         "enabled": {"type": "boolean"},
         "existingClaim": {"type": "string", "minLength": 1},
-        "mountPath": {"type": "string", "pattern": "^/"}
+        "mountPath": {"type": "string", "pattern": "^/"},
+        "reportsPath": {"type": "string", "pattern": "^/"}
       }
     },
     "route": {

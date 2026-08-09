@@ -58,7 +58,8 @@ podEnv:
 persistence:
   enabled: true
   existingClaim: harvester-app-data
-  mountPath: /data/reports
+  mountPath: /app/data
+  reportsPath: /app/data/reports
 
 resources:
   requests:

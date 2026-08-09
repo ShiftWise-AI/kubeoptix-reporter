@@ -144,6 +144,13 @@ fi
 
 oc logs -n "$NAMESPACE" -f "$BUILD_NAME"
 
+log "Aguardando conclusão do build $BUILD_NAME"
+oc wait -n "$NAMESPACE" \
+    --for=jsonpath='{.status.phase}'=Complete \
+    "$BUILD_NAME" \
+    --timeout="$TIMEOUT" \
+    || true
+
 BUILD_PHASE="$(oc get "$BUILD_NAME" -n "$NAMESPACE" -o jsonpath='{.status.phase}')"
 [[ "$BUILD_PHASE" == "Complete" ]] \
     || fail "Build '$BUILD_NAME' terminou com status '$BUILD_PHASE'"
