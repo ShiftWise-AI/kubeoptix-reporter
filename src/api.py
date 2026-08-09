@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from starlette.background import BackgroundTask
 
-REPORTS_DIR = Path(os.getenv("DATA_DIR", "/data/reports"))
+REPORTS_DIR = Path(os.getenv("DATA_DIR", "/app/data/reports"))
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 LOG_LEVELS = {
     "DEBUG": logging.DEBUG,
