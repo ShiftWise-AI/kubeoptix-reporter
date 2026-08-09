@@ -1,7 +1,7 @@
 from pathlib import Path
 from urllib.parse import quote
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Path as PathParameter
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from starlette.background import BackgroundTask
@@ -26,9 +26,9 @@ async def health_check():
     return {"status": "ok"}
 
 
-@app.get("/report")
+@app.get("/report/{filename}")
 async def get_report(
-    filename: str = Query(..., description="Nome do arquivo Markdown")
+    filename: str = PathParameter(..., description="Nome do arquivo Markdown")
 ) -> StreamingResponse:
     if Path(filename).name != filename or not filename.lower().endswith(".md"):
         raise HTTPException(
