@@ -74,11 +74,26 @@ fi
 log "Validando chart Helm com $VALUES_FILE"
 helm lint "$CHART_DIR" -f "$VALUES_FILE"
 
-log "Instalando release $RELEASE_NAME no namespace $NAMESPACE"
-helm upgrade --install "$RELEASE_NAME" "$CHART_DIR" \
-    --namespace "$NAMESPACE" \
-    -f "$VALUES_FILE" \
-    "${HELM_ARGS[@]}"
+IS_UPDATE=false
+if helm status "$RELEASE_NAME" --namespace "$NAMESPACE" >/dev/null 2>&1; then
+    IS_UPDATE=true
+    log "Atualizando release $RELEASE_NAME no namespace $NAMESPACE"
+    HELM_UPGRADE_ARGS=()
+    if helm upgrade --help | grep -q -- '--force-conflicts'; then
+        HELM_UPGRADE_ARGS+=(--force-conflicts)
+    fi
+    helm upgrade "$RELEASE_NAME" "$CHART_DIR" \
+        --namespace "$NAMESPACE" \
+        -f "$VALUES_FILE" \
+        "${HELM_UPGRADE_ARGS[@]}" \
+        "${HELM_ARGS[@]}"
+else
+    log "Instalando release $RELEASE_NAME no namespace $NAMESPACE"
+    helm install "$RELEASE_NAME" "$CHART_DIR" \
+        --namespace "$NAMESPACE" \
+        -f "$VALUES_FILE" \
+        "${HELM_ARGS[@]}"
+fi
 
 BUILD_CONFIG="kubeoptix-reporter"
 
@@ -105,17 +120,22 @@ oc get persistentvolumeclaim "$PVC_NAME" -n "$NAMESPACE" >/dev/null 2>&1 \
 oc get secret "$GITHUB_SECRET" -n "$NAMESPACE" >/dev/null 2>&1 \
     || fail "Secret '$GITHUB_SECRET' definido em '$VALUES_FILE' não encontrado no namespace '$NAMESPACE'"
 
-BUILD_NAME="$(oc get builds \
-    -n "$NAMESPACE" \
-    -l "buildconfig=${BUILD_CONFIG}" \
-    --sort-by=.metadata.creationTimestamp \
-    -o name | tail -n 1)"
-
-if [[ -z "$BUILD_NAME" ]]; then
-    log "Iniciando build $BUILD_CONFIG"
+if [[ "$IS_UPDATE" == true ]]; then
+    log "Iniciando novo build $BUILD_CONFIG para a atualização"
     BUILD_NAME="$(oc start-build "$BUILD_CONFIG" -n "$NAMESPACE" -o name)"
 else
-    log "Acompanhando build disparado pelo BuildConfig: $BUILD_NAME"
+    BUILD_NAME="$(oc get builds \
+        -n "$NAMESPACE" \
+        -l "buildconfig=${BUILD_CONFIG}" \
+        --sort-by=.metadata.creationTimestamp \
+        -o name | tail -n 1)"
+
+    if [[ -z "$BUILD_NAME" ]]; then
+        log "Iniciando build $BUILD_CONFIG"
+        BUILD_NAME="$(oc start-build "$BUILD_CONFIG" -n "$NAMESPACE" -o name)"
+    else
+        log "Acompanhando build disparado pelo BuildConfig: $BUILD_NAME"
+    fi
 fi
 
 oc logs -n "$NAMESPACE" -f "$BUILD_NAME"
@@ -123,6 +143,9 @@ oc logs -n "$NAMESPACE" -f "$BUILD_NAME"
 BUILD_PHASE="$(oc get "$BUILD_NAME" -n "$NAMESPACE" -o jsonpath='{.status.phase}')"
 [[ "$BUILD_PHASE" == "Complete" ]] \
     || fail "Build '$BUILD_NAME' terminou com status '$BUILD_PHASE'"
+
+log "Reiniciando StatefulSet $STATEFULSET com a imagem atualizada"
+oc rollout restart "statefulset/$STATEFULSET" -n "$NAMESPACE"
 
 log "Aguardando StatefulSet $STATEFULSET"
 oc rollout status "statefulset/$STATEFULSET" -n "$NAMESPACE" --timeout="$TIMEOUT"
@@ -132,6 +155,17 @@ SERVICE="$(oc get service \
     -l "app.kubernetes.io/instance=${RELEASE_NAME},app.kubernetes.io/name=kubeoptix-reporter" \
     -o jsonpath='{.items[?(@.spec.clusterIP!="None")].metadata.name}')"
 
+ROUTE_HOST="$(oc get route \
+    -n "$NAMESPACE" \
+    -l "app.kubernetes.io/instance=${RELEASE_NAME},app.kubernetes.io/name=kubeoptix-reporter" \
+    -o jsonpath='{.items[0].spec.host}' 2>/dev/null || true)"
+
 log "Instalação concluída"
-printf 'Release:   %s\nNamespace: %s\nService:   %s:8000\nHealth:    /health\n' \
+printf 'Release:   %s\nNamespace: %s\nService:   %s:8000\n' \
     "$RELEASE_NAME" "$NAMESPACE" "$SERVICE"
+
+if [[ -n "$ROUTE_HOST" ]]; then
+    printf 'Route:     https://%s\nHealth:    https://%s/health\n' "$ROUTE_HOST" "$ROUTE_HOST"
+else
+    printf 'Route:     disabled\nHealth:    /health\n'
+fi

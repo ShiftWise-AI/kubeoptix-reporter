@@ -39,6 +39,22 @@
         "mountPath": {"type": "string", "pattern": "^/"}
       }
     },
+    "route": {
+      "type": "object",
+      "required": ["enabled", "host", "tls"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "host": {"type": "string"},
+        "tls": {
+          "type": "object",
+          "required": ["termination", "insecureEdgeTerminationPolicy"],
+          "properties": {
+            "termination": {"type": "string", "enum": ["edge", "passthrough", "reencrypt"]},
+            "insecureEdgeTerminationPolicy": {"type": "string", "enum": ["Allow", "Disable", "Redirect"]}
+          }
+        }
+      }
+    },
     "resources": {"type": "object"}
   }
 }

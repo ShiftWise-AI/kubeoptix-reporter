@@ -28,6 +28,13 @@ image:
 service:
   port: 8000
 
+route:
+  enabled: true
+  host: ""
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+
 persistence:
   existingClaim: harvester-app-data
   mountPath: /data/reports

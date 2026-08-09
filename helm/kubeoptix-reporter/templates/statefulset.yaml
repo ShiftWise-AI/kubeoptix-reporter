@@ -4,9 +4,6 @@ metadata:
   name: {{ include "kubeoptix-reporter.fullname" . }}
   labels:
     {{- include "kubeoptix-reporter.labels" . | nindent 4 }}
-  annotations:
-    image.openshift.io/triggers: >-
-      [{"from":{"kind":"ImageStreamTag","name":"{{ include "kubeoptix-reporter.fullname" . }}:{{ .Values.image.tag }}"},"fieldPath":"spec.template.spec.containers[?(@.name==\"kubeoptix-reporter\")].image","pause":"false"}]
 spec:
   serviceName: {{ include "kubeoptix-reporter.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
