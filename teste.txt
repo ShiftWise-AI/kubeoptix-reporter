@@ -1,10 +1,9 @@
 BASE_URL="https://reporter-shiftwise-ai.apps-crc.testing"
 REPORT_FILE="openshift-apiserver-local.md" 
 
-curl -v -k "${BASE_URL}/health
+curl -v -k "${BASE_URL}/health"
 
 curl -k --fail-with-body --silent --show-error \
   --request GET \
   --header "Accept: text/markdown" \
-  --output "${REPORT_FILE}" \
   "${BASE_URL}/report/${REPORT_FILE}"
