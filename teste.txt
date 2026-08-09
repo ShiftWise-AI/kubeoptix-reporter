@@ -1,0 +1,9 @@
+BASE_URL="http://127.0.0.1:8000"
+REPORT_FILE="teste.md" 
+
+
+curl --fail-with-body --silent --show-error \
+  --request GET \
+  --header "Accept: text/markdown" \
+  --output "${REPORT_FILE}" \
+  "${BASE_URL}/report/${REPORT_FILE}"

@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from urllib.parse import quote
 
@@ -6,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from starlette.background import BackgroundTask
 
-REPORTS_DIR = Path("/data/reports")
+REPORTS_DIR = Path(os.getenv("DATA_DIR", "/data/reports"))
 
 app = FastAPI(
     title="Assessment API",

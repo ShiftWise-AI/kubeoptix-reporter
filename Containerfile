@@ -5,7 +5,7 @@ USER 0
 WORKDIR /app
 
 ENV LOG_DIR=/app/logs/ \
-    DATA_DIR=/app/data/ \
+    DATA_DIR=/app/data/reports \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     KUBEOPTIX_API_HOST=0.0.0.0 \
