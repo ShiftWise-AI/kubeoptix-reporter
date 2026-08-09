@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from starlette.background import BackgroundTask
 
-REPORTS_DIR = Path("/app/data/reports")
+REPORTS_DIR = Path("/data/reports")
 
 app = FastAPI(
     title="Assessment API",
