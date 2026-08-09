@@ -1,3 +1,4 @@
+{{- if and .Values.deploy.enabled .Values.scalePolicy.enabled }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
@@ -39,3 +40,4 @@ spec:
   policyName: {{ include "kubeoptix-reporter.fullname" . }}
   validationActions:
     - Deny
+{{- end }}

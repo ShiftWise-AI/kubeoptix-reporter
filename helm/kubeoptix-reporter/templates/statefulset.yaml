@@ -1,3 +1,4 @@
+{{- if .Values.deploy.enabled }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -5,8 +6,8 @@ metadata:
   labels:
     {{- include "kubeoptix-reporter.labels" . | nindent 4 }}
 spec:
-  serviceName: {{ include "kubeoptix-reporter.fullname" . }}-headless
-  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ .Values.service.headless.name }}
+  replicas: {{ .Values.scalePolicy.maxReplicas }}
   podManagementPolicy: OrderedReady
   selector:
     matchLabels:
@@ -32,9 +33,11 @@ spec:
           env:
             - name: REPORT_DIR
               value: {{ .Values.persistence.mountPath | quote }}
+            - name: TZ
+              value: {{ .Values.podEnv.TZ | quote }}              
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.service.api.targetPort }}
               protocol: TCP
           startupProbe:
             httpGet:
@@ -53,10 +56,15 @@ spec:
             {{- toYaml .Values.probes.liveness | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.persistence.enabled }}
           volumeMounts:
-            - name: reports
-              mountPath: {{ .Values.persistence.mountPath | quote }}
+            - name: app-data
+              mountPath: {{ .Values.persistence.mountPath }}     
+          {{- end }}
+      {{- if .Values.persistence.enabled }}
       volumes:
-        - name: reports
+        - name: app-data
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | quote }}
+            claimName: {{ .Values.persistence.existingClaim }}
+      {{- end }}
+{{- end }}

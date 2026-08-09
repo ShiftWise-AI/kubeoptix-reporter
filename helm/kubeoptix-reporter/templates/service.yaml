@@ -1,22 +1,26 @@
+{{- if and .Values.deploy.enabled .Values.service.api.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "kubeoptix-reporter.fullname" . }}
+  name: {{ .Values.service.api.name }}
   labels:
     {{- include "kubeoptix-reporter.labels" . | nindent 4 }}
 spec:
+  type: {{ .Values.service.api.type }}
   ports:
     - name: http
-      port: {{ .Values.service.port }}
-      targetPort: http
+      port: {{ .Values.service.api.port }}
+      targetPort: {{ .Values.service.api.targetPort }}
       protocol: TCP
   selector:
     {{- include "kubeoptix-reporter.selectorLabels" . | nindent 4 }}
+{{- end }}
+{{- if and .Values.deploy.enabled .Values.service.headless.enabled }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "kubeoptix-reporter.fullname" . }}-headless
+  name: {{ .Values.service.headless.name }}
   labels:
     {{- include "kubeoptix-reporter.labels" . | nindent 4 }}
 spec:
@@ -24,8 +28,9 @@ spec:
   publishNotReadyAddresses: true
   ports:
     - name: http
-      port: {{ .Values.service.port }}
+      port: {{ .Values.service.headless.port }}
       targetPort: http
       protocol: TCP
   selector:
     {{- include "kubeoptix-reporter.selectorLabels" . | nindent 4 }}
+{{- end }}

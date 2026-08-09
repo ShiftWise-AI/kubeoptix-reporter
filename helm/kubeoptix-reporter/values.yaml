@@ -1,4 +1,5 @@
-replicaCount: 1
+deploy:
+  enabled: true
 
 nameOverride: ""
 fullnameOverride: ""
@@ -22,20 +23,39 @@ build:
       memory: 1Gi
 
 image:
+  useBuildOutput: true
+  repository: ""
   tag: latest
   pullPolicy: Always
 
 service:
-  port: 8000
+  headless:
+    enabled: true
+    name: reporter
+    port: 8000
+  api:
+    enabled: true
+    name: reporter-api
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
 
 route:
   enabled: true
+  name: reporter
   host: ""
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Redirect
+  termination: edge
+  insecureEdgeTerminationPolicy: Redirect
+
+scalePolicy:
+  enabled: true
+  maxReplicas: 1
+
+podEnv:
+  TZ: America/Sao_Paulo
 
 persistence:
+  enabled: true
   existingClaim: harvester-app-data
   mountPath: /data/reports
 

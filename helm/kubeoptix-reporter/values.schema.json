@@ -1,12 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["replicaCount", "build", "persistence", "resources"],
+  "required": ["build", "image", "service", "scalePolicy", "persistence", "resources"],
   "properties": {
-    "replicaCount": {
-      "type": "integer",
-      "const": 1,
-      "description": "This workload must run with exactly one replica."
+    "deploy": {
+      "type": "object",
+      "required": ["enabled"],
+      "properties": {
+        "enabled": {"type": "boolean"}
+      }
     },
     "build": {
       "type": "object",
@@ -33,25 +35,32 @@
     },
     "persistence": {
       "type": "object",
-      "required": ["existingClaim", "mountPath"],
+      "required": ["enabled", "existingClaim", "mountPath"],
       "properties": {
+        "enabled": {"type": "boolean"},
         "existingClaim": {"type": "string", "minLength": 1},
         "mountPath": {"type": "string", "pattern": "^/"}
       }
     },
     "route": {
       "type": "object",
-      "required": ["enabled", "host", "tls"],
+      "required": ["enabled", "host", "termination", "insecureEdgeTerminationPolicy"],
       "properties": {
         "enabled": {"type": "boolean"},
         "host": {"type": "string"},
-        "tls": {
-          "type": "object",
-          "required": ["termination", "insecureEdgeTerminationPolicy"],
-          "properties": {
-            "termination": {"type": "string", "enum": ["edge", "passthrough", "reencrypt"]},
-            "insecureEdgeTerminationPolicy": {"type": "string", "enum": ["Allow", "Disable", "Redirect"]}
-          }
+        "termination": {"type": "string", "enum": ["edge", "passthrough", "reencrypt"]},
+        "insecureEdgeTerminationPolicy": {"type": "string", "enum": ["Allow", "Disable", "Redirect"]}
+      }
+    },
+    "scalePolicy": {
+      "type": "object",
+      "required": ["enabled", "maxReplicas"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "maxReplicas": {
+          "type": "integer",
+          "const": 1,
+          "description": "This workload must run with exactly one replica."
         }
       }
     },

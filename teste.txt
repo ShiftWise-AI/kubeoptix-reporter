@@ -1,0 +1,31 @@
+# Endereco base da aplicacao
+BASE_URL="https://kubeoptix-reporter-shiftwise-ai.apps-crc.testing"
+
+# Verificar a saude da aplicacao
+curl --fail-with-body --silent --show-error \
+  "${BASE_URL}/health"
+
+# Consultar um relatorio Markdown
+# Substitua o caminho abaixo por um arquivo .md existente no container.
+REPORT_FILE="default-local.md"
+curl --fail-with-body --silent --show-error --get \
+  --data-urlencode "file=${REPORT_FILE}" \
+  "${BASE_URL}/assessment/report"
+echo $REPORT_FILE
+
+# Validar rejeicao de arquivo sem extensao .md (HTTP 400)
+curl --silent --show-error --get \
+  --data-urlencode "file=/tmp/teste.txt" \
+  --write-out "\nHTTP %{http_code}\n" \
+  "${BASE_URL}/assessment/report"
+
+# Validar arquivo Markdown inexistente (HTTP 404)
+curl --silent --show-error --get \
+  --data-urlencode "file=/tmp/inexistente.md" \
+  --write-out "\nHTTP %{http_code}\n" \
+  "${BASE_URL}/assessment/report"
+
+# Documentacao e especificacao OpenAPI
+curl --fail-with-body --silent --show-error \
+  "${BASE_URL}/openapi.json"
+# Navegador: https://kubeoptix-reporter-shiftwise-ai.apps-crc.testing/docs

@@ -29,5 +29,9 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "kubeoptix-reporter.image" -}}
+{{- if .Values.image.useBuildOutput }}
 {{- printf "image-registry.openshift-image-registry.svc:5000/%s/%s:%s" .Release.Namespace (include "kubeoptix-reporter.fullname" .) .Values.image.tag }}
+{{- else }}
+{{- printf "%s:%s" .Values.image.repository .Values.image.tag }}
+{{- end }}
 {{- end }}
