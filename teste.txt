@@ -1,31 +1,37 @@
-# Endereco base da aplicacao
+# Application base URL
 BASE_URL="https://kubeoptix-reporter-shiftwise-ai.apps-crc.testing"
 
-# Verificar a saude da aplicacao
-curl --fail-with-body --silent --show-error \
+# Check application health
+curl --fail-with-body --silent --show-error -k \
   "${BASE_URL}/health"
+printf '\n'
 
-# Consultar um relatorio Markdown
-# Substitua o caminho abaixo por um arquivo .md existente no container.
+# Stream a Markdown report from /app/data/reports
 REPORT_FILE="default-local.md"
-curl --fail-with-body --silent --show-error --get \
-  --data-urlencode "file=${REPORT_FILE}" \
-  "${BASE_URL}/assessment/report"
-echo $REPORT_FILE
+curl --fail-with-body --silent --show-error --get -k \
+  --data-urlencode "filename=${REPORT_FILE}" \
+  "${BASE_URL}/report"
+printf '\n'
 
-# Validar rejeicao de arquivo sem extensao .md (HTTP 400)
-curl --silent --show-error --get \
-  --data-urlencode "file=/tmp/teste.txt" \
+# Reject a filename without the .md extension (HTTP 400)
+curl --silent --show-error --get -k \
+  --data-urlencode "filename=teste.txt" \
   --write-out "\nHTTP %{http_code}\n" \
-  "${BASE_URL}/assessment/report"
+  "${BASE_URL}/report"
 
-# Validar arquivo Markdown inexistente (HTTP 404)
-curl --silent --show-error --get \
-  --data-urlencode "file=/tmp/inexistente.md" \
+# Reject path traversal (HTTP 400)
+curl --silent --show-error --get -k \
+  --data-urlencode "filename=../default-local.md" \
   --write-out "\nHTTP %{http_code}\n" \
-  "${BASE_URL}/assessment/report"
+  "${BASE_URL}/report"
 
-# Documentacao e especificacao OpenAPI
-curl --fail-with-body --silent --show-error \
+# Report a missing Markdown file (HTTP 404)
+curl --silent --show-error --get -k \
+  --data-urlencode "filename=inexistente.md" \
+  --write-out "\nHTTP %{http_code}\n" \
+  "${BASE_URL}/report"
+
+# OpenAPI specification and interactive documentation
+curl --fail-with-body --silent --show-error -k \
   "${BASE_URL}/openapi.json"
-# Navegador: https://kubeoptix-reporter-shiftwise-ai.apps-crc.testing/docs
+# Browser: https://kubeoptix-reporter-shiftwise-ai.apps-crc.testing/docs

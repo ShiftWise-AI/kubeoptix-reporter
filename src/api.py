@@ -1,7 +1,12 @@
-import os
+from pathlib import Path
+from urllib.parse import quote
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from starlette.background import BackgroundTask
+
+REPORTS_DIR = Path("/app/data/reports")
 
 app = FastAPI(
     title="Assessment API",
@@ -17,38 +22,42 @@ app.add_middleware(
 
 
 @app.get("/health", tags=["Health"])
-def health_check():
+async def health_check():
     return {"status": "ok"}
 
 
-@app.get("/assessment/report")
-def get_assessment_report(
-    file: str = Query(..., description="Caminho do arquivo Markdown")
-):
-    if not file.lower().endswith(".md"):
+@app.get("/report")
+async def get_report(
+    filename: str = Query(..., description="Nome do arquivo Markdown")
+) -> StreamingResponse:
+    if Path(filename).name != filename or not filename.lower().endswith(".md"):
         raise HTTPException(
             status_code=400,
-            detail="O arquivo deve possuir extensão .md"
+            detail="Informe somente o nome de um arquivo com extensão .md"
         )
 
-    if not os.path.isfile(file):
+    reports_dir = REPORTS_DIR.resolve()
+    report_path = (reports_dir / filename).resolve()
+
+    if not report_path.is_relative_to(reports_dir) or not report_path.is_file():
         raise HTTPException(
             status_code=404,
-            detail=f"Arquivo não encontrado: {file}"
+            detail=f"Arquivo não encontrado: {filename}"
         )
 
     try:
-        with open(file, "r", encoding="utf-8") as f:
-            content = f.read()
-
-        return {
-            "filename": os.path.basename(file),
-            "path": file,
-            "content": content
-        }
-
+        report = report_path.open("r", encoding="utf-8")
     except OSError as exc:
         raise HTTPException(
             status_code=500,
             detail=f"Erro ao ler o arquivo: {exc}"
-        )
+        ) from exc
+
+    return StreamingResponse(
+        report,
+        media_type="text/markdown; charset=utf-8",
+        headers={
+            "Content-Disposition": f"inline; filename*=UTF-8''{quote(filename)}"
+        },
+        background=BackgroundTask(report.close),
+    )

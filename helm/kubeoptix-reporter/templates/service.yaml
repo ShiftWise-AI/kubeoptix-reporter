@@ -20,7 +20,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.service.headless.name }}
+  name: {{ include "kubeoptix-reporter.headlessServiceName" . }}
   labels:
     {{- include "kubeoptix-reporter.labels" . | nindent 4 }}
 spec:

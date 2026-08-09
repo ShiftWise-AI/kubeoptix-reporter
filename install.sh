@@ -109,13 +109,17 @@ STATEFULSET="$(oc get statefulset \
 
 PVC_NAME="$(oc get statefulset "$STATEFULSET" \
     -n "$NAMESPACE" \
-    -o jsonpath='{.spec.template.spec.volumes[?(@.name=="reports")].persistentVolumeClaim.claimName}')"
+    -o jsonpath='{.spec.template.spec.volumes[?(@.persistentVolumeClaim)].persistentVolumeClaim.claimName}')"
 GITHUB_SECRET="$(oc get buildconfig "$BUILD_CONFIG" \
     -n "$NAMESPACE" \
     -o jsonpath='{.spec.source.sourceSecret.name}')"
 
-oc get persistentvolumeclaim "$PVC_NAME" -n "$NAMESPACE" >/dev/null 2>&1 \
-    || fail "PVC '$PVC_NAME' definido em '$VALUES_FILE' não encontrado no namespace '$NAMESPACE'"
+if [[ -n "$PVC_NAME" ]]; then
+    oc get persistentvolumeclaim "$PVC_NAME" -n "$NAMESPACE" >/dev/null 2>&1 \
+        || fail "PVC '$PVC_NAME' definido em '$VALUES_FILE' não encontrado no namespace '$NAMESPACE'"
+else
+    log "Persistência desabilitada; validação de PVC ignorada"
+fi
 
 oc get secret "$GITHUB_SECRET" -n "$NAMESPACE" >/dev/null 2>&1 \
     || fail "Secret '$GITHUB_SECRET' definido em '$VALUES_FILE' não encontrado no namespace '$NAMESPACE'"

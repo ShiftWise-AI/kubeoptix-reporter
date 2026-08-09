@@ -6,7 +6,6 @@ WORKDIR /app
 
 ENV LOG_DIR=/app/logs/ \
     DATA_DIR=/app/data/ \
-    REPORT_DIR=/app/report \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     KUBEOPTIX_API_HOST=0.0.0.0 \
@@ -16,7 +15,7 @@ RUN dnf install -y \
     python3 \
     python3-pip \
     && dnf clean all \
-    && mkdir -p "$LOG_DIR" "$DATA_DIR" "$REPORT_DIR" \
+    && mkdir -p "$LOG_DIR" "$DATA_DIR" \
     && chgrp -R 0 /app \
     && chmod -R g=u /app
 
