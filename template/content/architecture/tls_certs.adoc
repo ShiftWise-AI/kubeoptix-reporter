@@ -1,0 +1,40 @@
+////
+Propósito
+-------
+Informações sobre certificados SSL implantados.
+
+////
+
+[id="ssl_certs_{context}"]
+= Certificados TLS/SSL
+
+A tabela abaixo fornece detalhes sobre os certificados TLS/SSL que foram implantados como parte do compromisso.
+Para evitar uma interrupção no serviço, certifique-se de que os certificados sejam renovados antes da data de expiração.
+
+#TODO - Tabela completa com detalhes do certificado TLS/SSL#
+
+[id=tls_cert_info,title='Informações sobre certificados TLS/SSL']
+[cols="1,2a,1,1", options="header"]
+|===
+
+| Inscrição
+| Localização do certificado
+| Autoridade de certificação
+| Data de validade
+
+| [.example]#Exemplo Inscrição#
+| [cols="1,2"]
+!===
+! Servidor
+! [.example]#app.example.com#
+
+! Certificado
+! [.example]#/etc/app/app.cert#
+
+! Chave
+! [.example]#/etc/app/app.key#
+!===
+| [.example]#self-signed#
+| [.example]#12/31/2023#
+
+|===

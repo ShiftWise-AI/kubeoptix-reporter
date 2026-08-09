@@ -1,0 +1,49 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Enterprise Kubernetes Storage with Red Hat OpenShift Data Foundation (DO370)
+
+[.big]#*Descrição do curso*#
+
+*Aprenda as habilidades essenciais necessárias para projetar, implementar e gerenciar um cluster do Red Hat OpenShift Data Foundation e realizar tarefas diárias de gerenciamento de armazenamento do Kubernetes.*
+
+As opções de armazenamento tradicionais disponíveis para administradores do Kubernetes são limitadas e não têm versatilidade. O Red Hat OpenShift Data Foundation oferece vantagens reais, mesmo quando suportado por armazenamento em nuvem, como AWS EBS ou matrizes de armazenamento de datacenter legado. Muitas empresas dependem de soluções de terceiros para gerenciar o backup e a recuperação de desastres na produção. No entanto, o planejamento adequado para implementar essas soluções exige conhecimento sobre as APIs OADP e CSI do Kubernetes. Este curso mostra as etapas recomendadas para configurar e gerenciar serviços de armazenamento para containers e serviços do Kubernetes.
+
+Após a conclusão do curso, o acesso prático ao laboratório permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+*Observação*: este curso é oferecido como aulas virtuais em cinco dias ou em ritmo individualizado. A duração do curso pode variar de acordo com o formato escolhido. Para obter todos os detalhes, o cronograma e o preço do curso, selecione sua localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do conteúdo*#
+
+* Descrever as funcionalidades do OpenShift Data Foundation (ODF), as arquiteturas de implantação e a relação delas com as APIs de armazenamento do Kubernetes, além de instalar um cluster do ODF em um do OpenShift usando o modo interno
+* Selecionar e configurar classes de armazenamento do ODF para atender aos requisitos da aplicação
+* Configurar aplicações para usar o armazenamento de objetos do ODF
+* Configurar o monitoramento, o registro e a geração de logs do OpenShift para usar o armazenamento do ODF
+* Fazer backup e restaurar dados de aplicações usando as APIs CSI do Kubernetes
+* Monitorar as métricas de integridade do armazenamento de um cluster do ODF
+* Identificar os componentes de armazenamento Ceph relacionados ao Red Hat OpenShift Data Foundation e solucionar problemas comuns e cenários de falha
+
+[.big]#*Público-alvo*#
+
+O público-alvo deste curso inclui:
+
+* Primário: *administradores de plataforma, administradores de sistema, administradores de nuvem* e outras funções de TI relacionadas à infraestrutura que são responsáveis por gerenciar e manter a infraestrutura das aplicações
+* Secundário: *arquitetos empresariais, engenheiros de confiabilidade de sites,* engenheiros de DevOps e outras funções de TI relacionadas a aplicações que são responsáveis por projetar a infraestrutura das aplicações
+
+[.big]#*Treinamentos recomendados*#
+
+* https://skills.ole.redhat.com/en[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para suas habilidades.
+* https://www.redhat.com/pt-br/services/training/red-hat-certified-openshift-administrator-exam[Red Hat Certified Specialist in OpenShift Administration certification (EX280)] ou conhecimento equivalente para as funções de SRE ou engenheiro de cluster do Red Hat OpenShift
+* É recomendado para todas as funções concluir o https://www.redhat.com/pt-br/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam[Red Hat Certified Systems Administrator certification (EX200) ]ou ter conhecimento equivalente sobre administração de sistemas Linux
+* Embora não seja obrigatório, concluir o https://www.redhat.com/pt-br/services/training/do380-red-hat-openshift-administration-iii-scaling-deployments-in-the-enterprise[Red Hat OpenShift Administration III: Scaling Deployments in the Enterprise (DO380)] oferece conhecimento avançado sobre a plataforma do Red Hat OpenShift como preparação para implementar e trabalhar com o Red Hat Openshift Data Foundation (antigo Red Hat OpenShift Container Storage)
+* Ter conhecimento básico sobre o Red Hat Ansible Automation Platform, mas isso não é obrigatório
+* Ter conhecimento básico sobre tecnologias de armazenamento, como tipos de disco, SAN e NAS
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/do370-enterprise-kubernetes-storage-with-red-hat-openshift-data-foundation

@@ -1,0 +1,43 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Integrating ROSA Applications with AWS Services (CS221)
+
+*Integre aplicações no ROSA com os serviços da AWS e mantenha boas medidas de segurança.*
+
+[.big]#*Descrição do curso*#
+
+* Integre aplicações implantadas no ROSA com serviços da AWS de maneira que os administradores de cluster e engenheiros de plataforma tenham o controle das credenciais e das funções exigidas pelas aplicações para acessar os serviços da AWS, em vez de expor essas credenciais aos desenvolvedores de aplicações.
+* *Observação:* o curso é oferecido como duas aulas presenciais e três aulas virtuais, ou no ritmo que você preferir. A duração pode variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do conteúdo do curso*#
+
+* Integre com registros de containers externos, como ECR e Quay.io, para implantar aplicações de repositórios de imagem privados
+* Configure classes de armazenamento para permitir o acesso de aplicações a diferentes tipos de volume do EBS
+* Configure classes de armazenamento e contextos de segurança para permitir o acesso de aplicações a volumes de armazenamento de EFS compartilhados
+* Configure a identidade do pod usando STS/IRSA para permitir o acesso de aplicações a serviços da AWS, como banco de dados (Aurora), integração (SQS) e armazenamento de objetos (S3)
+* Provisione serviços da AWS para aplicações usando os AWS Controllers for Kubernetes (ACK)
+* Agregue e consulte métricas de aplicações (monitoramento de cargas de trabalho de aplicações) com o Amazon Managed Prometheus Service
+* Agregue e consulte logs de aplicações estruturados com o Amazon CloudWatch
+* Configure domínios personalizados e certificados TLS para garantir acesso público seguro às aplicações
+
+[.big]#*Público-alvo*#
+
+* *Primário:* administradores do ROSA, engenheiros de plataforma, administradores de nuvem, administradores de sistema e outras funções de TI relacionadas à infraestrutura que são responsáveis pelo suporte e provisionamento da infraestrutura de aplicações implantadas na AWS
+* *Secundário:* arquitetos empresariais, engenheiros de confiabilidade de sites, engenheiros de DevOps e outras funções de TI relacionadas a aplicações, responsáveis pela criação da infraestrutura de aplicações implantadas na AWS
+
+[.big]#*Treinamentos recomendados*#
+
+* *CS220 – Create and Configure Production Red Hat OpenShift on AWS (ROSA) Clusters* ou experiência equivalente: "Eu sei como criar e acessar o cluster privado do ROSA"
+* Administração da AWS com nível de *AWS Certified SysOps Administrator – Associate ou AWS Certified Solutions Architect – Associate*, ou experiência equivalente: "Eu sei como gerenciar os serviços de infraestrutura da AWS"
+* Conhecimentos básicos em OpenShift pelo *DO080 Technical Overview*: "Eu sei os conceitos básicos do OpenShift e dos containers"
+* É recomendável que os estudantes também se inscrevam nos https://www.redhat.com/pt-br/services/certification/rhcs-paas[cursos com certificações do Red Hat Certified OpenShift Administration], além do CS220 e do CS221
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/integrating-rosa-applications-aws-services-cs221

@@ -1,0 +1,21 @@
+////
+Objetivo
+-------
+Capture informações sobre como usar os sistemas implantados e relacionados.
+
+Recomendado para ser principalmente diagramas de fluxo de trabalho, possível com etapas rotuladas e anotadas.
+
+Exemplos
+--------
+* Continua a integração e continua os processos de implantação/entrega
+* Processos DeclarativeOps / GitOps
+* Processos de atualização/atualização
+* Processos de autoatendimento,
+   - EX: crie um CR para um operador personalizado para criar um novo namespace e anexá-lo ao RBAC de equipe correto.
+
+////
+[id="processes_{context}"]
+= Processos
+Informações sobre os processos de uso dos sistemas implantados e relacionados.
+
+#TODO#

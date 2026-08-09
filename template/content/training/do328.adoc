@@ -1,0 +1,46 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Building Resilient Microservices with Istio and Red Hat OpenShift Service Mesh (DO328)
+
+[.big]#*Descrição do curso*#
+
+*Controle, gerencie, rastreie, monitore e teste seus microsserviços com o Red Hat OpenShift Service Mesh*
+
+O curso Building Resilient Microservices with Istio and Red Hat OpenShift Service Mesh (DO328) é uma introdução ao Red Hat OpenShift Service Mesh que ensina os alunos a instalar, monitorar, gerenciar e assegurar a resiliência e a proteção dos serviços com o Red Hat OpenShift Service Mesh.
+
+Com o Red Hat OpenShift, foi possível criar uma plataforma multilocatária empresarial para implantar e escalar aplicações de microsserviços de modo eficiente e facilmente reproduzível. No entanto, à medida que essas arquiteturas aumentam em tamanho e complexidade, fica cada vez mais difícil definir como os serviços interagem uns com os outros. O Red Hat OpenShift Service Mesh é formado por três soluções: Istio, Jaeger e Kiali. Juntas, elas viabilizam uma rede de confiança zero para o gerenciamento da interação segura entre serviços, oferecem rastreamento de serviços e criam uma representação visual dos caminhos de comunicação.
+
+Este curso é baseado no Red Hat OpenShift® Container Platform 4.6 e no Red Hat OpenShift Service Mesh 2.0.
+
+Após a conclusão do curso, o acesso prático ao laboratório permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+*Observação:* este curso é oferecido como uma aula virtual de quatro dias ou no ritmo que você preferir. As durações podem variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do conteúdo*#
+
+* Instale o Red Hat OpenShift Service Mesh em um cluster do Red Hat OpenShift.
+* Aplique estratégias de lançamento com o controle do tráfego de serviços.
+* Aumente a resiliência dos serviços com balanceamento de carga e failovers.
+* Avalie a resiliência de serviços com engenharia do caos.
+* Assegure a segurança dos serviços.
+* Observe, meça e rastreie o tráfego de rede com o OpenShift Service Mesh.
+
+[.big]#*Público-alvo*#
+
+Este curso destina-se a desenvolvedores que desejam implantar, gerenciar e proteger aplicações de microsserviços no Red Hat OpenShift.
+
+[.big]#*Pré-requisitos do curso*#
+
+* https://skills.ole.redhat.com/[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para as suas habilidades.
+* Concluir o curso https://www.redhat.com/pt-br/services/training/red-hat-cloud-native-microservices-development-quarkus-do378[Red Hat Cloud-native Microservices Development with Quarkus (DO378)] ou comprovar experiência equivalente na criação de aplicações de microsserviços é recomendado, mas não é um requisito obrigatório
+* É altamente recomendável concluir os cursos https://www.redhat.com/pt-br/services/training/red-hat-openshift-administration-i-operating-a-production-cluster[Red Hat OpenShift Administration I: Operating a Production Cluster (DO180)] e https://www.redhat.com/pt-br/services/training/red-hat-openshift-developer-ii-building-and-deploying-cloud-native-applications[Red Hat OpenShift Development II: Containerizing Applications (DO288)] e ter aprovação no https://www.redhat.com/pt-br/services/training/ex288-red-hat-certified-openshift-application-developer-exam[Red Hat Certified Specialist in OpenShift Application Development exam (EX288)] ou ter experiência básica em OpenShift.
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/do328-building-resilient-microservices-with-istio-and-red-hat-openshift-service-mesh

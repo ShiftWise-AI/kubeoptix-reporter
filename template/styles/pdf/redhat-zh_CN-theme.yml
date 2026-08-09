@@ -1,0 +1,14 @@
+extends:
+  - redhat-theme.yml
+
+font:
+  catalog:
+    merge: true
+    KaiGenGothic:
+      normal: KaiGenGothicCN-Regular.ttf
+      bold: KaiGenGothicCN-Bold.ttf
+      italic: KaiGenGothicCN-Regular-Italic.ttf
+      bold_italic: KaiGenGothicCN-Bold-Italic.ttf
+
+base:
+  font-family: KaiGenGothic

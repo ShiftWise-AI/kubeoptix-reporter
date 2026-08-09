@@ -1,0 +1,12 @@
+////
+Propósito
+-------
+Esta seção indica o grupo que iniciou este documento. Normalmente deve ser
+"Red Hat Consulting."
+
+Exemplo
+------
+Red Hat Consulting
+////
+
+Red Hat Consulting

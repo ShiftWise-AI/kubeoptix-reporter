@@ -1,0 +1,45 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat Ceph Storage for OpenStack (CL260)
+
+[.big]#*Descrição do curso*#
+
+*Crie, expanda e mantenha armazenamento em cluster em escala de nuvem para suas aplicações com o Red Hat Ceph Storage*
+
+O Cloud Storage with Red Hat Ceph Storage (CL260) foi elaborado para administradores de armazenamento e operadores de nuvem que implantam o Red Hat Ceph Storage em ambientes de produção de data centers ou como componente de uma infraestrutura do Red Hat OpenStack Platform ou OpenShift Container Platform. Aprenda a implantar, gerenciar e escalar um cluster de armazenamento do Ceph para oferecer recursos de armazenamento híbrido, incluindo armazenamento de objetos compatível com Amazon S3 e OpenStack Swift, armazenamento em blocos baseado em iSCSI e nativo do Ceph e armazenamento de arquivos compartilhados. Esse curso é baseado no Red Hat Ceph Storage 5.0.
+
+Após a conclusão do curso, o acesso prático ao laboratório permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+*Observação:* esse curso é oferecido como uma aula virtual de cinco dias ou no ritmo que você preferir. As durações podem variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do curso*#
+
+* Implante e gerencie um cluster do Red Hat Ceph Storage em servidores comuns.
+* Realize operações de gerenciamento comuns usando a interface de gerenciamento baseada na web.
+* Crie, expanda e controle o acesso a pools de armazenamento disponibilizados pelo cluster do Ceph.
+* Acesse o Red Hat Ceph Storage de clientes usando métodos baseados em arquivos, blocos e objetos.
+* Analise e ajuste o desempenho do Red Hat Ceph Storage.
+* Integre o armazenamento de arquivos, blocos, objetos e imagens do Red Hat OpenStack Platform com um cluster do Red Hat Ceph Storage.
+* Integre o OpenShift Container Platform a um cluster do Red Hat Ceph Storage.
+
+[.big]#*Público-alvo*#
+
+* O curso é destinado a administradores de armazenamento e operadores de nuvem que desejam aprender a implantar e gerenciar o Red Hat Ceph Storage nos servidores em um data center empresarial ou ambiente do Red Hat OpenStack Platform ou OpenShift Container Platform.
+* Desenvolvedores de aplicações que usam armazenamento baseado em nuvem aprenderão a diferenciar vários tipos de armazenamento e métodos de acesso de clientes.
+
+[.big]#*Treinamentos recomendados*#
+
+* https://skills.ole.redhat.com/[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para as suas habilidades.Certificação
+* https://www.redhat.com/pt-br/services/certification/rhcsa[Red Hat Certified System Administrator (RHCSA)] ou experiência equivalente.
+* Para os candidatos que não têm a certificação RHCSA ou equivalente, a confirmação das habilidades e dos conhecimentos adequados para este curso pode ser obtida pela aprovação na https://skills.ole.redhat.com/[avaliação online de habilidades.]
+* Ter experiência com a administração de armazenamento é recomendável, mas não obrigatório.
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/cloud-storage-red-hat-ceph-storage-cl260

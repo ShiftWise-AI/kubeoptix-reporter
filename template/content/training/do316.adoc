@@ -1,0 +1,63 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Managing Virtual Machines with Red Hat OpenShift Virtualization (DO316)
+
+[.big]#*Oferta relacionada*#
+
+Esse curso faz parte do pacote https://www.redhat.com/pt-br/services/training/managing-virtual-machines-red-hat-openshift-virtualization-exam[Managing Virtual Machines with Red Hat OpenShift Virtualization with Exam (DO317)]. Esse pacote está disponível com 70% de desconto no preço de varejo até 31 de dezembro de 2025. Clique em "Enviar" para realizar a compra e selecione a versão individualizada do curso mais o exame para ter acesso a esta oferta. O desconto será aplicado ao preço local na finalização da compra. Esta oferta não pode ser combinada com outras ofertas ou descontos.
+
+[.big]#*Descrição do curso*#
+
+*Crie e gerencie máquinas virtuais no OpenShift usando o operador Red Hat OpenShift Virtualization*
+
+O curso Managing Virtual Machines with OpenShift Virtualization ensina as habilidades essenciais necessárias para criar e gerenciar máquinas virtuais (VM) no OpenShift usando o operador Red Hat OpenShift Virtualization. Este curso não exige conhecimento prévio de containers e Kubernetes.
+
+Este curso oferece:
+
+* Habilidades necessárias para criar, acessar e gerenciar VMs em clusters do OpenShift.
+* Habilidades necessárias para controlar o uso e o acesso de recursos de CPU, memória, armazenamento e rede de VMs usando as mesmas funcionalidades do Kubernetes que também controlariam o uso e o acesso a esses recursos para containers.
+* Exemplos de arquiteturas para gerenciar a alta disponibilidade (HA) de VMs usando funcionalidades e extensões padrão do Kubernetes do OpenShift Virtualization.
+* Estratégias para conectar VMs no OpenShift a serviços de data center fora do cluster do OpenShift, como armazenamento e bancos de dados.
+* Estratégias para migrar máquinas virtuais de hipervisores compatíveis para o OpenShift Virtualization usando o operador do kit de ferramentas de migração para máquinas virtuais
+
+*Observação:*
+
+Este curso está disponível como aula presencial (5 dias), aula virtual (5 dias) ou online (individualizado). A duração pode variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do conteúdo*#
+
+* Criar VMs a partir de mídias de instalação e imagens de disco
+* Acessar consoles de texto e gráficos de uma VM
+* Conectar-se a VMs usando a rede Kubernetes (serviços, entrada e rotas)
+* Provisionar armazenamento para VMs usando armazenamento Kubernetes (classes de PVC, PV e armazenamento)
+* Iniciar, pausar e interromper VMs
+* Clonar e criar snapshots de VMs
+* Criar e selar golden images de VMs
+* Conectar VMs a redes externas e extras (fora do pod do Kubernetes e das redes de serviço)
+* Provisionar serviços de balanceador de carga para VMs e, em seguida, usar os serviços para habilitar o acesso por SSH a VMs
+* Conectar as VMs ao armazenamento externo e do host
+* Criar VMs com base em templates e InstanceTypes predefinidos e personalizados
+* Migrar VMs de hipervisores compatíveis
+* Fazer backup e restauração de VMs usando ferramentas de linha de comando e OADP
+
+[.big]#*Público-alvo do curso*#
+
+* Administradores de máquinas virtuais que desejam migrar cargas de trabalho virtualizadas dos hipervisores tradicionais para o OpenShift Virtualization
+* Engenheiros de plataforma, administradores de nuvem e administradores de sistema que desejam oferecer suporte a cargas de trabalho virtualizadas, seja de forma independente ou no mesmo cluster do OpenShift como cargas de trabalho em containers
+
+[.big]#*Pré-requisitos do curso*#
+
+* https://skills.ole.redhat.com/[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para suas habilidades
+* É recomendável fazer o https://www.redhat.com/pt-br/services/training/red-hat-openshift-administration-i-operating-a-production-cluster[Red Hat OpenShift Administration I: Operating a Production Cluster (DO180)] , mas não é obrigatório.
+* Habilidades em Linux não são necessárias para gerenciar os clusters do OpenShift e o OpenShift Virtualization. No entanto, o gerenciamento de VMs individuais do Linux requer habilidades de sysadmin Linux disponibilizadas em:
+** https://www.redhat.com/pt-br/services/training/rh124-red-hat-system-administration-i[Red Hat System Administration I (RH124)] e https://www.redhat.com/pt-br/services/training/rh134-red-hat-system-administration-ii[Red Hat System Administration II (RH134)] para gerenciar o sistema operacional em uma VM do Linux.
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/do316-managing-virtual-machines-red-hat-openshift-virtualization

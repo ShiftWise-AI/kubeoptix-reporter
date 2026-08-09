@@ -1,0 +1,38 @@
+# Cache e arquivos temporários do Python
+**/__pycache__/**
+**/*.py[cod]
+**/*$py.class
+**/.pytest_cache/**
+**/.coverage
+**/htmlcov/**
+
+# Ambientes virtuais e dependências locais
+**/venv/**
+**/.venv/**
+**/env/**
+**/ENV/**
+**/build/**
+**/dist/**
+**/*.egg-info/**
+
+# Arquivos de Infraestrutura, CI/CD e Helm
+**/*.tgz
+**/charts/**
+**/.github/**
+**/.gitlab-ci.yml
+
+# Documentação pesada e Markdown
+**/docs/**
+**/README.md
+**/CHANGELOG.md
+
+# Configurações de IDEs e Editores
+**/.idea/**
+**/.vscode/**
+**/*.swp
+**/.DS_Store
+
+# Arquivos de logs e variáveis de ambiente locais
+**/*.log
+**/.env
+**/.env.*

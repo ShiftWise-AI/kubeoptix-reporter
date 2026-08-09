@@ -1,0 +1,31 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat Satellite Technical Overview (RH053)
+
+[.big]#*Descrição do curso*#
+
+*Uma visão geral do Red Hat Satellite*
+
+O Red Hat® Satellite é uma plataforma escalável usada para gerenciar correções de erros, provisionamento e gerenciamento de subscrições da sua infraestrutura da Red Hat. Saiba mais sobre os recursos básicos do Red Hat Satellite e veja como o Satellite pode ajudar você a atender às suas necessidades empresariais.
+
+[.big]#*Resumo do curso*#
+
+Por meio de vídeos on-line, sob demanda, você aprenderá sobre
+
+* Correção de erros e gerenciamento de software.
+* Gerenciamento de subscrições usando o Red Hat Satellite.
+* Provisionamento usando o Red Hat Satellite.
+* Gerenciamento de configurações usando o Red Hat Satellite.
+* Integração do Red Hat Satellite com o Red Hat Ansible® Automation e o Red Hat Insights.
+
+[.big]#*Público do curso*#
+
+* Administrador de sistema
+* Operador de sistema
+
+[.big]#*Pré-requisitos do curso*#
+
+Familiaridade com a terminologia básica do Red Hat e experiência básica em administração do sistema Red Hat® Enterprise Linux®.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/rh053-red-hat-satellite-technical-overview

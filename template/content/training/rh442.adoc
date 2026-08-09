@@ -1,0 +1,38 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat Performance Tuning: Linux in Physical, Virtual, and Cloud (RH442)
+
+[.big]#*Descrição do curso*#
+
+*Ajuste de desempenho e planejamento de capacidade do Red Hat Enterprise Linux*
+
+O curso Red Hat Performance Tuning: Linux in Physical, Virtual, and Cloud (RH442) ensina administradores de sistemas Linux® seniores a metodologia de ajuste de desempenho. Esse curso discute a arquitetura do sistema com ênfase na compreensão de suas implicações no desempenho do sistema, ajustes de desempenho, serviços de benchmark open source, desempenho da rede e ajustes de configurações para casos de uso e cargas de trabalho de servidores específicos.
+
+O curso é baseado no Red Hat® Enterprise Linux 8.
+
+Após a conclusão do curso, você terá 45 dias de acesso prolongado aos laboratórios hands-on para fazer qualquer curso que inclua um ambiente virtual.
+
+*Observação:* esse curso é oferecido como uma aula virtual de cinco dias ou no ritmo que você preferir. As durações podem variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do conteúdo*#
+
+* Analise e ajuste-se para cenários de recursos específicos
+* Aplique perfis de ajuste com a ferramenta de ajuste
+* Ajuste ambientes virtuais (hosts e guests)
+* Rastreie e crie perfis de eventos e atividades do sistema
+* Ajuste os limites e a utilização de recursos usando cGroups integrados ao systemd
+* Reúna métricas de desempenho e dados de benchmark
+
+[.big]#*Público-alvo*#
+
+* Administradores de sistema Linux seniores, responsáveis pela maximização da utilização de recursos por meio de ajuste de desempenho
+
+[.big]#*Pré-requisitos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/rh442-red-hat-enterprise-performance-tuning

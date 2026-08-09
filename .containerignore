@@ -1,0 +1,23 @@
+# Git & CI/CD
+.git
+.gitignore
+.github
+
+# AI context files
+copilot-instructions.md
+
+# IDEs
+.idea
+.vscode
+
+# Local dependencies & caches
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache
+.coverage
+
+# Documentation
+README.md
+docs/

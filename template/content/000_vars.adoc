@@ -1,0 +1,66 @@
+////
+Proposito
+--------
+No diretório "Base", esta seção é um espaço reservado que deve ser estendido por 
+vars específicos ao produto ou produtos a serem entregues.
+
+Se o diretório do produto estiver faltando um "vars.adoc" correspondente, os "vars" não serão usado 
+neste caso ou pode ser encontrado por padrão em vars/redhat-vars.adoc
+
+Quanto as variáveis usadas a seguir temos:
+- "cer_show_optional_xxx" dizem respeito as seções opcionais do CER
+- "cer_show_required__xxx" dizem respeito as seções OBRIGATÓRIAS do CER (neste caso elas não devem deixar de constar no documento, no uso foi movido o conteúdo para outras seções, e ou mudado a disposição)
+- "cer_title_xxx" permitir customizar algum título
+////
+:cer_show_optional_document_conventions: true
+:cer_show_optional_about_the_customer: true
+:cer_show_optional_customer_provided_documentation: true
+:cer_show_optional_journal: true
+:cer_show_optional_architecture_app_practice_bra: false
+:cer_show_optional_architecture: true
+:cer_show_optional_knowledge_transfer: true
+:cer_show_optional_challenges: true
+:cer_show_optional_recommendations_relevant_training: true
+:cer_show_optional_recommendations_other: true
+:cer_show_optional_relevant_links: true
+:cer_show_optional_subscriptions: true
+:cer_show_optional_support: true
+
+:cer_show_required_scope_summary: true
+:cer_show_required_statement_of_work: true
+:cer_show_required_purpose_and_approach: true
+
+:cer_title_overview: Visão Geral
+:cer_title_statement_of_work: Statement of Work
+////
+Purpose
+-------
+In the "Base" directory, this section is a placeholder which is to be extended
+by vars specific to the product or products being delivered.
+
+If the product directory is missing a corresponding "vars.adoc", vars are not
+used for it or can be found in the default vars/redhat-vars.adoc
+////
+:cer_show_optional_document_conventions: false
+:cer_show_optional_about_the_customer: false
+:cer_show_optional_customer_provided_documentation: false
+:cer_show_optional_journal: false
+:cer_show_optional_architecture_app_practice_bra: true
+:cer_show_optional_architecture: false
+:cer_show_optional_knowledge_transfer: false
+:cer_show_optional_challenges: false
+:cer_show_optional_recommendations_relevant_training: false
+:cer_show_optional_recommendations_other: false
+//:cer_show_optional_relevant_links: true
+:cer_show_optional_subscriptions: false
+:cer_show_optional_support: false
+
+// item será mostrado dentro de outra seção (melhor disposição)
+:cer_show_required_scope_summary: false
+// ajustado local com a mesma informação
+:cer_show_required_statement_of_work: false
+// item com conteudo duplicado já coberto em outros topicos (movido para o sumário executivo)
+:cer_show_required_purpose_and_approach: false
+
+:cer_title_overview: Visões da Solução
+:cer_title_statement_of_work: Planejamento Técnico

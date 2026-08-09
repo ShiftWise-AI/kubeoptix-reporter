@@ -1,0 +1,12 @@
+[id="qos_{context}"]
+= Estratégia de Qualidade de Serviço
+As considerações a seguir foram feitas para garantir o tempo de atividade pronto para a empresa.
+
+:context: qos
+include::ha.adoc[leveloffset=+1]
+
+:context: qos
+include::failover.adoc[leveloffset=+1]
+
+:context: qos
+include::dr.adoc[leveloffset=+1]

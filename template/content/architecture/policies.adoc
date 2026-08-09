@@ -1,0 +1,41 @@
+[id="policies_{context}"]
+= Políticas
+Políticas de arquitetura são declarações de como as coisas serão feitas, normalmente legalmente obrigatórias e impostas de fora da organização. As políticas documentadas aqui foram fornecidas ao longo do engajamento de várias equipes e principais interessados e afetaram as Decisões de Arquitetura documentadas.
+
+// copia este modelo para cada política
+// atualiza o ID para igualar o ID e o título para igualar o título, útil para vincular a esta seção
+[id=POLICY-???,title='#TODO a title for this policy record#'']
+[cols="1h,3a"]
+|===
+
+| ID
+| POLÍTICA-#TODO número único#
+// Um código único que identifica inequivocamente a decisão; por exemplo: “POLÍTICA-42”.
+
+| Título
+| #TODO um título para este registro de política#
+
+| Descrição
+| #TODO#
+// Qual é a política?
+
+| Data em vigor
+| #TODO Data em que esta política está em vigor, ex, atual, planejada para data X#
+
+| Fonte
+| #TODO Grupos externos, lei ou equipe interna que diz que esta política deve ser aplicada, pode ser de vários níveis, ex-Diretor de Segurança devido ao Memorando Federal XYZ#
+
+| Políticas relacionadas
+| * #TODO Lista links para políticas com as quais este registro está relacionado de alguma forma e a maneira pela qual elas estão relacionadas. EX: outra política atua em cooperação com esta política.#
+//DICA: a sintaxe do link embutido é <<POLICY-?>>
+
+| Princípios Relacionados
+| * #TODO Lista links para políticas às quais este registro está relacionado de alguma forma e a maneira pela qual,
+eles estão relacionados. EX: o princípio é resultado desta política.#
+//DICA: a sintaxe para o link embutido é <<PRINCÍPIO-?>>
+
+| Decisões Relacionadas
+| * #TODO Lista links para políticas com as quais este registro está relacionado de alguma forma e a maneira pela qual elas estão relacionadas. EX: a decisão tomada se deve em parte a esta política#
+//DICA: a sintaxe do link embutido é <<ADR-?>>
+
+|===

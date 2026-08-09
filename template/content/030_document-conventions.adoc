@@ -1,0 +1,49 @@
+////
+Propósito
+-------
+Explica o significado de determinados itens visuais utilizados no documento.
+
+Somente as convenções reais usadas no documento devem ser incluídas.
+
+Nota sobre comandos:
+É importante explicar de antemão exatamente qual sistema e contexto o
+O comando deve ser executado (ex.: no master node como root)
+
+Nota sobre blocos de código / conteúdo de arquivos:
+O sistema e o caminho completo do arquivo devem ser listados diretamente antes do
+bloco de código (ex.: 'no servidor RHVM em /etc/yum/repos.d/redhat.repo')
+
+Exemplo
+------
+N/A
+
+////
+
+= Advertências e Destaques
+[NOTE]
+====
+Detalhes adicionais sobre um tópico serão destacados com o símbolo "info".
+====
+
+TIP: Dicas e conselhos aparecerão com uma advertência de "lâmpada".
+
+WARNING: Avisos e recomendações aparecerão ao lado de uma exclamação.
+
+IMPORTANT: Informações e notas bem importantes aparecerão ao lado de uma exclamação vermelha.
+
+
+= Comandos e código de linha única
+Se for digitado um único comando, ele será exibido em uma fonte monoespaçada e destacado como este exemplo:
+
+`ipa -vvv cert-find --all`
+
+= Comandos em várias linhas, bloco de código / arquivo
+Se houver comandos, blocos de código ou conteúdo de arquivos com várias linhas, as informações serão monoespaçadas e colocadas em uma caixa de texto explicativo como este exemplo:
+
+```ruby
+require 'sinatra'
+
+get '/hi' do
+  "Hello World!"
+end
+```

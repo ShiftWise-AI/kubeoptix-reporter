@@ -1,0 +1,26 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat Enterprise Linux Technical Overview (RH024)
+
+[.big]#*Descrição do curso*#
+
+*Aprenda o básico sobre o Linux*
+
+O Red Hat Enterprise Linux Technical Overview (RH024) é uma série de vídeos online gratuitos e sob demanda que oferecem uma introdução técnica ao Linux® para profissionais de TI.
+
+O curso é baseado no Red Hat® Enterprise Linux 8.
+
+[.big]#*Resumo do conteúdo*#
+
+Os vídeos demonstram as técnicas práticas e básicas de utilização do Linux e as tarefas de administração do sistema. Assim, os profissionais pouco familiarizados com esse sistema operacional podem se preparar para estudos mais aprofundados. Os alunos descobrem por que o Linux e o modelo de desenvolvimento open source são tão importantes no ambiente de computação atual.
+
+[.big]#*Público-alvo*#
+
+Líderes de TI, administradores, engenheiros, arquitetos e qualquer pessoa que queira aprender as noções básicas sobre o Linux.
+
+[.big]#*Pré-requisitos*#
+
+Não há pré-requisitos para este curso.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/rh024-red-hat-linux-technical-overview

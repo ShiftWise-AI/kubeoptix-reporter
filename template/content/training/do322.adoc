@@ -1,0 +1,67 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat OpenShift Installation Lab (DO322)
+
+* [IMPORTANT]
+====
+
+Observação: o 
+
+====
+
+https://www.redhat.com/pt-br/services/training/red-hat-openshift-administration-ii-configuring-a-production-cluster[][IMPORTANT]
+====
+
+Red Hat OpenShift Administration II: Operating a Production Kubernetes Cluster (DO280)
+
+====
+
+[IMPORTANT]
+====
+
+é pré-requisito para o OpenShift Installation Lab
+
+====
+
+
+[.big]#*Descrição do curso*#
+
+*Instalação do OpenShift em uma infraestrutura física, virtual ou de nuvem.*
+
+Com o Red Hat OpenShift Installation Lab (DO322), você aprende as habilidades essenciais para instalar um cluster do OpenShift em diversos ambientes, desde prova de conceito até produção, e como identificar personalizações que possam ser exigidas pela infraestrutura subjacente física, virtual ou de nuvem.
+
+Este curso é baseado no Red Hat OpenShift Container Platform 4.6.
+
+Após a conclusão do curso, o acesso prático ao laboratório permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+*Observação:* este curso é oferecido como uma aula virtual de três dias ou no ritmo que você preferir. As durações podem variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do curso*#
+
+* Validar pré-requisitos de infraestrutura para um cluster do OpenShift.
+* Executar o instalador do OpenShift com configurações personalizadas.
+* Descrever e monitorar cada fase do processo de instalação do OpenShift.
+* Reunir informações sobre solução de problemas durante uma instalação em andamento ou depois dela falhar.
+* Completar a configuração dos serviços do cluster em um cluster recém-instalado.
+
+[.big]#*Público-alvo*#
+
+* Administradores de cluster (administradores de sistema júnior, administradores de nuvem júnior) interessados em implantar clusters adicionais para atender às demandas crescentes das organizações.
+* Engenheiros de cluster (administradores de sistema sênior, administradores de nuvem sênior, engenheiros de nuvem) interessados em planejar e projetar clusters do OpenShift para alcançar o desempenho e a confiabilidade de cargas de trabalho diferentes e em criar pastas de trabalho para essas instalações.
+* Engenheiros de confiabilidade de sites (SREs) interessados em implantar clusters de cama de teste para validar novas configurações, atualizações, personalizações, procedimentos operacionais e respostas a incidentes.
+
+[.big]#*Treinamentos recomendados*#
+
+* Para iniciar este curso, recomendamos ter o certificado do *Red Hat Certified Specialist in OpenShift Administration* no OpenShift 4 ou, pelo menos, fazer o curso https://www.redhat.com/pt-br/services/training/red-hat-openshift-administration-ii-configuring-a-production-cluster[Red Hat OpenShift Administration II: Operating a Production Kubernetes Cluster (DO280)] antes.
+** "Experiência equivalente em Kubernetes" não se aplica neste caso porque é necessário ter conhecimento de operadores de cluster do OpenShift para ir além do mínimo na execução de uma instalação automatizada com stack completo padrão do OpenShift em um provedor de nuvem.
+* Também recomendamos ter o certificado do https://www.redhat.com/pt-br/services/certification/rhcsa-991[Red Hat Certified System Administrator (RHCSA)] ou experiência equivalente em administração do sistema Red Hat Enterprise Linux antes de fazer o curso DO322.
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/do322-red-hat-openshift-installation-lab

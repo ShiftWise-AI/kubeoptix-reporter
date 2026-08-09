@@ -1,0 +1,29 @@
+{{- if .Values.build.enabled }}
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: kubeoptix-reporter
+  labels:
+    {{- include "kubeoptix-reporter.labels" . | nindent 4 }}
+spec:
+  runPolicy: SerialLatestOnly
+  source:
+    type: Git
+    git:
+      uri: {{ .Values.build.git.uri | quote }}
+      ref: {{ .Values.build.git.ref | quote }}
+    sourceSecret:
+      name: {{ .Values.build.git.sourceSecret | quote }}
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Containerfile
+  output:
+    to:
+      kind: ImageStreamTag
+      name: {{ printf "%s:%s" (include "kubeoptix-reporter.fullname" .) .Values.image.tag | quote }}
+  resources:
+    {{- toYaml .Values.build.resources | nindent 4 }}
+  triggers:
+    - type: ConfigChange
+{{- end }}

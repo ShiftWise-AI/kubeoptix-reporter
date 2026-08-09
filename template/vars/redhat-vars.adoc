@@ -1,0 +1,98 @@
+// --------------------------------
+// Various params for products
+// Please improve where needed!
+// --------------------------------
+:rh: Red Hat
+:rhservices: {rh} Services
+:rhconsulting: {rh} Consulting
+:rhprojectmanager: Luciana Carvalho
+
+:rhel: {rh} Enterprise Linux
+:rhcoreos: {rhel} CoreOS
+:rhcos: RHCOS
+
+:sat: Satellite
+:rhsat: {rh} {sat}
+:satver: 6.15
+
+:quay: Quay
+:rhq: {rh} {quay}
+
+:rhv: {rh} Virtualization
+
+:osp: OpenStack Platform
+:rhosp: {rh} {osp}
+
+:ceph: Ceph Storage
+:rhceph: {rh} Ceph Storage
+
+:cf: CloudForms
+:rhcf: {rh} CloudForms
+
+:ipa: FreeIPA
+:idm: Identity Management
+:rhidm: {rh} {idm}
+
+:rhds: {rh} Directory Server
+
+:rhsso: {rh} Single Sign-On
+:rhbk: {rh} build of Keycloak
+
+:ocp: OpenShift Container Platform
+:rhocp: {rh} {ocp}
+
+:ocs: OpenShift Container Storage
+:rhocs: {rh} {ocs}
+
+:odf: OpenShift Data Foundation
+:rhodf: {rh} {odf}
+
+:ossm: OpenShift Service Mesh
+:rhossm: {rh} {ossm}
+
+:oss: OpenShift Serverless
+:rhoss: {rh} {oss}
+
+:ocp_gitops: {ocp} GitOps
+
+:ans: Ansible
+:aap: {ans} Automation Platform
+:rhaap: {rh} {aap}
+:pb: {ans} Playbook
+:twr: {rh} {ans} Tower
+:ctlr: Automation Controller
+:rhctlr: {rh} {ctlr}
+:hub: Automation Hub
+:rhhub: {rh} {hub}
+:mesh: Automation Mesh
+:rhmesh: {rh} {mesh}
+:avc: {ans} validated content
+
+:vm: Virtual Machine
+
+:acm: Advanced Cluster Management for Kubernetes
+:rhacm: {rh} {acm}
+
+:acs: Advanced Cluster Security for Kubernetes
+:rhacs: {rh} {acs}
+
+:amq: AMQ Broker
+:rhamq: {rh} {amq}
+
+:amqi: AMQ Interconnect
+:rhamqi: {rh} {amqi}
+
+:fuse: Fuse
+:rhfuse: {rh} {fuse}
+
+:rhdg: {rh} Data Grid
+
+:rhbq: {rh} build of Quarkus
+
+:osai: OpenShift AI
+:osaism: OpenShift AI Self-Managed
+:rhoaifull: {rh} {osai}
+:rhoaifullsm: {rh} {osaism}
+:rhoai: RHOAI
+:rhoaism: RHOAI-SM
+:accai: AI Platform Foundation - Services

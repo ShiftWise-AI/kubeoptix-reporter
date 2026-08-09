@@ -1,0 +1,40 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Introduction to OpenShift Applications (DO101)
+
+[.big]#*Descrição do curso*#
+
+*Um curso introdutório voltado para desenvolvedores criarem, implantarem, escalarem e solucionarem problemas de aplicações no OpenShift.*
+
+O Red Hat® OpenShift® Container Platform é uma plataforma de aplicações em containers que permite às empresas acelerar e otimizar o desenvolvimento, entrega e implantação de aplicações on-premise ou na nuvem. À medida que o OpenShift e o Kubernetes continuam sendo amplamente adotados, é importante que os desenvolvedores entendam melhor como desenvolver, criar e implantar aplicações com uma plataforma de aplicações em container. Embora alguns desenvolvedores estejam interessados em gerenciar a infraestrutura subjacente, a maioria dos desenvolvedores quer se concentrar no desenvolvimento de aplicações e no uso do OpenShift por conta de seus recursos simples de criação, implantação e escalonamento.
+
+Após a conclusão do curso, o acesso prático ao laboratório permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+*Observação:* este curso é oferecido como uma aula virtual de dois dias ou no ritmo que você preferir. As durações podem variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do conteúdo*#
+
+* Gerenciamento de código-fonte de aplicações com Git
+* Desenvolvimento de aplicações com VSCode
+* Implantação de aplicações no OpenShift
+* Atualização de uma aplicação
+* Configuração de segredos de aplicações
+* Escalabilidade de uma aplicação
+* Solução de problemas e correções de aplicações
+
+[.big]#*Público-alvo*#
+
+Este curso é um pré-requisito inicial para o desenvolvimento no OpenShift. Muitos desenvolvedores querem descobrir maneiras de usar o OpenShift em sua organização e ouviram falar de seus muitos benefícios, mas não têm as habilidades necessárias ou o interesse em usar o OpenShift a partir de uma abordagem detalhada e orientada de baixo para cima. A maioria dos desenvolvedores opta por descobrir maneiras mais rápidas e fáceis de gravar e implantar aplicações. Os alunos que estão interessados em aprender mais sobre a infraestrutura subjacente do OpenShift e têm habilidades avançadas no nível de RHCSA devem começar pelo curso https://www.redhat.com/pt-br/services/training/red-hat-openshift-administration-i-operating-a-production-cluster[Red Hat OpenShift Administration I: Operating a Production Cluster (DO180)]
+
+[.big]#*Treinamentos recomendados*#
+
+Os alunos devem ter uma boa base em desenvolvimento de aplicações e programação orientada a objetos. Caso contrário, recomendamos fazer primeiro o https://www.redhat.com/pt-br/services/training/ad183-red-hat-application-development-i-programming-java-ee[Red Hat Application Development I: Programming in Java EE (AD183).]
+
+[.big]#*Requisitos técnicos*#
+
+* É necessário usar o seu próprio dispositivo no treinamento.
+* Você precisa instalar software no seu dispositivo.
+* É necessário ter acesso à Internet.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/do101-introduction-openshift-applications

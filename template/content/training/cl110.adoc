@@ -1,0 +1,63 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat OpenStack Administration I: Core Operations for Domain Operators (CL110)
+
+[.big]#*Descrição do curso*#
+
+*Aprenda a executar uma nuvem privada do Red Hat® OpenStack Platform e a gerenciar recursos de domínio para proteger e implantar armazenamento, redes e aplicações de nuvem escaláveis e atuais.*
+
+O curso Red Hat OpenStack Administration I: Core Operations for Domain Operators (CL110) ensina como operar e gerenciar uma overcloud de produção de um único local do Red Hat OpenStack Platform (RHOSP). Você aprenderá a criar ambientes de projeto seguros para provisionar recursos e gerenciar privilégios de segurança que os usuários da nuvem precisam para implantar aplicações em nuvem escaláveis. Você aprenderá sobre a integração do OpenShift com balanceadores de carga, gerenciamento de identidades, monitoramento, proxies e armazenamento. Neste curso, você também desenvolverá mais habilidades em soluções de problemas e operações do Dia 2.
+
+Este curso é baseado no Red Hat OpenStack Platform 16.1
+
+Após a conclusão do curso, o acesso prático ao laboratório permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+*Observação:* este curso é oferecido como uma aula virtual de cinco dias ou no ritmo que você preferir. As durações podem variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do conteúdo*#
+
+Os alunos do curso Red Hat OpenStack Administration I: Core Operations for Domain Operators (CL110) se concentrarão na realização de tarefas rotineiras e especializadas necessárias para gerenciar um domínio de overcloud de produção do OpenStack. Os alunos gerenciarão o OpenStack usando interfaces baseadas na web e de linha de comando. As habilidades essenciais abordadas no curso incluem:
+
+* Iniciar instâncias para atender a vários exemplos de casos de uso.
+
+* Gerenciar domínios, projetos, usuários, funções e cotas em um ambiente multilocação.
+
+* Gerenciar redes, sub-redes, roteadores e endereços IP flutuantes.
+
+* Gerenciar a segurança da instância com regras de grupo e chaves de acesso.
+
+* Criar e gerenciar armazenamento compartilhado, de blocos e de objetos no OpenStack.
+
+* Personalizar o lançamento de instâncias com o cloud-init.
+
+* Implantar aplicações escaláveis usando templates de stack.
+
+
+[.big]#*Público-alvo*#
+
+Este curso foi desenvolvido para usuários da nuvem que implantam instâncias e stacks de aplicações, operadores de domínio que gerenciam recursos e a segurança para usuários da nuvem e qualquer outro profissional de nuvem interessado ou responsável pela manutenção de aplicações em nuvens OpenStack privadas ou híbridas. Todas as pessoas ou profissionais trabalhando com nuvens que exerçam funções que incluam a avaliação da tecnologia devem participar deste curso para aprender sobre a operação do RHOSP e os métodos de implantação de aplicações.
+
+[.big]#*Pré-requisitos do curso*#
+
+* Ter a certificação 
+
+https://www.redhat.com/pt-br/services/certification/rhcsa-991[]Red Hat Certified System Administrator (RHCSA)
+
+ou demonstrar experiência equivalente
+
+* Se você não for um RHCSA, será possível 
+
+https://skills.ole.redhat.com/[]fazer um teste de habilidade
+
+para avaliar seu nível de experiência.
+
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/cl110-red-hat-openstack-administration-i

@@ -1,0 +1,47 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat System Administration I (RH124)
+
+[.big]#*Descrição do curso*#
+
+*Comece a desenvolver as habilidades necessárias para se tornar um administrador Linux em tempo integral.*
+
+O curso Red Hat System Administration I (RH124) foi elaborado para profissionais de TI sem experiência anterior em administração de sistemas Linux. O objetivo do curso é oferecer aos alunos capacidade para a administração do Linux, com foco nas tarefas básicas. Esse curso também proporciona uma base para os alunos que planejam se tornar administradores de sistemas Linux em tempo integral, porque apresenta os principais conceitos de linha de comando e ferramentas em nível empresarial.
+
+Esse curso é o primeiro de uma série de duas partes que ajuda profissionais de TI sem conhecimento em administração de sistemas Linux a se tornarem administradores plenamente capazes de executar tarefas relacionadas ao sistema. Esses conceitos são desenvolvidos no curso seguinte, https://www.redhat.com/pt-br/services/training/rh134-red-hat-system-administration-ii[Red Hat System Administration II (RH134)].
+
+O curso é baseado no Red Hat® Enterprise Linux 10.0.
+
+Após a conclusão do curso, o acesso ao laboratório hands-on permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+Observação: esse curso é oferecido com uma aula presencial de cinco dias, uma aula virtual de cinco dias ou no ritmo que você preferir. A duração do curso pode variar de acordo com o formato escolhido. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Enviar" no menu à direita.
+
+[.big]#*Resumo do conteúdo do curso*#
+
+* Apresentar o Linux e o ecossistema do Red Hat Enterprise Linux.
+* Executar comandos e visualizar ambientes de shell.
+* Gerenciar, organizar e proteger arquivos.
+* Gerenciar usuários, grupos e políticas de segurança de usuários.
+* Controlar e monitorar serviços de systemd.
+* Configurar o acesso remoto usando o console web e o SSH.
+* Configurar interfaces e configurações de rede.
+* Gerenciar software usando DNF.
+
+[.big]#*Público-alvo*#
+
+* Administradores de sistemas, engenheiros de plataforma, desenvolvedores e outros profissionais de TI com experiência limitada no Red Hat Enterprise Linux, mas que precisam realizar tarefas essenciais de administração do Linux em um único servidor.
+* Esse curso é popular na https://www.redhat.com/pt-br/services/training/red-hat-academy[RHA] e é direcionado ao aluno que planeja se tornar um profissional técnico que usa Linux.
+
+[.big]#*Treinamentos recomendados*#
+
+* Familiaridade básica com sistemas de computação como usuário. Ter experiência anterior como usuário do Linux ou com administração de outros sistemas operacionais pode ser vantajoso.
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/rh124-red-hat-system-administration-i

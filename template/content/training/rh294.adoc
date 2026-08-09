@@ -1,0 +1,48 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat Enterprise Linux Automation with Ansible (RH294)
+
+[.big]#*Descrição do curso*#
+
+*Aprenda a automatizar tarefas de administração do sistema Linux com o Red Hat Ansible Automation Platform*
+
+O curso Red Hat Enterprise Linux Automation with Ansible (RH294)  foi elaborado para desenvolvedores e administradores Linux que precisam automatizar ações suscetíveis a erros e repetíveis para provisionamento, configuração, implantação de aplicações e orquestração do sistema.
+
+Este curso é baseado no Red Hat® Enterprise Linux® 9 e no Red Hat Ansible Automation Platform 2.2.
+
+Após a conclusão do curso, o acesso prático ao laboratório permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+*Observação:* este curso é oferecido como uma aula presencial de quatro dias, uma aula virtual de cinco dias ou no ritmo que você preferir. As durações podem variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do conteúdo*#
+
+* Instale o Red Hat Ansible Automation Platform nos nós de controle.
+* Crie e atualize inventários de hosts gerenciados e gerencie suas conexões.
+* Automatize tarefas administrativas com comandos ad-hoc e Ansible Playbooks.
+* Crie playbooks eficazes e em escala.
+* Proteja dados confidenciais usados pelo Ansible Automation Platform com o vault do Ansible.
+* Reutilize o código e simplifique o desenvolvimento de playbooks com Ansible Roles e Ansible Content Collections.
+
+[.big]#*Público-alvo*#
+
+Este curso é destinado a administradores de sistemas Linux e engenheiros de DevOps, de automação de infraestruturas e de design de sistemas responsáveis pelas seguintes tarefas:
+
+* Automatizar o gerenciamento de configurações
+* Garantir a implantação consistente e repetível de aplicações
+* Provisionar e implantar servidores de desenvolvimento, teste e produção
+* Integrar fluxos de trabalho de entrega/integração contínuas de DevOps
+
+[.big]#*Pré-requisitos do curso*#
+
+* Ser aprovado no https://www.redhat.com/pt-br/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam[Red Hat Certified System Administrator (RHCSA) exam (EX200)] ou demonstrar experiência e conhecimento equivalentes em Red Hat Enterprise Linux.
+* https://skills.ole.redhat.com/[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para suas habilidades.
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/rh294-red-hat-linux-automation-with-ansible

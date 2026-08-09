@@ -1,0 +1,40 @@
+////
+Propósito
+-------
+Esta seção é um espaço reservado que deve ser substituído por recomendações técnicas (próxima etapa)
+específicas para o(s) produto(s) entregue(s). Recomendações técnicas
+para produtos não entregues, incluindo produtos que não sejam da Red Hat devem ser colocados em 'outras-recomendações (recommedations-other)'.
+
+Se você está tentando gerar uma versão específica do produto nesse espaço reservado,
+observe as seguintes diretrizes e a estrutura demonstrada no exemplo.
+
+Candidatos/Pontos de recomendação:
+- Demanda subsequentes
+- Apoio e recomendações para expansão do produto liderada pelo cliente
+- Recomendações de upgrade
+- Melhorias de segurança (específicas do produto)
+- Soluções permanentes para substituir soluções alternativas (workarounds)
+
+Exemplos
+------
+== Satellite Capsules Adicionais
+=== Indicação
+Durante esse trabalho, um único _Satellite Server_ foi implementado, pois foi suficiente para o escopo do projeto. No decorrer desse trabalho, ficou claro que o cliente {cust} esta planejando a utilização do Satellite para gerenciamento de sites adicionais, com base na performance.
+=== Recomendação
+A Red Hat recomenda a utilização de _Capsule Servers_ separados para locais remotos ou para equilibrar a carga à medida que os ambientes crescem. A documentação está disponível em https://access.redhat.com/documentation/en-us/red_hat_satellite (na seção "Instalando o Capsule Server"). A adição de _Capsule Servers_ e a expansão do ambiente podem ser tratadas pela equipe interna do cliente {cust} ou como uma demanda subsequente com a Red Hat Consulting.
+
+== Satellite Hardening
+=== Indicação
+Embora fora do escopo deste projeto, foi manifestado interesse em tornar o Satellite mais seguro.
+=== Recomendação
+Consulte a documentação sobre Satellite Security Compliance aqui:
+https://access.redhat.com/documentation/en-us/red_hat_satellite/6.6/html-single/administering_red_hat_satellite/index#chap-Red_Hat_Satellite-Administering_Red_Hat_Satellite-Security_Compliance_Management
+
+== Ansible Tower Performance
+=== Indicação
+O provisionamento de callbacks do Ansible Tower está sendo afetado por uma variação significativa no tempo necessário para concluir os _Jobs_. O mesmo trabalho pode levar 10 minutos para um servidor e 45 minutos para algum outro. Uma investigação preliminar (troubleshooting) sugere que a causa está relacionada à localidade.
+=== Recomendação
+Considere uma análise mais aprofundada dos sistemas mais lentos para verificar se o problema pode ser causado por falhas de rede ou problemas de configuração do DNS.
+////
+
+#TODO#

@@ -1,0 +1,48 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat Application Development I: Programming in Java EE (AD183)
+
+[.big]#*Descrição do curso*#
+
+*Este curso tem como objetivo ensinar desenvolvedores Java SE a escreverem aplicações Java EE.*
+
+O curso Red Hat Application Development I: Programming in Java EE (AD183) apresenta o Java Enterprise Edition (Java EE) aos desenvolvedores experientes em Java Standard Edition (Java SE).
+
+Esse curso é baseado no Red Hat® Enterprise Application Platform 7.0.
+
+Nesse curso, você conhecerá as diversas especificações que compõem o Java EE. Com laboratórios hands-on, você transformará uma aplicação simples de linha de comando do Java SE em uma aplicação empresarial multicamada usando várias especificações do Java EE, incluindo Enterprise Java Beans, Java Persistence API, Serviço de Mensagem Java (JMS), JAX-RS for REST services, Contexts and Dependency Injection (CDI) e JAAS para proteger a aplicação.
+
+Após a conclusão do curso, o acesso prático ao laboratório permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+*Observação*: este curso é oferecido como aulas virtuais em cinco dias ou em ritmo individualizado. As durações podem variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do curso*#
+
+* Geração de aplicações Java EE multicamada.
+* Empacotamento e implantação de aplicações Java EE.
+* Criação de Enterprise Java Beans, incluindo beans acionados por mensagens.
+* Gerenciamento da persistência.
+* Criação de serviços REST com JAX-RS.
+* Implementação de contextos e injeção de dependências.
+* Criação de aplicações de mensagens com o JMS.
+* Proteção de aplicações Java EE com JAAS.
+
+[.big]#*Público-alvo*#
+
+Este curso foi criado para desenvolvedores de Java que querem aprender mais sobre as especificações que compõem o mundo do Java Enterprise Edition (Java EE).
+
+[.big]#*Pré-requisitos do curso*#
+
+* Proficiência no desenvolvimento de aplicações Java SE, com mais de dois anos de experiência
+* Proficiência no uso de IDEs, como Red Hat CodeReady Studio ou Eclipse
+* Ter experiência com o Maven é recomendável, porém não é obrigatório
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/ad183-red-hat-application-development-i-programming-java-ee

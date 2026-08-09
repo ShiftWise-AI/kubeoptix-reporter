@@ -1,0 +1,29 @@
+# Python cache & bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Python environments
+.venv/
+venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# IDE configurations
+.idea/
+.vscode/
+*.swp
+
+# Helm artifacts
+*.tgz
+charts/
+
+# Local secrets & logs
+.env
+*.log

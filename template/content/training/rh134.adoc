@@ -1,0 +1,46 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat System Administration II (RH134)
+
+[.big]#*Descrição do curso*#
+
+*Desenvolva as habilidades necessárias para administradores Linux em tempo integral.*
+
+O Red Hat System Administration II (RH134) é a continuação do Red Hat System Administration I. Ele se destina a quem já fez a primeira parte desse treinamento para obter a certificação RHCSA. O curso aborda de maneira mais aprofundada as principais habilidades em administração de sistemas Linux: instalação e implantação do Red Hat Enterprise Linux, configuração e gerenciamento de armazenamento, gestão de funcionalidades de segurança (como o SELinux), controle de tarefas recorrentes do sistema, gerenciamento do processo de inicialização e da solução de problemas, ajuste básico do sistema, bem como melhoria da produtividade e automação da linha de comando.  Para participar do curso, é necessário ter concluído o Red Hat System Administration I (RH124).  Para administradores de sistemas Linux que já têm experiência e querem se preparar rapidamente para a certificação RHCSA, recomendamos o RHCSA Rapid Track (RH199).
+
+Este curso é baseado no Red Hat Enterprise Linux 10.0.
+
+Após a conclusão do curso, o acesso ao laboratório hands-on permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+*Observação:* este curso é oferecido como uma aula presencial de cinco dias, uma aula virtual de cinco dias ou no ritmo que você preferir. A duração do curso pode variar de acordo com o formato escolhido. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Enviar" no menu à direita.
+
+[.big]#*De 5 a 10 tópicos*#
+
+* Instalação do Red Hat Enterprise Linux com métodos escaláveis
+* Acesso a arquivos de segurança, sistemas de arquivos e redes
+* Execução de técnicas de automação e criação de scripts de shell
+* Gerenciamento de dispositivos de armazenamento, sistemas de arquivos e volumes lógicos
+* Gerenciamento de segurança e acesso a sistemas
+* Controle do processo de inicialização e serviços de sistema
+* Execução de containers
+* Uso de image mode para o RHEL
+
+[.big]#*Público-alvo*#
+
+Administradores de sistema, engenheiros de plataforma, desenvolvedores e outros profissionais de TI que concluíram o curso Red Hat System Administration I (RH124) e querem expandir suas habilidades em administração de sistemas Linux.
+
+[.big]#*Treinamentos recomendados*#
+
+* É recomendado fazer o https://www.redhat.com/pt-br/services/training/rh124-red-hat-system-administration-i[Red Hat System Administration I (RH124)].
+* Administradores Linux experientes que queiram obter a certificação Red Hat Certified System Administrator com mais rapidez podem começar pelo https://www.redhat.com/pt-br/services/training/rh199-red-hat-certified-system-administrator-rapid-track-course[RHCSA Rapid Track Course (RH199)].
+* https://skills.ole.redhat.com/[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para suas habilidades.
+
+[.big]#*Requisitos técnicos*#
+
+* Para aulas online, presenciais e no ritmo que você preferir:
+** É necessário ter acesso à internet.
+** As aulas no laboratório são realizadas no Red Hat Online Learning.
+** No caso das aulas presenciais, pode ser que no futuro a Red Hat disponibilize um ambiente local como alternativa.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/rh134-red-hat-system-administration-ii

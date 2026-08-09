@@ -1,0 +1,95 @@
+////
+Propósito
+-------
+
+Atividades
+------
+Forneça um resumo em uma única linha para cada atividade realizada em um determinado dia.
+O formato recomendado é "<resumo> <verbo>", em que "resumo" é uma breve descrição
+da atividade e "verbo" é "iniciado", "em progresso" ou "concluído".
+Isso ajudará a capturar tarefas que duram vários dias.
+
+Quando uma atividade se correlaciona com uma tarefa da Declaração de Trabalho(SOW), tente usar
+o mesmo palavreado do SOW para descrevê-lo. Isso simplificará bastante
+revisões posteriores deste documento.
+
+Use o bom senso ao decidir quais atividades listar e quais omitir.
+Um bom ponto de partida é adicionar:
+- Qualquer atividade que requer 30 minutos ou mais para ser concluída
+- Tarefas fundamentais ou críticas para o trabalho, independentemente do tempo necessário
+- Tarefas que não faziam parte da Declaração de Trabalho (SOW), mas foram adicionadas por
+  solicitação do cliente
+
+É altamente recomendável que o consultor atualize esta parte do CER diariamente 
+para garantir que todas as atividades significativas sejam registradas.
+
+Bloqueadores
+------
+Forneça um resumo em uma única linha para cada bloqueador presente em um determinado dia. o
+O formato recomendado é "<resumo> <verbo>", em que "resumo" é uma breve descrição
+da atividade e "verbo" é "enfrentado" (??? "encountered" - como traduzir isso ???), "em andamento" ou "resolvido".
+Isso ajudará a capturar a duração e o impacto dos bloqueadores.
+
+Tente abster-se de explicações detalhadas sobre bloqueadores nesta seção. Insira apenas 
+detalhes relevantes na área "Desafios" do CER e tente usar a primeira
+frase da descrição do Desafio como um resumo aqui.
+
+Exemplo
+------
+
+[cols="1,5,5",options=header]
+|===
+|Data
+|Atividades
+|Bloqueadores
+
+// Data
+| 05/06/2021
+
+// Atividades
+a|
+- Implementação do cluster primário concluída
+- Automação para implantação do workflow iniciada
+- Criação do repositório de imagem avançou
+// Bloqueadores
+a|
+- Grupos para RBAC não definidos no Active Directory
+
+
+// Data
+| 06/06/2021
+
+// Atividades
+a|
+- A automação para implantação do workload avançou
+- Criação do repositório de imagem finalizada
+
+// Bloqueadores
+a|
+- Grupos para RBAC não definidos no Active Directory resolvido
+- Sem acesso à Internet para o Satellite extrair imagens da CDN
+|===
+
+
+////
+
+[cols="1,5,5",options=header]
+|===
+|Data
+|Atividades
+|Bloqueadores
+
+// Data
+| DD/MM/YYYY
+
+// Atividades
+a|
+- #TODO#
+- #TODO#
+
+// Bloqueadores
+a|
+- #TODO#
+- #TODO#
+
+|===

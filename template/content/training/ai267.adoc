@@ -1,0 +1,54 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Developing and Deploying AI/ML Applications on Red Hat OpenShift AI (AI267)
+
+[.big]#**Descrição do curso **#
+
+*Uma introdução ao desenvolvimento e implantação de aplicações de inteligência artificial e machine learning no Red Hat OpenShift AI. *
+
+O curso Developing and Deploying AI/ML Applications on Red Hat OpenShift AI (AI267) contém as noções básicas de como usar o Red Hat OpenShift para desenvolver e implantar aplicações de inteligência artificial e machine learning. Ele ajuda os alunos a desenvolver habilidades essenciais para usar o Red Hat OpenShift AI para treinar, desenvolver e implantar modelos de machine learning por meio de uma experiência hands-on.
+
+Este curso é baseado no Red Hat OpenShift® 4.16 e no Red Hat OpenShift AI 2.13.
+
+*Observação:* este curso pode ser concluído em três dias no modelo presencial, em quatro dias no modelo virtual ou no ritmo que você preferir. A duração pode variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Enviar" no menu à direita.
+
+[.big]#**Resumo do conteúdo do curso**#
+
+* Introdução ao Red Hat OpenShift AI
+* Projetos de ciência de dados
+* Jupyter Notebooks
+* Instalação do Red Hat OpenShift AI
+* Gerenciamento de usuários e recursos
+* Imagens personalizadas do Notebook
+* Introdução ao machine learning
+* Modelos de treinamento
+* Aprimoramento do treinamento de modelos com RHOAI
+* Introdução à disponibilização de modelos
+* Disponibilização de modelos no Red Hat OpenShift AI
+* Introdução a pipelines de ciência de dados
+* Trabalho com pipelines
+* Controle de pipelines e experimentos
+
+[.big]#**Público-alvo**#
+
+* Cientistas de dados e profissionais de IA que querem usar o Red Hat OpenShift AI para criar e treinar modelos de ML
+* Desenvolvedores que querem criar e integrar aplicações habilitadas para inteligência artificial e machine learning
+* Desenvolvedores, cientistas de dados e profissionais de IA que querem automatizar os fluxos de trabalho de ML
+* Engenheiros de MLOps responsáveis pela operacionalização do ciclo de vida de ML no Red Hat OpenShift AI 
+
+[.big]#**Treinamento recomendado**#
+
+* Experiência com Git é obrigatória
+* É obrigatório ter experiência em desenvolvimento em Python ou ter concluído o curso https://www.redhat.com/pt-br/services/training/ad141-red-hat-training-presents-introduction-to-python-programming[Python Programming with Red Hat (AD141)]
+* É obrigatório ter experiência no Red Hat OpenShift ou ter concluído o curso https://www.redhat.com/pt-br/services/training/red-hat-openshift-developer-ii-building-and-deploying-cloud-native-applications[Red Hat OpenShift Developer II: Building and Deploying Cloud-native Applications (DO288)]
+* É recomendado ter experiência básica nos campos de IA, ciência de dados e machine learning
+
+[.big]#**Considerações sobre tecnologia**#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/developing-and-deploying-aiml-applications-red-hat-openshift-ai-ai267

@@ -1,0 +1,507 @@
+
+= Visão Geral 
+A seguir, apresenta-se uma visão geral dos componentes que deverão ser instalados nos ambientes para viabilizar a implantação do Developer Hub.
+
+.Componentes
+image::../images/fig01.png[Componentes,align="center"]
+
+
+== OpenShift Container Platform (OCP)
+
+O Red Hat OpenShift Container Platform é uma plataforma de aplicações em containers construída sobre o Kubernetes, projetada para ambientes corporativos. Fornece recursos avançados de orquestração, segurança integrada, automação operacional e suporte a cargas de trabalho híbridas e multi-cloud. É a base de toda a solução proposta, responsável por hospedar e gerenciar os workloads dos ambientes de desenvolvimento, homologação e produção do {cust}.
+
+Referência: https://docs.openshift.com/container-platform/latest/welcome/index.html
+
+== Red Hat Developer Hub (RHDH)
+
+O Red Hat Developer Hub é uma plataforma interna para desenvolvedores (IDP — Internal Developer Platform) baseada no projeto open source Backstage, mantido pela CNCF. Centraliza o acesso a templates de software (Software Templates), catálogos de componentes, documentação técnica (TechDocs), pipelines, repositórios Git e plugins de ferramentas do ecossistema de desenvolvimento. Tem como objetivo reduzir o tempo de onboarding de novos desenvolvedores e padronizar o ciclo de vida do desenvolvimento de software no {cust}.
+
+Referência: https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.9
+
+== Red Hat Quay
+
+O Red Hat Quay é um registro de imagens de containers corporativo, com suporte a replicação geográfica, controle de acesso baseado em função (RBAC), varredura automática de vulnerabilidades, assinatura de imagens e rastreabilidade completa do ciclo de vida das imagens. Atua como repositório centralizado e confiável (_source of truth_) para todas as imagens utilizadas nos pipelines de CI/CD e nos clusters OpenShift do {cust}.
+
+Referência: https://docs.redhat.com/pt-br/documentation/red_hat_quay
+
+== Red Hat Advanced Cluster Management for Kubernetes (RHACM)
+
+O Red Hat Advanced Cluster Management for Kubernetes (RHACM) oferece gerenciamento centralizado de múltiplos clusters OpenShift e Kubernetes a partir de um único plano de controle. Permite criar, importar, configurar e monitorar clusters, além de distribuir políticas de conformidade, configurações e aplicações de forma consistente entre os clusters Hub, HML/DEV e PRD do {cust}. Integra-se nativamente ao OpenShift GitOps para entrega declarativa de configurações via GitOps.
+
+Referência: https://docs.redhat.com/pt-br/documentation/red_hat_advanced_cluster_management_for_kubernetes
+
+== Red Hat Advanced Cluster Security for Kubernetes (RHACS)
+
+O Red Hat Advanced Cluster Security for Kubernetes (RHACS) é uma plataforma de segurança nativa para Kubernetes e OpenShift. Oferece visibilidade contínua sobre vulnerabilidades em imagens e workloads, aplicação de políticas de segurança em tempo de execução, detecção de comportamentos anômalos, análise de conformidade e auditoria. No {cust}, o RHACS será integrado ao pipeline de CI/CD para aplicar o conceito de _shift-left_ de segurança, impedindo a promoção de imagens vulneráveis ou não conformes entre ambientes.
+
+Referência: https://docs.redhat.com/pt-br/documentation/red_hat_advanced_cluster_security_for_kubernetes
+
+== Red Hat build of Keycloak (RHBK)
+
+O Red Hat build of Keycloak (RHBK) é uma solução de gerenciamento de identidade e acesso (IAM) baseada no projeto open source Keycloak. Provê autenticação e autorização centralizadas por meio de protocolos padrões de mercado como OpenID Connect, OAuth 2.0 e SAML 2.0. No contexto da solução, o RHBK é responsável pelo gerenciamento das identidades dos desenvolvedores que acessam o Developer Hub e os demais serviços integrados, podendo ser federado com o serviço de diretório (LDAP/Active Directory) já existente no {cust}.
+
+Referência: https://docs.redhat.com/pt-br/documentation/red_hat_build_of_keycloak
+
+== Red Hat OpenShift Pipelines
+
+O Red Hat OpenShift Pipelines é uma solução de integração e entrega contínua (CI/CD) cloud-native baseada no projeto Tekton, da CNCF. Executa pipelines como workloads nativos do Kubernetes, sem dependência de servidor central, onde cada etapa do pipeline é executada em um container isolado e independente. No {cust}, os pipelines serão responsáveis pelas etapas de construção, teste, varredura de segurança e promoção de imagens entre os ambientes de desenvolvimento, homologação e produção.
+
+Referência: https://docs.openshift.com/pipelines/latest/about/about-pipelines.html
+
+== Red Hat OpenShift GitOps
+
+O Red Hat OpenShift GitOps é uma solução de entrega contínua baseada no projeto Argo CD, da CNCF, que implementa o modelo GitOps para o gerenciamento declarativo do estado dos clusters e das aplicações. Todo o estado desejado da infraestrutura e das aplicações é versionado em repositórios Git, e o OpenShift GitOps garante a reconciliação contínua entre o estado desejado e o estado atual dos clusters, eliminando desvios de configuração (_configuration drift_) nos ambientes do {cust}.
+
+Referência: https://docs.openshift.com/gitops/latest/about/about-openshift-gitops.html
+
+== Red Hat Ansible Automation Platform (AAP)
+
+O Red Hat Ansible Automation Platform é uma plataforma de automação de TI que permite criar, gerenciar e executar automações de forma escalável, auditável e governada. Inclui o Automation Controller (ex-Ansible Tower), o Automation Hub para gerenciamento de coleções e conteúdo e o Event-Driven Ansible para automações orientadas a eventos. No contexto da solução, o AAP complementa a stack DevOps do {cust}, automatizando tarefas de infraestrutura, provisionamento de ambientes e integrando-se aos pipelines de entrega.
+
+Referência: https://docs.redhat.com/pt-br/documentation/red_hat_ansible_automation_platform
+
+= Visão Lógica
+
+A seguir, uma visão lógica da solução de IDP (Internal Developer Platform) basead em Developer Hub e componentes nativos do OpenShift:
+
+.Arquitetura - Visão Lógica
+image::../images/fig02.png[visao_logicas,align="center"]
+
+A figura acima apresenta o fluxo lógico da solução baseada no Red Hat Developer Hub (RHDH), ilustrando como os componentes da plataforma se comunicam e colaboram para suportar o ciclo de vida completo do desenvolvimento de software no {cust}. O fluxo pode ser descrito nas seguintes etapas:
+
+. **Acesso e autenticação via RHBK:**
+O desenvolvedor acessa o portal do *Red Hat Developer Hub* autenticado pelo *Red Hat build of Keycloak (RHBK)*, que atua como provedor de identidade (IdP) centralizado. O RHBK é federado com o serviço de diretório corporativo do {cust} (LDAP/Active Directory), garantindo que o acesso ao RHDH e a todos os serviços integrados seja controlado por uma única identidade corporativa, via protocolos OpenID Connect/OAuth 2.0.
+
+. **Self-service de scaffolding via Software Templates:**
+Uma vez autenticado, o desenvolvedor utiliza os *Software Templates* disponíveis no catálogo do RHDH para criar novos projetos ou componentes de forma padronizada. O RHDH interage diretamente com o *GitLab* do {cust} para criar automaticamente o repositório de código, a estrutura de diretórios, os arquivos de configuração de pipeline e os manifestos de deploy, eliminando tarefas manuais e repetitivas e garantindo aderência aos padrões da organização desde o início do projeto.
+
+. **Disparo do pipeline via push de código:**
+Após o scaffolding, o desenvolvedor realiza o desenvolvimento e envia (_push_) o código para o repositório GitLab. O evento de push dispara automaticamente o *Red Hat OpenShift Pipelines* (Tekton), que executa o pipeline de CI/CD definido no repositório. Cada etapa do pipeline é executada em containers isolados dentro do cluster OpenShift, garantindo rastreabilidade e reprodutibilidade da execução.
+
+. **Build, scan e publicação de imagem no Quay:**
+O pipeline de CI executa as etapas de compilação e build da imagem de container, seguido da varredura de vulnerabilidades e conformidade realizada pelo *Red Hat Advanced Cluster Security for Kubernetes (RHACS)*. Somente imagens que atendem às políticas de segurança definidas são publicadas no *Red Hat Quay*, o registro corporativo de imagens. Ao ser publicada, a imagem recebe uma assinatura digital que garante sua autenticidade e rastreabilidade em todos os ambientes.
+
+. **Atualização do manifesto e entrega contínua via GitOps:**
+Após a publicação da imagem, o pipeline atualiza automaticamente o manifesto de deploy no repositório de configuração Git com a nova _tag_ da imagem aprovada. O *Red Hat OpenShift GitOps* (Argo CD) monitora continuamente esse repositório e reconcilia o estado desejado declarado no Git com o estado atual dos clusters OpenShift — Hub, HML/DEV e PRD — garantindo que as aplicações do {cust} estejam sempre no estado esperado e que qualquer desvio de configuração (_configuration drift_) seja detectado e corrigido automaticamente.
+
+. **Gerenciamento e visibilidade multi-cluster via RHACM:**
+O *Red Hat Advanced Cluster Management for Kubernetes (RHACM)* fornece visibilidade centralizada sobre todos os clusters OpenShift do {cust}. Distribui políticas de conformidade, configurações de segurança e aplicações entre os clusters de forma consistente, e integra-se ao OpenShift GitOps para garantir que as aplicações sejam entregues  nos clusters corretos conforme as políticas definidas.
+
+. **Automação de infraestrutura via AAP:**
+O *Red Hat Ansible Automation Platform (AAP)* complementa o fluxo automatizando tarefas de infraestrutura que estão fora do escopo nativo do Kubernetes — como provisionamento de recursos de rede, configuração de sistemas operacionais, integração com sistemas legados e execução de runbooks operacionais. O AAP pode ser acionado diretamente pelo pipeline do OpenShift Pipelines ou pelo Event-Driven Ansible em resposta a eventos da plataforma.
+
+. **Visibilidade e rastreabilidade no RHDH:**
+Ao longo de todo o fluxo, o *Red Hat Developer Hub* agrega e exibe de forma unificada o estado das aplicações, o histórico de execuções dos pipelines, o status dos deploys nos diferentes ambientes e os links para os recursos relacionados (repositório, imagem no Quay, logs do pipeline, instância no cluster). Essa visibilidade centralizada é o principal diferencial do RHDH como IDP, eliminando a necessidade de os desenvolvedores navegarem entre múltiplas ferramentas para acompanhar o ciclo de vida de suas aplicações.
+
+A figura abaixo, representa os principais integração do Developer Hub e o catálogo inicial que será provisionado:
+
+.Catálogo Inicial
+image::../images/fig03.png[Catalogo,align="center", pdfwidth=75%]
+
+Com base na figura 03, o catálogo inicial do Red Hat Developer Hub deve priorizar templates que acelerem o onboarding e já entreguem os padrões técnicos da plataforma. A proposta inicial inclui templates para APIs e microsserviços backend, aplicações frontend, serviços de integração e componentes utilitários (jobs/batch). Cada template deve provisionar automaticamente a estrutura base do projeto, incluindo repositório no GitLab, arquivos de pipeline, manifestos de implantação e documentação técnica inicial.
+
+As saídas esperadas do RHDH nesse catálogo inicial são: criação padronizada de componentes no catálogo de software, geração de repositórios com convenções do {cust}, habilitação de pipelines de CI/CD, versionamento de manifestos para GitOps e vinculação dos artefatos operacionais (pipeline, imagem e ambiente) em uma visão única do componente no portal. Dessa forma, o RHDH deixa de ser apenas um catálogo e passa a ser o ponto de entrada do ciclo de vida de entrega.
+
+Ainda conforme a figura 03, as principais integrações do RHDH concentram-se em identidade, desenvolvimento, entrega e operação. O RHDH integra-se ao RHBK para autenticação corporativa e controle de acesso; ao GitLab para scaffolding e versionamento; ao OpenShift Pipelines para execução de CI; ao RHACS para validações de segurança; ao Red Hat Quay para publicação de imagens; ao OpenShift GitOps para reconciliação declarativa de deployments; ao RHACM para governança multi-cluster; e ao AAP para automações de infraestrutura. Em conjunto, essas integrações formam a base da IDP do {cust}, com foco em padronização, rastreabilidade e redução do tempo entre criação e disponibilização de novos serviços.
+
+A figura 04 representa o fluxo de identidade e autorização entre RHBK, RHDH e GitLab para governança do catálogo e controle de permissões por perfil. Nesse modelo, o RHBK atua como fonte única de identidades e grupos, enquanto o RHDH e o GitLab consomem os atributos do usuário autenticado para aplicar regras de acesso consistentes.
+
+.Integração RHBK + GitLab
+image::../images/fig04.png[rhbk,align="center",  pdfwidth=60%]
+
+No processo de login, o usuário autentica no RHBK (federado ao diretório corporativo), e os _claims_ de grupos são enviados ao RHDH via OIDC. O RHDH realiza o mapeamento desses grupos para permissões internas de catálogo, scaffolder e administração da plataforma. Em paralelo, o GitLab aplica memberships e permissões de projeto/grupo de acordo com os mesmos grupos corporativos, preservando alinhamento entre a experiência no portal e o acesso aos repositórios.
+
+Para a definição inicial de governança, recomenda-se a separação em dois perfis principais:
+
+. **Grupo administrativo (especial):** possui acesso ao catálogo de automação/Ansible, pode criar, editar e publicar novos templates no RHDH, além de administrar entidades e parâmetros de scaffolding. Esse grupo também deve ter memberships no GitLab com permissão de manutenção dos repositórios-base de templates e dos repositórios de configuração da plataforma.
+
+. **Grupo de desenvolvedores:** possui acesso apenas ao catálogo de desenvolvimento (templates homologados para consumo), com permissão para instanciar templates e criar componentes derivados. No GitLab, esse perfil recebe memberships compatíveis com desenvolvimento dos projetos de aplicação, sem permissão para alterar templates globais, catálogo administrativo ou configurações centrais da plataforma.
+
+Com esse mapeamento, a administração do catálogo fica centralizada e auditável, enquanto os times de desenvolvimento mantêm autonomia de consumo com limites claros de governança. O resultado é um modelo seguro de _self-service_, em que o RHDH acelera a entrega sem abrir mão de controle sobre padrões, templates oficiais e segregação de responsabilidades.
+
+A figura 05 consolida o fluxo de autorização da solução, conectando autenticação corporativa, controle de catálogo no RHDH e permissões de trabalho no GitLab. O objetivo desse desenho é garantir que a identidade do usuário, seus grupos e seus níveis de acesso sejam consistentes em toda a jornada — da entrada no portal até a criação e manutenção de componentes de software.
+
+.Fluxo de autorização
+image::../images/fig05.png[fluxo,align="center",  pdfwidth=75%]
+
+
+Nesse fluxo, o RHBK centraliza a autenticação e publica os grupos do usuário nos _tokens_ OIDC consumidos pelo RHDH. O RHDH interpreta esses grupos para aplicar regras de autorização no catálogo (visualização, consumo e administração de templates) e para controlar ações no scaffolder. Em sequência, o GitLab aplica memberships equivalentes para assegurar que o mesmo usuário tenha no repositório exatamente o nível de permissão compatível com seu perfil no portal.
+
+No contexto do {cust}, esse encadeamento viabiliza segregação de funções e governança do catálogo: perfis administrativos podem manter templates e componentes de plataforma, enquanto perfis de desenvolvimento consomem templates homologados para entrega de aplicações. Como resultado, a integração representada na figura 05 reduz inconsistências de acesso, fortalece a auditabilidade e sustenta o modelo de IDP com segurança e padronização de ponta a ponta.
+
+== Mapeamento de Grupos do GitLab no RHBK
+
+O RHBK utiliza o protocolo OpenID Connect para federar a identidade do GitLab e sincronizar os grupos do usuário no momento da autenticação. A configuração é realizada por meio de um *Identity Provider* do tipo OIDC/OAuth 2.0 no realm do RHDH, combinado com um ou mais *mappers* responsáveis por extrair os grupos presentes no token do GitLab e publicá-los como atributos ou roles no token emitido pelo RHBK para o RHDH.
+
+O fluxo técnico é resumido em três etapas:
+
+. O GitLab emite um token OIDC contendo o claim `groups` com os grupos de que o usuário é membro.
+. O RHBK intercepta esse claim por meio de um mapper configurado no Identity Provider e o propaga como grupos internos do realm.
+. O RHDH consome os grupos via claim `groups` (ou role mapping) no token OIDC emitido pelo RHBK, aplicando as regras de autorização do catálogo.
+
+=== Configuração do Identity Provider GitLab no RHBK
+
+O trecho abaixo exemplifica a criação do Identity Provider GitLab via API REST do RHBK (Keycloak Admin REST API), utilizando o fluxo Authorization Code:
+
+[source,json]
+----
+POST /admin/realms/{realm}/identity-provider/instances
+
+{
+  "alias": "gitlab",
+  "displayName": "GitLab",
+  "providerId": "oidc",
+  "enabled": true,
+  "trustEmail": true,
+  "firstBrokerLoginFlowAlias": "first broker login",
+  "config": {
+    "clientId": "<GITLAB_APPLICATION_ID>",
+    "clientSecret": "<GITLAB_APPLICATION_SECRET>",
+    "authorizationUrl": "https://gitlab.{cust}.gov.br/oauth/authorize",
+    "tokenUrl": "https://gitlab.{cust}.gov.br/oauth/token",
+    "userInfoUrl": "https://gitlab.{cust}.gov.br/oauth/userinfo",
+    "jwksUrl": "https://gitlab.{cust}.gov.br/oauth/discovery/keys",
+    "issuer": "https://gitlab.{cust}.gov.br",
+    "defaultScope": "openid profile email",
+    "syncMode": "FORCE",
+    "validateSignature": "true",
+    "useJwksUrl": "true"
+  }
+}
+----
+
+NOTE: O campo `syncMode: FORCE` garante que os atributos do usuário (incluindo grupos) sejam sempre resincronizados com o GitLab a cada login, mantendo a consistência entre os memberships do GitLab e as permissões no RHDH.
+
+=== Mapper de Grupos GitLab → RHBK
+
+Após configurar o Identity Provider, é necessário criar um mapper para extrair o claim `groups` do token do GitLab e propagá-lo como grupos internos do RHBK:
+
+[source,json]
+----
+POST /admin/realms/{realm}/identity-provider/instances/gitlab/mappers
+
+{
+  "name": "gitlab-groups-mapper",
+  "identityProviderMapper": "oidc-group-idp-mapper",
+  "identityProviderAlias": "gitlab",
+  "config": {
+    "syncMode": "FORCE",
+    "claim": "groups",
+    "group": "/"
+  }
+}
+----
+
+Para mapeamentos específicos (por exemplo, mapear o grupo GitLab `detran/platform-admins` para o grupo RHBK `rhdh-admins`), utiliza-se o mapper do tipo `hardcoded-group-idp-mapper` ou uma combinação de `oidc-group-idp-mapper` com `attribute-importer`:
+
+[source,json]
+----
+POST /admin/realms/{realm}/identity-provider/instances/gitlab/mappers
+
+{
+  "name": "gitlab-platform-admins-to-rhdh-admins",
+  "identityProviderMapper": "hardcoded-group-idp-mapper",
+  "identityProviderAlias": "gitlab",
+  "config": {
+    "syncMode": "FORCE",
+    "attribute": "groups",
+    "attribute.value": "detran/platform-admins",
+    "group": "rhdh-admins"
+  }
+}
+----
+
+=== Propagação dos Grupos para o RHDH via Claim OIDC
+
+Para que o RHDH receba os grupos no token OIDC emitido pelo RHBK, deve-se configurar um Protocol Mapper no client `rhdh` do realm que publique os grupos do usuário no claim `groups`:
+
+[source,json]
+----
+POST /admin/realms/{realm}/clients/{rhdh-client-id}/protocol-mappers/models
+
+{
+  "name": "groups",
+  "protocol": "openid-connect",
+  "protocolMapper": "oidc-group-membership-mapper",
+  "consentRequired": false,
+  "config": {
+    "full.path": "false",
+    "id.token.claim": "true",
+    "access.token.claim": "true",
+    "userinfo.token.claim": "true",
+    "claim.name": "groups"
+  }
+}
+----
+
+Com `full.path: false`, o claim `groups` terá apenas o nome do grupo (ex.: `rhdh-admins`), sem o caminho completo no realm. Dependendo da configuração do plugin de autenticação do RHDH, pode ser necessário usar `full.path: true` (ex.: `/rhdh-admins`).
+
+=== Tabela de Mapeamento de Grupos Recomendados
+
+A tabela abaixo apresenta o mapeamento inicial recomendado entre grupos do GitLab, grupos internos do RHBK e permissões no RHDH:
+
+[cols="2,2,2,3",options="header"]
+|===
+|Grupo GitLab |Grupo RHBK |Permissão no RHDH |Descrição
+
+|`detran/platform-admins`
+|`rhdh-admins`
+|Admin (catálogo, templates, configuração)
+|Equipe de plataforma responsável por manter templates, configurações e entidades centrais do RHDH.
+
+|`detran/developers`
+|`rhdh-developers`
+|Developer (consumo de templates, criação de componentes)
+|Times de desenvolvimento com acesso ao catálogo homologado e ao scaffolder.
+
+|`detran/viewers`
+|`rhdh-viewers`
+|Viewer (somente leitura do catálogo)
+|Stakeholders e perfis de auditoria que necessitam visibilidade do catálogo sem permissão de criação.
+|===
+
+NOTE: A nomenclatura dos grupos deve ser alinhada com a estrutura de grupos já existente no GitLab do {cust}, minimizando a criação de grupos adicionais e aproveitando os memberships já gerenciados pelas equipes de operações.
+
+= Visão Física
+
+A visão física abaixo detalha a arquitetura em nível de infraestrutura (nós e segmentos de rede) e as comunicações principais entre os componentes da solução no OpenShift/Kubernetes.
+
+.Visão Física - Infraestrutura e comunicação de rede
+image::../images/fig06.png[fluxo,align="center",  pdfwidth=60%]
+
+== Comunicação de rede entre componentes
+
+[cols="2,3,2",options="header"]
+|===
+|Origem -> Destino |Finalidade |Protocolo
+
+|Usuário -> RHDH (Route)
+|Acesso ao portal e catálogo
+|HTTPS (443)
+
+|RHDH -> RHBK
+|Autenticação e autorização (SSO, tokens e grupos)
+|OIDC/OAuth2 sobre HTTPS (443)
+
+|RHDH -> GitLab
+|Scaffolding, criação de repositórios e leitura de metadados
+|HTTPS (443)
+
+|Tekton -> GitLab
+|Clone/push de código e atualização de manifestos
+|HTTPS (443) ou SSH (22, quando aplicável)
+
+|Tekton -> Quay
+|Push/pull de imagens de container
+|HTTPS (443)
+
+|Tekton/RHDH -> RHACS
+|Consulta e validação de políticas e vulnerabilidades
+|HTTPS (443)
+
+|Argo CD (Hub) -> HML/DEV e PRD
+|Reconciliação de aplicações e estado desejado
+|HTTPS (443) para API Kubernetes
+
+|RHACM (Hub) -> HML/DEV e PRD
+|Governança, distribuição de políticas e observabilidade multi-cluster
+|HTTPS (443) para APIs dos clusters gerenciados
+
+|AAP -> APIs OpenShift/GitLab/serviços internos
+|Automação operacional e integrações de infraestrutura
+|HTTPS (443)
+|===
+
+Essa topologia reforça a separação entre plano de controle, plano de dados e camada de aplicações, mantendo a comunicação principal em TLS, com governança centralizada no Hub e execução distribuída nos ambientes HML/DEV e PRD.
+
+== Segmentação por zonas de rede
+
+Como complemento da visão física, a segmentação abaixo organiza a comunicação em zonas lógicas para reduzir superfície de ataque, facilitar troubleshooting e apoiar regras de firewall/egress controlado.
+
+.Visão Física - Segmentação de rede
+image::../images/fig07.png[fluxo,align="center",  pdfwidth=60%]
+
+
+== Diretrizes de comunicação por zona
+
+[cols="2,3,2",options="header"]
+|===
+|Origem -> Destino |Regra de comunicação |Protocolo/Porta
+
+|Zona Externa -> Zona DMZ
+|Somente entradas publicadas por Route/Ingress
+|HTTPS 443
+
+|Zona DMZ -> Zona de Serviços da IDP
+|Apenas serviços internos necessários (RHDH, RHBK, Quay, AAP)
+|HTTPS 443
+
+|Zona de Serviços da IDP -> Zona de Gestão
+|Chamadas autenticadas à API do OpenShift e controladores
+|HTTPS 443
+
+|Zona de Serviços da IDP -> Zona de Segurança
+|Validação de imagem, políticas e compliance
+|HTTPS 443
+
+|Zona de Serviços da IDP -> Zonas de Aplicação (HML/DEV e PRD)
+|Deploy e reconciliação via GitOps/RHACM com segregação por ambiente
+|HTTPS 443
+
+|Zonas de Aplicação -> Zona de Egress
+|Saída controlada por allowlist e policy de destino
+|HTTPS 443 (e portas específicas quando aprovado)
+|===
+
+Essa segmentação recomenda aplicar NetworkPolicies por namespace, controle de egress por ambiente e trilhas de auditoria centralizadas, mantendo o princípio de menor privilégio entre componentes da plataforma.
+
+== Matriz de comunicação por componente
+
+A matriz abaixo detalha os fluxos essenciais de rede por componente, com foco em implementação de regras de firewall, egress e NetworkPolicies.
+
+[cols="2,2,3,2",options="header"]
+|===
+|Componente (origem) |Destino |Finalidade |Protocolo/Porta
+
+|RHBK
+|LDAP/AD corporativo
+|Federação de identidade e validação de usuários/grupos
+|LDAPS 636 (ou LDAP 389 quando aplicável)
+
+|RHDH
+|RHBK
+|Login SSO, recebimento de token OIDC e resolução de grupos
+|HTTPS 443
+
+|RHDH
+|GitLab
+|Scaffolding, criação de repositórios e consulta de projetos
+|HTTPS 443
+
+|RHDH
+|API OpenShift (Cluster HUB)
+|Leitura de recursos e integração com plugins da plataforma
+|HTTPS 443
+
+|Tekton (Pipelines)
+|GitLab
+|Clone/push de código e atualização de manifestos GitOps
+|HTTPS 443 (ou SSH 22 quando aprovado)
+
+|Tekton (Pipelines)
+|Quay
+|Push/pull de imagens de container
+|HTTPS 443
+
+|Tekton (Pipelines)
+|RHACS
+|Consulta de políticas e checagem de vulnerabilidades/compliance
+|HTTPS 443
+
+|RHACS
+|Quay/Registry
+|Análise de imagens e metadados de segurança
+|HTTPS 443
+
+|OpenShift GitOps (Argo CD)
+|API Kubernetes (HML/DEV)
+|Reconciliação de aplicações e estado declarado
+|HTTPS 443
+
+|OpenShift GitOps (Argo CD)
+|API Kubernetes (PRD)
+|Reconciliação de aplicações e estado declarado
+|HTTPS 443
+
+|RHACM Hub
+|Clusters gerenciados (HML/DEV e PRD)
+|Governança, distribuição de políticas e gestão de ciclo de vida
+|HTTPS 443
+
+|AAP
+|API OpenShift / GitLab / serviços corporativos
+|Execução de automações operacionais e integrações externas
+|HTTPS 443
+
+|Aplicações (HML/DEV e PRD)
+|Serviços externos permitidos
+|Consumo de APIs externas sob política de egress controlado
+|HTTPS 443 (demais portas somente por exceção aprovada)
+|===
+
+Para ambientes com maior restrição, recomenda-se separar regras por namespace (ex.: `rhdh`, `cicd`, `gitops`, `security`, `registry`, `aap`) e por ambiente (HML/DEV e PRD), mantendo listas de destino explícitas (allowlist) e bloqueio padrão para tráfego não mapeado.
+
+== Recursos computacionais para implementação (uso médio)
+
+Para a implementação inicial no OpenShift, recomenda-se o dimensionamento abaixo como baseline de uso médio. Os valores consideram operação corporativa com alta disponibilidade lógica dos serviços críticos no cluster Hub e volume moderado de pipelines e deploys.
+
+[cols="2,1,1,1,1,2",options="header"]
+|===
+|Tecnologia |Réplicas |CPU (requests/limits) |Memória (requests/limits) |Armazenamento inicial |Observações
+
+|RHDH
+|2
+|500m / 2 vCPU (por pod)
+|1Gi / 4Gi (por pod)
+|20Gi (PVC para dados/plugins, quando aplicável)
+|Portal de desenvolvimento; manter 2 réplicas para disponibilidade.
+
+|RHBK
+|2
+|500m / 2 vCPU (por pod)
+|1Gi / 4Gi (por pod)
+|20Gi (banco de dados do Keycloak em storage dedicado)
+|Componente de autenticação; priorizar estabilidade e latência baixa.
+
+|Tekton (Pipelines)
+|1 (control plane) + execução elástica
+|1 vCPU / 4 vCPU (controller); 500m / 2 vCPU (tasks)
+|2Gi / 8Gi (controller); 1Gi / 4Gi (tasks)
+|50Gi (workspace/cache inicial)
+|Capacidade depende do paralelismo de pipelines; escalar workers conforme demanda.
+
+|RHACS
+|2 (Central) + sensores por cluster
+|1 vCPU / 4 vCPU (Central)
+|4Gi / 8Gi (Central)
+|100Gi (dados de vulnerabilidade, compliance e histórico)
+|Pode exigir crescimento rápido de storage conforme retenção de dados.
+
+|Quay
+|2 (app) + serviços de apoio
+|1 vCPU / 4 vCPU (por pod app)
+|2Gi / 8Gi (por pod app)
+|500Gi inicial (registry) + 50Gi (banco)
+|Volume varia com política de retenção de imagens e número de builds.
+
+|OpenShift GitOps (Argo CD)
+|2 (controller/server/repo)
+|500m / 2 vCPU (por componente principal)
+|1Gi / 4Gi (por componente principal)
+|20Gi (cache de repositórios e estado)
+|Escalar conforme quantidade de aplicações e frequência de reconciliação.
+
+|RHACM
+|2 (Hub components)
+|1 vCPU / 4 vCPU (por componente principal)
+|2Gi / 8Gi (por componente principal)
+|100Gi (dados de governança/políticas/eventos)
+|Considerar expansão com aumento de clusters gerenciados.
+
+|AAP
+|2 (controller/web/task) + serviços associados
+|1 vCPU / 4 vCPU (por componente principal)
+|2Gi / 8Gi (por componente principal)
+|100Gi (projetos, inventários, artefatos e logs)
+|Carga varia com número de automações simultâneas e integrações externas.
+|===
+
+=== Capacidade agregada inicial sugerida (cluster Hub)
+
+Como referência para o cluster Hub, recomenda-se reservar capacidade computacional para plataforma em torno de:
+
+* **CPU:** 40 a 60 vCPU totais para componentes de plataforma e picos de CI.
+* **Memória:** 128 a 192 GiB para serviços base, controladores e picos de execução.
+* **Armazenamento persistente:** 1 a 2 TiB somando registry, segurança, automação e dados auxiliares.
+
+Esse baseline deve ser ajustado após as primeiras semanas de operação com base em métricas reais (uso de CPU/memória, taxa de pipelines, crescimento do registry, retenção de segurança e janela de reconciliação GitOps).

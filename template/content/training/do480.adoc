@@ -1,0 +1,49 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Multicluster Management with Red Hat OpenShift Platform Plus (DO480)
+
+[.big]#*Descrição do curso*#
+
+*Aprimore os recursos de gerenciamento de containers com automação, governança e segurança em todos os clusters.*
+
+Com o Multicluster Management with https://www.redhat.com/pt-br/technologies/cloud-computing/openshift/platform-plus[Red Hat OpenShift Platform Plus], você aprende as habilidades necessárias para manter um portfólio diversificado de aplicações que são executadas em vários clusters do OpenShift. As aplicações seguem regras de posicionamento determinadas pela capacidade e pela importância, e as configurações de cluster obedecem a políticas de governança e segurança: tudo isso é automatizado de acordo com os princípios do https://www.redhat.com/pt-br/topics/devops[DevOps].
+
+Este curso é baseado no Red Hat OpenShift Container Platform 4.10 e no Red Hat Advanced Cluster Management 2.4.
+
+*Observação:* este curso tem duração de cinco dias. As durações podem variar de acordo com a entrega. Para obter detalhes completos, programação e preços do curso, selecione sua localização e "Registre-se" no menu à direita.
+
+[.big]#*Resumo do conteúdo*#
+
+* Implantar o https://www.redhat.com/pt-br/technologies/management/advanced-cluster-management[Red Hat Advanced Cluster Management for Kubernetes (RHACM)] em um cluster do hub
+* Adicionar um cluster gerenciado ao RHACM (configurar um cluster para ser gerenciado pelo RHACM)
+* Definir e aplicar políticas de configuração de clusters
+* Detectar e corrigir não conformidades com as políticas de configuração de clusters
+* Visualizar e comparar as configurações entre diferentes clusters
+* Definir e implementar políticas de posicionamento de aplicações
+* Identificar e comparar recursos de aplicações de vários clusters
+* Implantar o https://www.redhat.com/pt-br/technologies/cloud-computing/quay[Red Hat Quay] no cluster do hub
+* Implantar o Red Hat Advanced Cluster Security for Kubernetes (RHACS) no cluster do hub
+* Integrar o Red Hat Quay e o RHACS com o RHACM
+
+[.big]#*Público-alvo*#
+
+* Administradores de sistema, desenvolvedores, engenheiros de confiabilidade de sites e arquitetos de TI interessados em gerenciar e automatizar o gerenciamento de uma frota de clusters do OpenShift, possivelmente em diferentes data centers e provedores de nuvem.
+
+[.big]#*Pré-requisitos do curso*#
+
+* https://skills.ole.redhat.com/[Faça nossa avaliação gratuita] e descubra se esta é a melhor opção para você.Obrigatório:
+** Concluir os cursos https://www.redhat.com/pt-br/services/training/red-hat-openshift-administration-ii-configuring-a-production-cluster[Red Hat OpenShift Administration II: Operating a Production Kubernetes Cluster (DO280)] e https://www.redhat.com/pt-br/services/training/red-hat-certified-openshift-administrator-exam[Red Hat Certified OpenShift Administrator Certification (EX280)] ou ter habilidades básicas equivalentes com relação à administração do Kubernetes e OpenShift
+* Recomendado e opcional
+** Com o curso https://www.redhat.com/pt-br/services/training/do380-red-hat-openshift-administration-iii-scaling-deployments-in-the-enterprise[Red Hat OpenShift Administration III: Scaling Kubernetes Deployments in the Enterprise (DO380)], você aprende sobre a configuração, registro e monitoramento em todo o cluster e sobre a automação do Ansible com o OpenShift
+** https://www.redhat.com/pt-br/services/training/do322-red-hat-openshift-installation-lab/pt-br/services/training/do322-red-hat-openshift-installation-lab[Red Hat OpenShift Installation Lab (DO322)] ensina como instalar o OpenShift usando IPI e UPI
+** Entender os fundamentos do https://www.redhat.com/pt-br/technologies/management/ansible[Ansible], incluindo a escrita e execução de playbooks simples, ou ter experiência equivalente
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/do480-multicluster-management-red-hat-openshift-platform-plus

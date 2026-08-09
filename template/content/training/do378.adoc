@@ -1,0 +1,47 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat Cloud-native Microservices Development with Quarkus (DO378)
+
+[.big]#*Descrição do curso*#
+
+*Desenvolva aplicações baseadas em microsserviços com Quarkus e OpenShift*
+
+As empresas estão migrando para arquiteturas de microsserviços nativos em nuvem. Quarkus é uma ferramenta nova e incrível que confere a confiabilidade, familiaridade e maturidade do Java Enterprise com um tempo de implantação pronto para container e muito rápido. O Red Hat Cloud-native Microservices Development with Quarkus (DO378) dá ênfase à aprendizagem de princípios arquitetônicos e à implementação de microsserviços baseados na  Versão Red Hat do Quarkus e Red Hat OpenShift. Usando os princípios básicos do desenvolvimento de aplicações, você se concentrará em como desenvolver, monitorar, testar e implantar aplicações modernas de microsserviços.
+
+Este curso é baseado no OpenShift 4.14 e na Versão Red Hat do Quarkus 3.8.
+
+Após a conclusão do curso, você receberá 45 dias de acesso prolongado aos laboratórios hands-on para qualquer curso que inclua um ambiente virtual.
+
+*Observação*: este curso é oferecido como aulas virtuais em cinco dias ou em ritmo individualizado. A duração pode variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do conteúdo*#
+
+* Implantação de aplicações de microsserviço no Red Hat OpenShift Container Platform.
+* Criação de aplicações de microsserviços com o Quarkus.
+* Implementação de testes de unidade e integração para microsserviços.
+* Uso da especificação da configuração para injetar dados em um microsserviço.
+* Proteção de um microsserviço usando OAuth.
+* Implementação de verificações de integridade, rastreamento e monitoramento de microsserviços.
+* Criação de aplicações reativas e assíncronas usando o Quarkus.
+
+[.big]#*Público-alvo*#
+
+Este curso foi elaborado para desenvolvedores de aplicações em Java.
+
+[.big]#*Treinamento recomendado*#
+
+* https://www.redhat.com/pt-br/services/training/ad183-red-hat-application-development-i-programming-java-ee[Red Hat Application Development I: Programming in Java EE (AD183)]
+* ou experiência em desenvolvimento de aplicações JavaProficiência no uso de um IDE, como o Visual Studio Code.
+* Experiência com Maven e controle de versão é recomendável, mas não é obrigatória.
+* Recomendado, mas não obrigatório: experiência com ohttps://www.redhat.com/pt-br/services/training/do101-introduction-openshift-applications[ OpenShift ou Introduction to OpenShift Applications (DO101)]
+* https://skills.ole.redhat.com/[Faça nossa avaliação gratuita] para saber se esta oferta é a mais adequada para suas habilidades.
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/red-hat-cloud-native-microservices-development-quarkus-do378

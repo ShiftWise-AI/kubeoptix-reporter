@@ -1,0 +1,34 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat OpenShift AI Technical Overview (AI067)
+
+*Uma introdução à operacionalização de IA/ML com o Red Hat OpenShift AI*
+
+[.big]#**Descrição do curso**#
+
+* Esta visão geral técnica gratuita descreve o cenário atual de inteligência artificial e machine learning (IA/ML) e os desafios associados ao desenvolvimento e à implantação de aplicações de IA/ML. O conteúdo do vídeo sob demanda também aborda como o Red Hat OpenShift AI se baseia nos recursos do Red Hat OpenShift em oferecer uma única plataforma híbrida de IA e MLOps consistente e empresarial.
+
+[.big]#**Resumo do conteúdo do curso**#
+
+* Como a IA progrediu até onde está hoje?
+* Como o cenário de IA/ML está evoluindo
+* Arquitetura do Red Hat OpenShift AI
+* Ecossistemas parceiros de IA/ML da Red Hat
+* Demonstração de caso de uso
+
+[.big]#**Público-alvo**#
+
+* Cientistas de dados e profissionais de IA que querem criar e treinar modelos de ML
+* Desenvolvedores que querem criar e integrar aplicações habilitadas para IA/ML
+* Engenheiros de MLOps responsáveis por instalar, configurar, implantar e monitorar aplicações de IA/ML
+
+[.big]#**Treinamento recomendado**#
+
+* Não há pré-requisitos para esta visão geral técnica.
+
+[.big]#**Requisitos técnicos**#
+
+* N/A
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/ai067-red-hat-openshift-ai-technical-overview

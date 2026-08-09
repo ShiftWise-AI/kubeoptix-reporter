@@ -1,0 +1,48 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat OpenShift Development I: Introduction to Containers with Podman (DO188)
+
+[.big]#*Descrição do curso*#
+
+*Um curso introdutório para desenvolvedores sobre criação e gerenciamento de containers com o Podman para implantar aplicações no Red Hat OpenShift.*
+
+O curso Red Hat OpenShift Development I: Introduction to Containers with Podman (DO188) é uma introdução à criação, à execução e ao gerenciamento de containers com o Podman e o Red Hat OpenShift. Neste curso, você aprende com experiência hands-on as principais habilidades para desenvolver aplicações em containers. Essas habilidades podem ser aplicadas em todas as versões do OpenShift, incluindo o Red Hat OpenShift on AWS (ROSA), o Azure Red Hat OpenShift (ARO) e o OpenShift Container Platform.
+
+O curso é baseado no Red Hat® Enterprise Linux® 9, Podman 5 e Red Hat OpenShift® 4.18.
+
+Após a conclusão do curso, o acesso prático ao laboratório permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+*Observação:* este curso é oferecido nos formatos presencial (três dias), aula virtual (quatro dias) ou online (individualizado). A duração do curso pode variar de acordo com o formato escolhido. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Enviar" no menu à direita.
+
+[.big]#*Resumo do conteúdo*#
+
+* Introdução aos https://www.redhat.com/pt-br/topics/containers[containers]
+* Execução de containers com Podman CLI e Podman Desktop
+* Criação de imagens de container personalizadas
+* Gerenciamento de imagens de container
+* Depuração remota com containers
+* Rede básica de containers
+* Dados persistentes com containers
+* Execução de aplicações multicontainer
+* Solução de problemas em implantações de containers
+* Orquestração de containers com o OpenShift e o https://www.redhat.com/pt-br/topics/containers/what-is-kubernetes[Kubernetes]
+
+[.big]#*Público-alvo do curso*#
+
+* Desenvolvedores e https://www.redhat.com/pt-br/solutions/sre-approach[engenheiros de confiabilidade de sites] iniciantes na tecnologia de containers
+
+[.big]#*Pré-requisitos do curso*#
+
+* https://skills.ole.redhat.com/[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para suas habilidades
+* Experiência com arquiteturas de aplicações web e tecnologias correspondentes
+* É recomendável ter experiência no uso de uma sessão do terminal https://www.redhat.com/pt-br/topics/linux[Linux], na emissão de comandos do sistema operacional e familiaridade com script de shell
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/do188-red-hat-open-shift-development-introduction-containers-with-podman

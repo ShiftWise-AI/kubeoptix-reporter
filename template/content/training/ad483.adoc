@@ -1,0 +1,38 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Desenvolvendo aplicações orientadas a eventos com o Red Hat AMQ Streams e o Apache Kafka with exam (AD483)
+
+[.big]#*Descrição do curso*#
+
+*Desenvolva, escale e solucione problemas de aplicações de microsserviços orientados a eventos.*
+
+Aprenda a usar o Kafka e o AMQ Streams para projetar, desenvolver e testar aplicações orientadas a eventos. Esses microsserviços escalam globalmente, armazenam e transmitem dados de processo e oferecem feedback de baixa latência aos clientes. Este curso é direcionado a desenvolvedores de aplicações e é baseado no Red Hat AMQ Streams 1.8 e no Red Hat OpenShift Container Platform 4.6. O https://www.redhat.com/pt-br/services/training/red-hat-certified-specialist-event-driven-application-development-exam[Red Hat Certified Specialist in Event-Driven Development with Kafka exam (EX482)] está incluso no pacote.
+
+[.big]#*Resumo do curso*#
+
+* Descrever os fundamentos do Kafka e sua arquitetura.
+* Desenvolver aplicações com a API do Kafka Streams.
+* Integrar aplicações com o Kafka Connect.
+* Detectar alterações de dados com o Debezium.
+* Solucionar problemas comuns de transmissão de aplicações.
+
+[.big]#*Público-alvo*#
+
+Desenvolvedores de aplicações com experiência em desenvolvimento de microsserviços.
+
+* Desenvolvedores de aplicações com experiência em desenvolvimento de microsserviços.
+
+[.big]#*Pré-requisitos do curso*#
+
+Desenvolvedores de aplicações com experiência em desenvolvimento de microsserviços.
+
+* Experiência com desenvolvimento e design de aplicações de microsserviços, como DO378 ou equivalente.
+* Ter experiência no OpenShift é recomendável, porém não obrigatório.
+
+Requisitos técnicos
+
+* Ambiente de sala de aula BYOD com acesso ao cluster compartilhado.
+* Um ambiente de sala de aula baseado em nuvem também será disponibilizado.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/ad483-developing-event-driven-applications-apache-kafka-and-red-hat-amq-streams

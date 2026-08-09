@@ -1,0 +1,56 @@
+replicaCount: 1
+
+nameOverride: ""
+fullnameOverride: ""
+
+build:
+  enabled: true
+  git:
+    uri: https://github.com/ShiftWise-AI/kubeoptix-reporter.git
+    ref: main
+    sourceSecret: github-auth
+  sourceSecret:
+    create: false
+    username: x-access-token
+    token: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+
+image:
+  tag: latest
+  pullPolicy: Always
+
+service:
+  port: 8000
+
+persistence:
+  existingClaim: harvester-app-data
+  mountPath: /data/reports
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+probes:
+  startup:
+    failureThreshold: 30
+    periodSeconds: 2
+  readiness:
+    initialDelaySeconds: 2
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+  liveness:
+    initialDelaySeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 2
+    failureThreshold: 3

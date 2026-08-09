@@ -1,0 +1,46 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat Security: Linux in Physical, Virtual, and Cloud (RH415)
+
+O curso "Red Hat Security: Linux in Physical, Virtual, and Cloud" (RH415) é destinado a profissionais de administração de sistemas e segurança que gerenciam a operação segura de sistemas computacionais que executam o Red Hat Enterprise Linux em hardware físico, como máquinas virtuais ou como instâncias de computação em nuvem, seja em data centers privados ou em plataformas de nuvem pública.
+
+[.big]#*Descrição do curso*#
+
+* Manter a segurança de sistemas computacionais é uma tarefa que inclui o gerenciamento de riscos por meio da implementação de processos e padrões com o suporte de tecnologias e ferramentas. O curso "Red Hat Security: Linux in Physical, Virtual, and Cloud" (RH415) destina-se a administradores de segurança e de sistemas que precisam gerenciar a operação segura de servidores que executam o Red Hat Enterprise Linux, esteja ele implantado em hardware físico, como máquinas virtuais ou como instâncias de computação em nuvem. Você vai conhecer as tecnologias e ferramentas que podem ser usadas para implementar e cumprir os requisitos de segurança, incluindo o subsistema Audit do kernel, AIDE, SELinux, OpenSCAP e SCAP Workbench, USBGuard, autenticação PAM e criptografia de dispositivos baseada em rede. Você vai aprender como monitorar a conformidade e identificar, priorizar e resolver problemas de maneira proativa usando o OpenSCAP, o Red Hat Insights, o Red Hat Satellite e o Red Hat Ansible Automation Platform. O curso também apresenta uma introdução básica sobre como o Red Hat Ansible Automation Platform automatiza a implantação de correções nos sistemas com o uso de Ansible Playbooks do OpenSCAP ou do Red Hat Insights.
+* Este curso é baseado nas seguintes soluções: RHEL 9.2, Ansible Core 2.14, Red Hat Ansible Automation Platform 2.4, Satellite 6.14 e OpenSCAP 1.3.7.
+* Manter a segurança de sistemas computacionais é uma tarefa que inclui o gerenciamento de riscos por meio da implementação de processos e padrões com o suporte de tecnologias e ferramentas. Neste curso, você vai conhecer os recursos que podem ser utilizados para implementar e manter a conformidade com os requisitos de segurança da empresa.
+* Após a conclusão do curso, o acesso prático ao laboratório permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+* *Observação:* este curso é oferecido como aulas virtuais em cinco dias ou em ritmo individualizado. A duração pode variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+
+[.big]#*Resumo do curso*#
+
+* Gerenciamento da conformidade com OpenSCAP.
+* Habilitação do SELinux com estado desabilitado em um servidor, análise básica da política do sistema e mitigação dos riscos com técnicas avançadas do SELinux.
+* Identificação proativa e solução de problemas com o Red Hat Insights.
+* Monitoramento da atividade e de mudanças em um servidor com Linux Audit e AIDE.
+* Proteção dos dados contra comprometimento com USBGuard e criptografia do armazenamento.
+* Gerenciamento de controles de autenticação com PAM.
+* Aplicação manual dos Ansible Playbooks disponibilizados para automatizar a mitigação de problemas de segurança e conformidade.
+* Expansão da escala do gerenciamento do OpenSCAP e do Red Hat Insights com o Red Hat Satellite e o Red Hat Ansible Automation Platform.
+
+[.big]#*Público-alvo*#
+
+* *Administradores de sistemas*: responsáveis por dar suporte à infraestrutura física e virtual, aos sistemas e aos servidores da empresa.
+* *Profissionais de segurança de TI/conformidade e auditores*: responsáveis por garantir que o ambiente de tecnologia esteja protegido contra ataques e em conformidade com as regras e regulamentos de segurança e privacidade.
+* *Arquitetos de automação*: engenheiros ou arquitetos responsáveis pelo desenvolvimento da automação da empresa e pela otimização das ferramentas e infraestrutura de nuvem para alcançar as metas de automação.
+
+[.big]#*Treinamentos recomendados*#
+
+* https://skills.ole.redhat.com/en[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para suas habilidades.
+* Certificação Red Hat Certified Engineer (EX294/RHCE) ou conhecimento e experiência equivalentes em Red Hat Enterprise Linux.
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/rh415-red-hat-security-linux-physical-virtual-and-cloud

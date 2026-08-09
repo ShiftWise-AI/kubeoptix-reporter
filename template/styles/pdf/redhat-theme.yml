@@ -1,0 +1,153 @@
+extends:
+  # The default-with-font-fallbacks is a builtin theme.
+  - default-with-font-fallbacks
+
+font:
+  catalog:
+    merge: true
+    RedHatText:
+      normal: RedHatText-Regular.ttf
+      bold: RedHatText-Bold.ttf
+      italic: RedHatText-Italic.ttf
+      bold_italic: RedHatText-BoldItalic.ttf
+
+page:
+  margin: [25mm, 17mm, 28mm, 17mm]
+
+base:
+  text-align: left
+  font-family: RedHatText
+
+role:
+  example:
+    font-color: #D3D3D3
+    font-style: italic
+  red-text:
+    background-color: #ee0000
+  lime-text:
+    background-color: #00fa00
+  aqua-text:
+    background-color: #00fafa
+  blue-text:
+    background-color: #0000fa
+  fuchsia-text:
+    background-color: #fa00fa
+  gray-text:
+    background-color: #7d7d7d
+  green-text:
+    background-color: #007d00
+  maroon-text:
+    background-color: #7d0000
+  navy-text:
+    background-color: #00007d
+  olive-text:
+    background-color: #7d7d00
+  purple-text:
+    background-color: #7d007d
+  silver-text:
+    background-color: #bcbcbc
+  teal-text:
+    background-color: #007d7d
+  white-text:
+    background-color: #fafafa
+  black-text:
+    background-color: #000
+
+caption:
+  align: center
+
+title-page:
+  text-align: left
+  background-image: image:redhatConsulting.png[]
+  title:
+    top: 60%
+  logo:
+    top: 20vh
+  authors:
+    margin-top: 110
+    font-size: 10
+    line-height: 1.5
+    content: |
+      *Autor:* {author} +
+      *Gerente do projeto:* {project-manager} +
+      *Data:* {document-date}
+  revision:
+    display: none
+
+header:
+  height: 19mm
+  border-color: #B7B7B7
+  recto:
+    left:
+       content: image:Logo-Red_Hat-Consulting-A-Standard-RGB.png[width=80]
+    center:
+       content:
+    right:
+       content: |
+                 {docstatus}
+  verso:
+    left:
+       content: image:Logo-Red_Hat-Consulting-A-Standard-RGB.png[width=80]
+    center:
+       content:
+    right:
+       content: |
+                 {docstatus}
+
+footer:
+  height: 19mm
+  recto:
+    left:
+      content: |
+                {customer} +
+                {confidentiality}
+    center:
+      content: |
+                {document-title} +
+                {description}
+    right:
+      content: |
+                {page-number} +
+                v{revnumber}
+  verso:
+    left:
+      content: |
+                {customer} +
+                {confidentiality}
+    center:
+      content: |
+                {document-title} +
+                {description}
+    right:
+      content: |
+                {page-number} +
+                v{revnumber}
+
+table:
+  head:
+    background-color: #CCCCCC
+  body:
+    stripe-background-color: #EFEFEF
+
+image:
+  align: center
+
+heading-h1:
+  font-size: $base-font-size * 2.6
+heading-h2:
+  font-size: $base-font-size * 2.15
+heading-h3:
+  font-size: $base-font-size * 1.7
+heading-h4:
+  font-size: $base-font-size * 1.4
+heading-h5:
+  font-size: $base-font-size * 1.25
+heading-h6:
+  font-size: $base-font-size * 1.15
+heading-h7:
+  font-size: $base-font-size * 1.1
+heading-h8:
+  font-size: $base-font-size * 1.05
+heading-h9:
+  font-size: $base-font-size
+

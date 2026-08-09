@@ -1,0 +1,52 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Migrating Virtual Machines to Red Hat OpenShift Virtualization with Ansible Automation Platform (DO346)
+
+[.big]#*Descrição do curso*#
+
+*Aprenda as habilidades essenciais para migrar máquinas virtuais para o Red Hat OpenShift Virtualization.*
+
+O curso _Migrating Virtual Machines to Red Hat OpenShift Virtualization with Ansible Automation Platform (DO346)_ fornece o conhecimento essencial para migrar máquinas virtuais para o Red Hat OpenShift Virtualization usando conteúdo cuidadosamente selecionado do _Managing Virtual Machines in Red Hat OpenShift Virtualization (DO316)_ e _Automate and Manage Red Hat OpenShift Virtualization with Ansible (DO336)_. Este curso oferece uma trajetória de aprendizagem mais rápida para profissionais de TI migrarem cargas de trabalho virtualizadas para o OpenShift Virtualization.
+
+Este curso fornece as seguintes informações e habilidades:
+
+* Uma introdução aos principais conceitos do OpenShift e do Kubernetes, como nós, pods e operadores
+* Habilidades de implantar o operador do OpenShift Virtualization
+* Habilidades para configurar redes e armazenamento para máquinas virtuais
+* Estratégias para migrar máquinas virtuais de outro hipervisor para o OpenShift Virtualization usando o operador de kit de ferramentas de migração para máquinas virtuais e o Ansible Automation Platform
+
+Este curso é baseado no OpenShift Container Platform 4.16, OpenShift Virtualization 4.16 e Ansible Automation Platform 2.4.
+
+*Observação:* este curso pode ser concluído em dois dias no modelo presencial, em três dias no modelo virtual ou no ritmo que você preferir. A duração pode variar com base no formato escolhido. Para conferir todos os detalhes, a programação e os preços do curso, selecione sua localização e clique em "Enviar" no menu à direita.
+
+[.big]#*Resumo do conteúdo do curso*#
+
+* Implantação do operador do OpenShift Virtualization em um ambiente existente do Red Hat OpenShift
+* Configuração de rede de nós para conectar máquinas virtuais e nós a redes fora do cluster usando plug-ins Multus CNI e o operador NMState
+* Gerenciamento de armazenamento e discos para máquinas virtuais no Red Hat OpenShift
+* Migração de máquinas virtuais de outro hipervisor para o Red Hat OpenShift Virtualization usando o operador de kit de ferramentas de migração para máquinas virtuais e o Ansible Automation Platform
+
+[.big]#*Público-alvo*#
+
+* *Administradores de máquinas virtuais* interessados em mover cargas de trabalho virtualizadas dos hipervisores tradicionais para o OpenShift Virtualization
+* *Administradores do Kubernetes (administradores de clusters, engenheiros de clusters)* com interesse em oferecer suporte a cargas de trabalho virtualizadas e em containers no mesmo cluster do OpenShift
+
+[.big]#*Treinamentos recomendados*#
+
+* https://skills.ole.redhat.com/en[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para suas habilidades
+* Este curso não requer experiência anterior com containers, Kubernetes, OpenShift ou OpenShift Virtualization. No entanto, recomendamos aos alunos a fazer os seguintes cursos antes de fazer o DO346:
+** https://www.redhat.com/pt-br/services/training/do080-deploying-containerized-applications-technical-overview[Containers, Kubernetes and Red Hat OpenShift Technical Overview (DO080)]
+** https://www.redhat.com/pt-br/services/training/do016-red-hat-openshift-virtualization-technical-overview[Red Hat OpenShift Virtualization Technical Overview (DO016)]
+** https://www.redhat.com/pt-br/services/training/do007-ansible-essentials-simplicity-automation-technical-overview[Ansible Basics: Automation Technical Overview (DOOO7 )]
+* Habilidades em Linux não são necessárias para gerenciar os clusters do OpenShift e o OpenShift Virtualization. No entanto, operar VMs individuais do Linux requer habilidades de administração de sistemas Linux que os cursos a seguir oferecem:
+** https://www.redhat.com/pt-br/services/training/rh124-red-hat-system-administration-i[Red Hat System Administration I (RH124)] e https://www.redhat.com/pt-br/services/training/rh134-red-hat-system-administration-ii[Red Hat System Administration II (RH134)] para gerenciar o sistema operacional em uma VM Linux
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/do346-migrating-virtual-machines-to-red-hat-openshift-virtualization-ansible-automation-platform

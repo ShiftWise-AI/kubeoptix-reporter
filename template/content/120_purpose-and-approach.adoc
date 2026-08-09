@@ -1,0 +1,28 @@
+////
+Propósito
+-------
+Em algumas frases, descreva brevemente e em alto nível a iniciativa
+que a RHC está apoiando, incluindo a necessidade comercial, o desafio técnico e o
+abordagem para enfrentar o desafio.
+
+Exemplo
+------
+A Red Hat Consulting foi contratada pela Acme Inc. para ajudar com o Projeto de Padronização 
+de Aplicação 2.0 que visa abordar o risco de auditoria associado a
+aplicativos não padronizados, automatizando o monitoramento, correção e
+gerando relatórios de compliance de aplicações no ambiente. Ansible automation será
+usado para estabelecer Padronização de _compliance scanning_, atividades de correção (remediação)
+e gravar os resultados no ServiceNow CMDB.
+
+Exemplo 2
+------
+(Antes de executar o script init para criar seu relatório de engajamento, você pode usar
+o seguinte formato para criar uma sentença usando variáveis. Note que
+partes em "<>" são textos que devem ser substituídos.)
+
+A Red Hat Consulting foi contratada pela {cust} para ajudar na {description} que
+procura <descrever o que a iniciativa pretende alcançar> por <descrever como
+esse engajamento vai apoiar a iniciativa>.
+////
+
+A Red Hat Consulting foi contratada por {cust} para ajudar com {description}, que busca (#TODO# descrever o que a iniciativa deve alcançar) por (#TODO# descreva como esse engajamento apoiará a iniciativa).

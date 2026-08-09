@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "kubeoptix-reporter.fullname" . }}
+  labels:
+    {{- include "kubeoptix-reporter.labels" . | nindent 4 }}
+  annotations:
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"{{ include "kubeoptix-reporter.fullname" . }}:{{ .Values.image.tag }}"},"fieldPath":"spec.template.spec.containers[?(@.name==\"kubeoptix-reporter\")].image","pause":"false"}]
+spec:
+  serviceName: {{ include "kubeoptix-reporter.fullname" . }}-headless
+  replicas: {{ .Values.replicaCount }}
+  podManagementPolicy: OrderedReady
+  selector:
+    matchLabels:
+      {{- include "kubeoptix-reporter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kubeoptix-reporter.selectorLabels" . | nindent 8 }}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: kubeoptix-reporter
+          image: {{ include "kubeoptix-reporter.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          env:
+            - name: REPORT_DIR
+              value: {{ .Values.persistence.mountPath | quote }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            {{- toYaml .Values.probes.startup | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            {{- toYaml .Values.probes.readiness | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            {{- toYaml .Values.probes.liveness | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: reports
+              mountPath: {{ .Values.persistence.mountPath | quote }}
+      volumes:
+        - name: reports
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | quote }}

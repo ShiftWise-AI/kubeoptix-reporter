@@ -1,0 +1,45 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Introduction to Red Hat JBoss Enterprise Application Platform 8 (AD258)
+
+[.big]#*Descrição do curso*#
+
+*Introdução às funcionalidades oferecidas pelo Red Hat JBoss EAP 8 e como realizar o gerenciamento básico dos serviços do EAP 8.*
+
+_Introduction to Red Hat JBoss Enterprise Application Platform 8_ apresenta as funcionalidades do Red Hat JBoss Enterprise Application Platform (JBoss EAP) 8. Com laboratórios hands-on, aprenda algumas tarefas essenciais e reais um administrador de sistemas precisa conhecer para implantar e gerenciar aplicações no JBoss EAP com eficiência.
+
+Este curso é baseado no Red Hat JBoss® Enterprise Application Platform 8.0.
+
+[.big]#*Resumo do conteúdo do curso*#
+
+* Instalação e gerenciamento do Red Hat JBoss Enterprise Application Platform 8
+* Migração para o JBoss EAP: identificação dos pontos principais em uma migração para o JBoss EAP 8
+* Migração para o JBoss EAP: kit de ferramentas de migração para aplicações (MTA)
+* Migração para o JBoss EAP: ferramenta de migração de servidores
+* JBoss EAP Security: introdução ao Elytron e ao JBoss EAP Security
+* JBoss EAP Security: migração para o Elytron
+* JBoss EAP Security: TLS em gerenciamento e interfaces HTTP
+* JBoss EAP Security: RBAC em gerenciamento e interfaces HTTP
+* JBoss EAP on OpenShift: implantação de aplicações do JBoss EAP em nuvens híbridas
+* JBoss EAP on OpenShift: configuração e remoção do JBoss EAP for Applications on OpenShift
+* JBoss EAP on OpenShift: JBoss EAP Operator
+
+[.big]#*Público-alvo*#
+
+* Administradores de sistemas que gerenciam servidores de aplicações Java
+* Desenvolvedores que criam aplicações JakartaEE
+* Arquitetos de automação, administradores de nuvem e engenheiros de plataforma que projetam e automatizam a infraestrutura de aplicações Java da organização
+
+[.big]#*Treinamentos recomendados*#
+
+* É necessário ter experiência básica em Linux ou ter concluído o curso _Red Hat System Administration I (RH124)_
+* É necessário saber os conceitos básicos de programação relacionados ao Java e às especificações JakartaEE/JavaEE ou ter concluído o curso https://www.redhat.com/pt-br/services/training/ad183-red-hat-application-development-i-programming-java-ee[]_Red Hat Application Development I: Programming in Java EE (AD183)_
+* É necessário ter experiência em administração básica do JBoss EAP
+* É necessário ter experiência básica com o Red Hat OpenShift ou Kubernetes ou ter concluído o curso _Introduction to OpenShift Applications (DO101)_
+
+[.big]#*Requisitos técnicos*#
+
+* Não haverá aulas conduzidas por instrutor
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/ad258-introduction-red-hat-jboss-enterprise-application-platform-8

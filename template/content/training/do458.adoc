@@ -1,0 +1,47 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Network Automation with Red Hat Ansible Automation Platform and Exam (DO458)
+
+*Configure e gerencie a infraestrutura de rede com o Red Hat Ansible Automation Platform.*
+
+[.big]#*Descrição do curso*#
+
+O Network Automation with Red Hat Ansible Automation Platform and Exam (DO458) foi elaborado para administradores de rede ou engenheiros de automação de infraestrutura que desejam usar a automação de rede para gerenciar de maneira centralizada switches, roteadores e outros dispositivos na infraestrutura de rede corporativa. Saiba como usar o Red Hat Ansible Automation Platform para automatizar de maneira remota a configuração de dispositivos de rede, testar e validar o estado atual da rede e realizar verificações de conformidade para detectar e corrigir desvios na configuração.
+
+Este curso é baseado no Red Hat^®^ Ansible Automation Platform 2.3. O https://www.redhat.com/pt-br/services/training/ex457-red-hat-certified-specialist-in-ansible-network-automation-exam[Red Hat Certified Specialist in Ansible Network Automation exam (EX457)] também está incluído nesta oferta.
+
+*Observação:* este curso tem duração de cinco dias. As durações podem variar de acordo com a entrega. Para obter detalhes completos, programação e preços do curso, selecione sua localização e "Registre-se" no menu à direita.
+
+[.big]#*Resumo do curso*#
+
+* Preparar um ambiente de desenvolvimento para a automação de rede do Ansible
+* Escrever playbooks do Ansible e solucionar problemas de maneira eficaz para a automação da rede
+* Coletar informações sobre a configuração da infraestrutura de rede para backup de configuração e consciência da infraestrutura
+* Automatizar casos de uso de administração de rede específicos, incluindo a configuração de roteadores e comutadores, o monitoramento de portas, VLANs e SNMP e os protocolos de roteamento
+* Usar playbooks do Ansible para gerenciar dispositivos de vários fornecedores de hardware, incluindo Cisco, Juniper e Arista
+* Gerenciar de maneira centralizada o conteúdo do Ansible no Git e executá-lo centralmente com o automation controller
+* Reutilizar o código de automação de rede existente e testado com Ansible Roles, Ansible Content Collections e conteúdo validado do Ansible
+
+[.big]#*Público-alvo*#
+
+Este curso foi elaborado para administradores de rede e engenheiros de automação de rede e de infraestrutura que são responsáveis por implantar, gerenciar e automatizar a infraestrutura de rede das organizações ou empresas onde trabalham.
+
+[.big]#*Treinamentos recomendados*#
+
+* https://skills.ole.redhat.com/en/catalog[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para suas habilidades.
+* Experiência com a administração de rede, incluindo conhecimento sólido sobre TCP/IP, roteadores e comutadores gerenciados.
+* Familiaridade com o gerenciamento de dispositivos de rede usando a linha de comando, preferencialmente com um ou mais dos seguintes: Cisco IOS, IOS XR ou NX-OS, Juniper Junos ou Arista EOS.
+* É recomendável ter conhecimento equivalente ou superior ao nível do curso https://www.redhat.com/pt-br/services/training/rh124-red-hat-system-administration-i[Red Hat System Administration I (RH124)].
+* Não é necessário ter conhecimento prévio do Ansible.
+
+[.big]#*Requisitos técnicos*#
+
+* Para alunos virtuais ou com aprendizagem individualizada: 
+** É necessário ter acesso à Internet para executar os exercícios e laboratórios.
+** "Traga seu próprio dispositivo" (BYOD)/"Traga sua estação de trabalho de desenvolvedor" (BYDW) não é compatível.
+* Para alunos em sala de aula: 
+** Não é necessário ter acesso à Internet.
+** "Traga seu próprio dispositivo" (BYOD)/"Traga sua estação de trabalho de desenvolvedor" (BYDW) não é compatível.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/do458-network-automation-with-red-hat-ansible-automation-platform-and-exam

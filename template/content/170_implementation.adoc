@@ -1,0 +1,414 @@
+Esta seção apresenta, em nível introdutório, como a arquitetura proposta para o {cust} será materializada de forma incremental nos ambientes Hub, HML/DEV e PRD. O foco da implementação é estabelecer uma plataforma interna de desenvolvimento (IDP) baseada no Red Hat Developer Hub, com integração entre identidade corporativa, versionamento de código, pipelines de CI/CD, segurança contínua e entrega declarativa via GitOps.
+
+Como diretriz de execução, a implementação prioriza padronização, rastreabilidade e governança desde o onboarding dos times. Isso inclui a configuração inicial de templates e catálogo no RHDH, a integração com GitLab para scaffolding e ciclo de vida de código, a publicação controlada de imagens no Quay, validações de segurança com RHACS, e a reconciliação contínua dos ambientes com OpenShift GitOps e RHACM.
+
+Nos tópicos seguintes, são detalhadas as etapas, dependências e artefatos necessários para consolidar a operação da solução, reduzindo esforço manual, acelerando a entrega de software e garantindo aderência aos padrões técnicos e de segurança definidos pelo {cust}.
+
+Além deste documento principal do Red Hat Developer Hub, recomenda-se a elaboração de documentos auxiliares de arquitetura para componentes estruturantes da solução, de forma a detalhar decisões específicas de implantação, integração, segurança, operação e ciclo de vida. Para este contexto, os documentos complementares devem abranger, no mínimo, as arquiteturas de *Red Hat Quay*, *Red Hat Advanced Cluster Management (RHACM)*, *Red Hat Advanced Cluster Security (RHACS)* e *Red Hat build of Keycloak (RHBK)*.
+
+Esses documentos auxiliares são importantes porque cada uma dessas plataformas introduz requisitos próprios de disponibilidade, identidade, armazenamento, integração, observabilidade e governança que extrapolam o escopo específico do Developer Hub. Dessa forma, a implantação do RHDH deve ser tratada como uma capacidade dependente da existência prévia dessas fundações tecnológicas, devidamente definidas, implantadas e validadas.
+
+== Pré Requisitos
+
+A seguir, serão apresentados os requisitos técnicos para a preparação dos clusters OpenShift, visando à implantação do RHDH e das demais ferramentas auxiliares descritas na seção anterior de arquitetura.
+
+=== Documentos auxiliares e dependências de plataforma
+
+Como pré-requisito para a implantação do Developer Hub, recomenda-se que sejam produzidos e aprovados documentos auxiliares de arquitetura para os seguintes componentes:
+
+* *Red Hat Quay*, responsável pela estratégia de registry corporativo, governança de imagens, promotion flow e integração com os pipelines da plataforma;
+* *Red Hat Advanced Cluster Management (RHACM)*, responsável pela governança multicluster, gestão do hub e controle declarativo dos ambientes gerenciados;
+* *Red Hat Advanced Cluster Security (RHACS)*, responsável pelos controles de segurança, políticas, análise de vulnerabilidades e enforcement contínuo ao longo do ciclo de vida das aplicações;
+* *Red Hat build of Keycloak (RHBK)*, responsável pela base de identidade, autenticação e federação necessária às integrações da plataforma interna de desenvolvimento.
+
+Além da produção documental, a implantação dessas ferramentas deve ser considerada requisito objetivo para a entrada em operação do Developer Hub, uma vez que a solução proposta depende delas para suportar, respectivamente, publicação de imagens, governança multicluster, segurança contínua e integração com identidade corporativa.
+
+Em termos práticos, isso significa que a implantação do RHDH não deve ser tratada como iniciativa isolada. Sua habilitação em ambiente corporativo requer que Quay, RHACM, RHACS e RHBK estejam definidos arquiteturalmente, implantados de acordo com os padrões do {cust} e com suas integrações básicas já estabilizadas antes do onboarding das equipes na plataforma.
+
+=== Atualização do cluster hub
+
+O cluster hub avaliado encontra-se em OpenShift Container Platform 4.15.17, portanto abaixo do patamar mínimo requerido para a implementação proposta, que demanda OCP 4.18 ou superior. A análise dos artefatos coletados indica que, no momento do levantamento, o ambiente não está apto para avanço entre versões menores, exigindo saneamento prévio de saúde do cluster e revisão dos operadores acoplados ao ciclo de upgrade.
+
+==== Estado atual identificado
+
+* Versão atual do hub: *OCP 4.15.17*.
+* Canal configurado: *stable-4.15*.
+* O cluster reporta atualizações recomendadas apenas dentro da trilha 4.15, com avanço para 4.16 condicionado à remoção dos bloqueios atuais.
+* O hub ACM encontra-se em *2.11.9* e o MCE em *2.6.9*, ambos em estado operacional no momento da coleta.
+* Os clusters gerenciados `local-cluster`, `ocpnoprod` e `ocpprod` aparecem como aceitos, conectados e disponíveis.
+
+==== Bloqueios objetivos para evolução do hub
+
+Foram identificados dois bloqueios formais para a progressão de versão:
+
+. *AdminAckRequired*: o cluster exige confirmação administrativa devido à remoção de APIs no salto para  OCP 4.18. Esse bloqueio deve ser tratado antes da mudança de versão menor.
+. *DegradedPool*: o operador `machine-config` está degradado porque o `MachineConfigPool` `odf` encontra-se em estado degradado e não pronto.
+
+Além disso, o `ClusterOperator` `machine-config` apresenta mensagem explícita de falha de sincronização por indisponibilidade do pool `odf`, com *3 nós no pool, 0 prontos, 0 atualizados e 3 indisponíveis*. Enquanto esse estado persistir, o hub não deve ser promovido para a próxima minor.
+
+==== Pendências confirmadas na camada de operadores
+
+Os dados coletados mostram que a maior parte dos operadores do hub está em estado `Succeeded` ou `AtLatestKnown`. Entretanto, há pendências confirmadas e itens que exigem revisão de compatibilidade:
+
+* *ODF / Storage*: esta é a principal pendência confirmada.
+** O pool dedicado `odf` está degradado.
+** O CSV `odf-csi-addons-operator.v4.15.5-rhodf` aparece em estado `Installing` durante a coleta.
+** Existe `InstallPlan` manual não aprovado para `ocs-operator.v4.15.6-rhodf`, o que indica atualização pendente ou incompleta no stack de armazenamento.
+** As subscriptions de ODF estão ancoradas em canais `stable-4.15`, o que exigirá replanejamento por etapa para acompanhar a evolução do cluster ao longo das minors 4.16, 4.17 e 4.18.
+
+* *Operadores vinculados ao ciclo de versão do OCP*: exigem validação de matriz de suporte antes de cada salto de minor, mesmo sem pendência operacional imediata no momento da coleta:
+** `advanced-cluster-management` em canal `release-2.11`.
+** `multicluster-engine` em canal `stable-2.6`.
+** `openshift-gitops-operator` em canal `latest`.
+** `openshift-pipelines-operator-rh` em canal `latest`.
+** `quay-operator` em canal `stable-3.12`.
+** `rhacs-operator` em canal `stable`.
+** `cluster-logging` em canal `stable-5.9`.
+** `loki-operator` em canal `stable-5.9`.
+** `devworkspace-operator` e `web-terminal` em canais `fast`, o que aumenta a necessidade de verificação de compatibilidade e estabilidade antes de upgrades do hub.
+
+* *Catálogos OLM*: os `CatalogSources` estão funcionais, porém ainda publicando índices `v4.15`, o que é coerente com a versão atual do cluster. Após cada avanço de minor, deve-se validar a convergência dos catálogos e a resolução normal das subscriptions.
+
+==== Leitura técnica do cenário
+
+O diagnóstico indica que o impedimento imediato para atingir OCP 4.18 não está no ACM/MCE nem na disponibilidade geral do hub, mas sim na saúde da base do cluster, com destaque para o domínio de armazenamento. Em outras palavras, antes de discutir o salto para 4.16+ é necessário estabilizar o `machine-config` e concluir a regularização do stack ODF.
+
+Também há evidências de instabilidade transitória em componentes acessórios durante a coleta, como reinicializações em pods de ACM/MCE, eventos de `ResolutionFailed` no OLM e oscilações pontuais em componentes de autenticação e API server. Esses eventos não aparecem como bloqueio persistente no estado final dos `ClusterOperators`, mas reforçam a necessidade de executar o upgrade somente após janela de estabilização e nova checagem de saúde.
+
+==== Recomendação de sequência de atualização
+
+Para reduzir risco operacional, recomenda-se a seguinte ordem de execução:
+
+. *Sanear o stack ODF e o MCP `odf`*:
+** identificar a causa da indisponibilidade dos três nós do pool `odf`;
+** concluir ou corrigir a atualização pendente do `ocs-operator`;
+** confirmar que todos os CSVs do storage estejam em `Succeeded`;
+** garantir `machine-config`, `mcp` e nós do pool `odf` em estado saudável.
+
+. *Resolver o `AdminAckRequired`*:
+** revisar o impacto de remoção de APIs para OCP 4.18;
+** registrar o aceite administrativo conforme procedimento do fabricante;
+** repetir a validação de upgrade após o aceite.
+
+. *Avançar o hub de forma incremental*:
+** atualizar primeiro para a última z-stream recomendada da família 4.15;
+** promover em seguida para a 4.16 suportada e estabilizada;
+** repetir o processo para 4.17;
+** somente então avançar para 4.18.
+
+. *Validar operadores a cada minor*:
+** revisar canais e versões suportadas para ACM, MCE, GitOps, Pipelines, Quay, RHACS, Logging, Loki, DevWorkspace, Web Terminal, Local Storage e ODF;
+** evitar saltos em cadeia sem confirmar compatibilidade entre a minor alvo do OCP e a versão efetivamente instalada de cada operador.
+
+==== Critérios mínimos para considerar o hub apto ao upgrade
+
+O cluster hub deve atender, no mínimo, aos critérios abaixo antes do início da elevação de versão:
+
+* todos os `ClusterOperators` em `Available=True`, `Progressing=False` e `Degraded=False`;
+* todos os `MachineConfigPools` em `UPDATED=True`, `UPDATING=False` e `DEGRADED=False`;
+* ausência de `InstallPlan` manual pendente para componentes críticos do storage e gerenciamento;
+* subscriptions dos operadores críticos resolvendo normalmente sem erros de catálogo;
+* aceite administrativo registrado para o salto de minor;
+* backup e teste de restauração do hub validados antes da janela de mudança.
+
+==== Comandos recomendados para saneamento e revalidação
+
+Os comandos a seguir podem ser utilizados na etapa de correção e rechecagem antes do upgrade:
+
+[source,bash]
+----
+# Saúde geral
+oc get clusterversion
+oc adm upgrade
+oc get co
+oc get mcp
+oc get nodes -o wide
+
+# Diagnóstico do bloqueio atual
+oc describe co machine-config
+oc describe mcp odf
+oc get machineconfigpool odf -o yaml
+
+# Storage / ODF
+oc get subscriptions,installplans,csv -n openshift-storage
+oc get pods -n openshift-storage -o wide
+oc describe subscription odf-operator -n openshift-storage
+oc describe installplan install-gghpb -n openshift-storage
+oc describe csv ocs-operator.v4.15.6-rhodf -n openshift-storage
+oc describe csv odf-csi-addons-operator.v4.15.5-rhodf -n openshift-storage
+
+# Logs dos componentes mais sensíveis do storage
+oc logs -n openshift-storage deploy/odf-operator-controller-manager --tail=200
+oc logs -n openshift-storage deploy/csi-addons-controller-manager --tail=200
+
+# OLM e resolução de catálogos
+oc get catalogsource -A
+oc get packagemanifest | egrep 'advanced-cluster-management|multicluster-engine|odf|ocs|gitops|pipelines|quay|rhacs|logging|loki'
+
+# ACM / MCE
+oc get multiclusterhub -A
+oc get multiclusterengine -A
+oc get managedclusters
+
+# Eventos recentes
+oc get events -A --sort-by=.lastTimestamp | tail -n 200
+----
+
+==== Conclusão
+
+No estado atual, o cluster hub *não atende* ao pré-requisito mínimo para a implementação por estar abaixo de OCP 4.18 e por apresentar bloqueios técnicos para progressão de minor. A pendência prioritária é a regularização do stack ODF e do `MachineConfigPool` `odf`. Após essa correção, o próximo passo é tratar o `AdminAckRequired` e executar a elevação de versão de forma incremental, com revisão de compatibilidade dos operadores em cada etapa.
+
+
+
+=== Atualização do cluster não produtivo
+
+O cluster não produtivo avaliado também se encontra em OpenShift Container Platform 4.15.17, portanto abaixo da versão mínima requerida para a implementação. Diferentemente do hub, entretanto, o ambiente apresenta boa saúde da plataforma base no momento da coleta, sem operadores degradados e sem `MachineConfigPools` com falha. O bloqueio formal para avanço de minor está concentrado no requisito de aceite administrativo para o salto a OCP 4.18 e na necessidade de revisão de compatibilidade das cargas e operadores instalados.
+
+==== Estado atual identificado
+
+* Versão atual do cluster: *OCP 4.15.17*.
+* Canal configurado: *stable-4.15*.
+* O cluster apresenta apenas o bloqueio `AdminAckRequired` para progressão entre minors.
+* Todos os `ClusterOperators` foram coletados em estado saudável, com `Available=True`, `Progressing=False` e `Degraded=False`.
+* Todos os `MachineConfigPools` (`infra`, `logging`, `master`, `odf`, `router` e `worker`) aparecem em estado saudável, com `UPDATED=True`, `UPDATING=False` e `DEGRADED=False`.
+* O domínio de armazenamento não apresenta falha estrutural na coleta: todos os PVCs avaliados estavam em `Bound`.
+
+==== Bloqueio formal para evolução do cluster
+
+O único bloqueio objetivo reportado pelo mecanismo de upgrade é:
+
+* *AdminAckRequired*: o salto para  OCP 4.18 exige análise prévia dos impactos de remoção de APIs e registro do aceite administrativo correspondente.
+
+Do ponto de vista de saúde da plataforma, o cluster não produtivo encontra-se em condição significativamente melhor que o hub para preparar a evolução de versão. Ainda assim, isso não significa liberação imediata para upgrade, pois o ambiente concentra workloads de aplicação com instabilidades operacionais relevantes e um conjunto de operadores com `InstallPlan` manual pendente.
+
+==== Situação dos operadores e do OLM
+
+Na camada OLM, o cenário base é estável:
+
+* não foram identificadas `Subscription` fora do estado `AtLatestKnown`;
+* não foram identificados `CSV` fora do estado `Succeeded`;
+* os catálogos estão resolvendo normalmente, ainda em trilha `v4.15`, coerente com a versão atual do cluster.
+
+Contudo, há `InstallPlan` manuais pendentes que devem ser revisados antes da elevação de versão:
+
+* `3scale-operator.v0.11.13` em `3scale-homol`;
+* `runtime-fabric-operator.v2.9.2` em `mule-desenv`;
+* `odf-operator.v4.15.6-rhodf` em `openshift-storage`;
+* `red-hat-hawtio-operator.v1.2.0` em `portal-homol`;
+* `amq-broker-operator.v7.12.3` em `rh-amq-broker`;
+* `amqstreams.v2.7.0-5` em `rh-amq-streams`.
+
+Esses itens não aparecem, por si só, como degradando a plataforma base, mas indicam que parte do ciclo de atualização dos operadores está sob controle manual. Para o relatório de prontidão, isso deve ser tratado como pendência de governança e compatibilidade, pois upgrades de cluster e upgrades de operadores não devem divergir sem validação explícita.
+
+==== Riscos operacionais identificados nas cargas de aplicação
+
+Embora a plataforma esteja estável, a coleta evidencia instabilidade relevante em workloads hospedados no ambiente não produtivo. Foram observados múltiplos pods em `CrashLoopBackOff`, `Error` e um caso em `Pending`, distribuídos em namespaces de aplicação e homologação. Entre os casos mais visíveis estão cargas em `micro-rotinas-desenv`, `micro-rotinas-homol`, `microsservicos-adm-desenv`, `microsservicos-app-desenv`, `microsservicos-app-homol`, `portal-homol`, `simgt-talonario-desenv` e `sistemas-detran-desenv`.
+
+Esse cenário sugere que o ambiente não produtivo está operacionalmente utilizável, porém com débito técnico relevante nas aplicações implantadas. Para fins de atualização de plataforma, isso amplia o risco de ruído durante a janela de mudança, pois falhas já existentes podem dificultar a separação entre problemas prévios e regressões introduzidas pelo upgrade.
+
+Também foram observados eventos compatíveis com:
+
+* reinicializações recorrentes e `CrashLoopBackOff` em aplicações de negócio;
+* rollouts frequentes e cancelados em workloads baseados em `DeploymentConfig`;
+* eventos transitórios de `Startup probe failed` em pods de catálogos do marketplace.
+
+Os eventos de marketplace aparentam ser transitórios e não se refletiram em degradação persistente do OLM. Já as falhas em aplicações de negócio devem ser consideradas passivo operacional real do ambiente.
+
+==== Indícios de uso de APIs legadas e revisão obrigatória
+
+Como o cluster exige `AdminAckRequired`, a revisão de APIs removidas ou sensíveis na transição para OCP 4.18 é mandatória. A coleta de `APIRequestCounts` indica uso ativo de recursos legados, beta ou específicos de APIs historicamente sensíveis em processos de upgrade, incluindo exemplos como:
+
+* `deploymentconfigs.v1.apps.openshift.io`;
+* `brokertemplateinstances.v1.template.openshift.io`;
+* `clustertasks.v1beta1.tekton.dev`;
+* `eventlisteners.v1beta1.triggers.tekton.dev`;
+* `alertmanagerconfigs.v1alpha1.monitoring.coreos.com` e `v1beta1`;
+* `consoleplugins.v1alpha1.console.openshift.io`;
+* recursos `v1beta1` de operadores como AMQ, 3scale, Machine API e Triggers.
+
+Nem todos esses usos representam bloqueio automático para OCP 4.18+, mas constituem evidência de que o aceite administrativo não deve ser tratado apenas como formalidade. É necessário revisar quais APIs efetivamente entram em descontinuação no caminho até 4.18 e quais aplicações, operadores ou pipelines ainda dependem delas.
+
+==== Leitura técnica do cenário
+
+Sob a perspectiva da plataforma OpenShift, o cluster não produtivo encontra-se mais próximo da prontidão para upgrade que o hub. Não há `ClusterOperators` degradados, não há `MachineConfigPools` problemáticos e não há pendências estruturais de PVC ou storage na coleta.
+
+Por outro lado, o ambiente ainda não deve ser classificado como integralmente pronto para a elevação de versão por três motivos:
+
+. o `AdminAckRequired` ainda não foi tratado;
+. há `InstallPlan` manuais pendentes em operadores relevantes do ecossistema de aplicações e integração;
+. existe quantidade expressiva de workloads instáveis, o que aumenta o risco operacional da janela de atualização.
+
+==== Recomendação de sequência para o cluster não produtivo
+
+Para preparar o ambiente não produtivo para OCP 4.18+, recomenda-se a seguinte ordem de ação:
+
+. *Tratar o requisito de aceite administrativo*:
+** revisar as APIs impactadas na transição 4.15 -> 4.16;
+** mapear aplicações, pipelines e operadores que ainda dependam de APIs legadas;
+** registrar o aceite administrativo somente após essa validação.
+
+. *Revisar operadores com aprovação manual*:
+** confirmar se os `InstallPlans` pendentes devem ser aprovados, substituídos ou mantidos congelados por decisão arquitetural;
+** validar matriz de suporte para `3scale`, `Runtime Fabric`, `ODF`, `Hawtio`, `AMQ Broker` e `AMQ Streams` ao longo do caminho até 4.18.
+
+. *Reduzir ruído operacional das aplicações*:
+** identificar e corrigir workloads em `CrashLoopBackOff`, `Error` e `Pending`;
+** priorizar aplicações críticas para testes de regressão e smoke tests pós-upgrade;
+** estabilizar pipelines e rollouts baseados em `DeploymentConfig` antes da janela de mudança.
+
+. *Executar a evolução de forma incremental*:
+** atualizar primeiro para a última z-stream recomendada de 4.15;
+** avançar depois para 4.16, 4.17 e 4.18, com validação entre cada etapa;
+** repetir a checagem de operadores, APIs e cargas de aplicação a cada minor.
+
+==== Critérios mínimos para considerar o não produtivo apto ao upgrade
+
+Antes da atualização do ambiente não produtivo, recomenda-se exigir os seguintes critérios mínimos:
+
+* `ClusterOperators` totalmente saudáveis;
+* `MachineConfigPools` totalmente saudáveis;
+* `AdminAckRequired` resolvido;
+* revisão concluída dos `InstallPlan` manuais pendentes;
+* identificação e tratamento dos principais pods em falha;
+* definição de conjunto mínimo de testes funcionais pós-upgrade para as aplicações hospedadas;
+* confirmação da compatibilidade dos operadores e integrações usados pelas equipes de desenvolvimento e homologação.
+
+==== Conclusão
+
+No momento da coleta, o cluster não produtivo *não atende integralmente* ao pré-requisito mínimo para a implementação apenas por ainda estar em OCP 4.15.17 e depender de tratamento do `AdminAckRequired` para avanço de minor. Diferentemente do hub, não foram observados bloqueios estruturais de plataforma. Assim, o principal trabalho neste ambiente concentra-se em três frentes: revisão de APIs, governança dos operadores com aprovação manual e saneamento das aplicações instáveis para que o upgrade ocorra com baixo ruído operacional.
+
+=== Atualização do cluster produtivo
+
+O cluster produtivo avaliado também se encontra em OpenShift Container Platform 4.15.17, abaixo do patamar mínimo requerido para a implementação. Assim como no ambiente não produtivo, a plataforma base apresenta boa saúde operacional na coleta realizada, sem `ClusterOperators` degradados e sem `MachineConfigPools` problemáticos. Entretanto, por se tratar do ambiente produtivo, a exigência de governança, compatibilidade e controle de risco para a elevação de versão é substancialmente maior.
+
+==== Estado atual identificado
+
+* Versão atual do cluster: *OCP 4.15.17*.
+* Canal configurado: *stable-4.15*.
+* O bloqueio formal para progressão de minor é `AdminAckRequired`.
+* Todos os `ClusterOperators` foram coletados em estado saudável, com `Available=True`, `Progressing=False` e `Degraded=False`.
+* Todos os `MachineConfigPools` (`infra`, `logging`, `master`, `odf`, `router` e `worker`) aparecem em condição estável, com `UPDATED=True`, `UPDATING=False` e `DEGRADED=False`.
+* Não foram observados PVCs fora do estado `Bound`.
+* O ambiente apresenta sinal de estabilidade operacional superior ao não produtivo, com apenas um pod de rotina de backup em `Error` no instante da coleta, sem evidência de degradação sistêmica das cargas críticas.
+
+==== Bloqueio formal para evolução do cluster
+
+O único bloqueio explícito apresentado pelo mecanismo de upgrade é:
+
+* *AdminAckRequired*: a transição para  OCP 4.18 exige avaliação prévia do impacto de remoção de APIs e aceite administrativo correspondente.
+
+Do ponto de vista de infraestrutura OpenShift, o cluster produtivo está em condição favorável para preparação do upgrade. Contudo, em produção, a ausência de degradação estrutural não é suficiente para autorizar a mudança. A decisão depende também de compatibilidade integral dos operadores instalados, estabilidade das integrações e testes de regressão das aplicações críticas.
+
+==== Situação dos operadores e do OLM
+
+O estado geral do OLM é estável:
+
+* não foram identificadas `Subscription` fora de `AtLatestKnown`;
+* não foram identificados `CSV` fora de `Succeeded`;
+* os catálogos continuam alinhados à trilha `v4.15`, o que é esperado para a versão atual do cluster.
+
+Ainda assim, há um conjunto relevante de `InstallPlan` manuais pendentes, inclusive em operadores sensíveis para produção:
+
+* `gitlab-runner-operator.v1.30.2` em `gitlab-runners`;
+* `jaeger-operator.v1.62.0-1` em `openshift-distributed-tracing`;
+* `kubernetes-nmstate-operator.4.15.0` em `openshift-nmstate`;
+* `loki-operator.v5.9.9` em `openshift-operators-redhat`;
+* `elasticsearch-operator.v5.8.15` em `openshift-operators-redhat`;
+* `servicemeshoperator.v2.6.x` em `openshift-operators`;
+* `kiali-operator.v2.17.x` em `openshift-operators`;
+* `odf-operator.v4.15.6-rhodf` em `openshift-storage`;
+* `amq-broker-operator.v7.12.3` em `rh-amq-broker`;
+* `amqstreams.v2.7.0-5` em `rh-amq-streams`.
+
+Esse conjunto é mais sensível que o observado no não produtivo, pois inclui componentes diretamente ligados a observabilidade, service mesh, integração, pipelines, mensageria e storage. Em ambiente produtivo, a simples existência desses `InstallPlan` não aprovados já constitui pendência formal para a estratégia de atualização, uma vez que amplia o risco de desalinhamento entre versão do OCP, versão do operador e versão dos operandos efetivamente em execução.
+
+Adicionalmente, o cluster produtivo hospeda operadores e integrações que exigem revisão criteriosa de suporte antes de qualquer avanço de minor, entre eles:
+
+* `3scale` e `Apicast`;
+* `GitLab Runner Operator`;
+* `Jaeger`, `Service Mesh` e `Kiali`;
+* `DevWorkspace` e `Web Terminal`, ambos em canal `fast`;
+* `ODF`, `AMQ Broker`, `AMQ Streams` e `RHACS`;
+* `Nexus Operator`, proveniente de catálogo `community-operators`, o que demanda atenção adicional por não fazer parte do mesmo ciclo de suporte dos operadores Red Hat.
+
+==== Leitura das cargas de aplicação e da operação
+
+O ambiente produtivo apresenta um perfil operacional mais estável que o não produtivo. A coleta de workloads com problema retornou apenas um pod de backup em `Error`, sem evidência de múltiplas aplicações em `CrashLoopBackOff` ou `Pending`. Os eventos recentes indicam predominantemente:
+
+* execução rotineira de `CronJobs` de negócio;
+* jobs concluídos com sucesso em namespaces produtivos;
+* eventos transitórios de rotação dos catálogos do marketplace;
+* atividades periódicas de autenticação e coleta operacional padrão do cluster.
+
+Esse cenário sugere que, no momento da coleta, o ambiente estava funcional do ponto de vista de disponibilidade das aplicações principais. Ainda assim, a estabilidade observada não elimina a necessidade de testes de regressão orientados por negócio, especialmente em domínios de integração, mensageria, observabilidade, service mesh e APIs expostas por `3scale`.
+
+==== Indícios de uso de APIs legadas e sensíveis
+
+Assim como nos demais ambientes, a coleta de `APIRequestCounts` mostra uso ativo de APIs beta, alpha ou historicamente sensíveis em processos de upgrade. Entre os exemplos observados estão:
+
+* `deploymentconfigs.v1.apps.openshift.io`;
+* `brokertemplateinstances.v1.template.openshift.io`;
+* `clustertasks.v1beta1.tekton.dev` e `eventlisteners.v1beta1.triggers.tekton.dev`;
+* `alertmanagerconfigs.v1alpha1` e `v1beta1.monitoring.coreos.com`;
+* recursos `v1alpha3` e `v1beta1` associados a `Istio`, `Kiali`, `Jaeger` e `Service Mesh`;
+* recursos `v1beta1` de `AMQ Streams`, `AMQ Broker`, `3scale`, `Machine API` e `Triggers`.
+
+Esse conjunto reforça que o `AdminAckRequired` no produtivo deve ser tratado com máximo rigor. O risco aqui não está apenas no cluster, mas na possibilidade de quebra funcional em integrações críticas ou na observabilidade do ambiente caso dependências legadas permaneçam ativas durante a evolução para 4.16, 4.17 e 4.18.
+
+==== Leitura técnica do cenário
+
+Do ponto de vista de infraestrutura OpenShift, o cluster produtivo encontra-se apto à preparação do upgrade, pois a base da plataforma está estável. Não foram observados sinais de degradação em `ClusterOperators`, `MachineConfigPools`, storage ou disponibilidade geral dos componentes centrais.
+
+Todavia, sob a ótica de prontidão de mudança, o ambiente produtivo ainda *não deve* ser considerado pronto para elevação imediata de versão pelos seguintes motivos:
+
+. o `AdminAckRequired` ainda não foi resolvido;
+. há vários `InstallPlan` manuais pendentes em operadores críticos;
+. existe dependência aparente de APIs legadas e beta em componentes de integração, observabilidade, service mesh e pipelines;
+. a natureza produtiva do ambiente exige homologação formal do caminho de upgrade com testes funcionais e plano de contingência.
+
+==== Recomendação de sequência para o cluster produtivo
+
+Para reduzir risco de indisponibilidade ou regressão funcional, recomenda-se a seguinte sequência:
+
+. *Concluir a preparação nos ambientes anteriores*:
+** validar primeiro a correção dos bloqueios do hub;
+** validar depois a jornada de atualização no ambiente não produtivo;
+** usar os resultados do não produtivo como evidência para a janela produtiva.
+
+. *Tratar o `AdminAckRequired` com revisão formal de impacto*:
+** mapear APIs removidas ou alteradas no caminho 4.15 -> 4.16;
+** confirmar aderência de aplicações, operadores, pipelines e integrações;
+** registrar aceite administrativo e técnico somente após análise de impacto.
+
+. *Revisar todos os operadores com aprovação manual*:
+** decidir explicitamente sobre aprovação, congelamento ou substituição de cada `InstallPlan`;
+** validar compatibilidade entre OCP 4.16/4.17/4.18 e os operadores de observabilidade, service mesh, tracing, mensageria, storage, runners e segurança;
+** dar atenção especial aos componentes oriundos de catálogos não Red Hat, como o operador do Nexus.
+
+. *Executar testes de prontidão de negócio*:
+** selecionar aplicações críticas expostas ao cidadão e aos sistemas internos;
+** validar fluxos de autenticação, mensageria, APIs publicadas, pipelines, tracing e observabilidade;
+** preparar smoke tests e critérios objetivos de rollback.
+
+. *Realizar a atualização de forma incremental*:
+** aplicar primeiro a última z-stream recomendada de 4.15;
+** promover depois para 4.16, 4.17 e 4.18 com validação intermediária;
+** repetir checagem de operadores, APIs e aplicações em cada etapa.
+
+==== Critérios mínimos para considerar o produtivo apto ao upgrade
+
+Antes da atualização do ambiente produtivo, recomenda-se exigir cumulativamente:
+
+* `ClusterOperators` e `MachineConfigPools` integralmente saudáveis;
+* `AdminAckRequired` resolvido com evidência de análise de impacto;
+* revisão formal de todos os `InstallPlan` manuais pendentes;
+* confirmação de compatibilidade dos operadores críticos com a minor alvo do OCP;
+* validação das integrações críticas, incluindo `3scale`, service mesh, tracing, mensageria, pipelines e storage;
+* execução prévia bem-sucedida da mesma trilha de atualização em não produtivo;
+* plano de rollback, backup, janela formal de mudança e critérios claros de sucesso e abortamento.
+
+==== Conclusão
+
+No momento da coleta, o cluster produtivo *não atende integralmente* ao pré-requisito mínimo para a implementação por ainda permanecer em OCP 4.15.17 e depender da resolução do `AdminAckRequired` para progressão de minor. Ainda assim, a base da plataforma apresenta bom nível de estabilidade, melhor inclusive que o hub e comparável ou superior ao não produtivo. O fator limitante principal no produtivo não é a saúde do cluster, mas a necessidade de governança estrita sobre APIs legadas, operadores críticos e validação funcional do negócio antes da jornada incremental até OCP 4.18.
+
+include::171_cronograma.adoc[]

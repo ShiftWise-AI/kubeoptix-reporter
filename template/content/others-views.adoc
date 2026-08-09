@@ -1,0 +1,338 @@
+= Outras Visões
+
+.Explicação
+****
+Nesta seção são apresentadas outras visões relacionadas a requisitos não funcionais mas que agregam do ponto de visto arquitetural. Explore cada subseção e traga informações/visões que agreguem a arquitetura como um todo. Caso alguma das visões abaixo não se encaixe no seu cenário, descreva na respectiva subseção que informações relacionadas ao assunto não foram identificadas/encontradas.
+
+Lembre-se que é importante avaliar o nível de entendimento e complexidade técnica da solução e do cliente. Então, com isso em mente, trabalhe o conteúdo de forma fique fácil de entender.
+****
+
+== Entrega
+
+.Explicação
+****
+Traga visões sobre como a solução será entregue ou, caso não seja identificados indícios afirmar: "Não foram encontradas/identificadas informações relacionadas a este requisito não funcional".
+
+Possíveis cenários a serem abordados nessa sessão:
+
+. Deploy de aplicações recém containerizadas
+. Estratégias de deploy em ambientes produtivos (blue/green, canary, etc.)
+. GitOps
+.. Por branch
+.. Por repositorio
+.. Atores
+. CI/CD
+****
+
+
+== Processo
+
+.Explicação
+****
+Traga visões sobre como será o(s) processo(s) que dão apoio a solução ou, caso não seja identificados indícios afirmar: "Não foram encontradas/identificadas informações relacionadas a este requisito não funcional".
+
+Possíveis cenários a serem abordados nessa sessão:
+
+. CI/CD
+. GitOps
+. BPM
+. Fluxogramas
+. Diagramas de atividades ou de sequencia
+****
+
+== Segurança
+
+.Explicação
+****
+Traga visões sobre como a solução será segura ou, caso não seja identificados indícios afirmar: "Não foram encontradas/identificadas informações relacionadas a este requisito não funcional".
+
+Possíveis cenários a serem abordados nessa sessão:
+
+. Ameaças em potencial a solução
+. Mecanismos de autorização e autenticação
+. DevSecOps
+. Uso de rotas seguras
+. Uso de certificados
+. RBAC
+. Criptografia de canais e de dados
+****
+
+
+== Escalabilidade
+
+.Explicação
+****
+Traga visões sobre como a solução será escalável ou, caso não seja identificados indícios afirmar: "Não foram encontradas/identificadas informações relacionadas a este requisito não funcional".
+
+Possíveis cenários a serem abordados nessa sessão:
+
+. Estratégias de HPA/VPA
+. Cluster HA de JBoss, AMQ, DG, RHSSO
+. Estratégias de Replicação de Dados/DB
+. Estratégias de Replicação de Sessão
+. Estratégia de DR
+. Como aplicações devem lidar com crescimento de acessos ou dados
+. Infraestrutura necessária e padrões de design para suportar escalabilidade
+****
+
+
+
+== Performance
+
+.Explicação
+****
+Traga visões sobre como será a performance da solução ou, caso não seja identificados indícios afirmar: "Não foram encontradas/identificadas informações relacionadas a este requisito não funcional".
+
+Possíveis cenários a serem abordados nessa sessão:
+
+. Sizing em condições Normais de Utilização: (Volumetria, Acesso, Tempo de Resposta, TPS/RQS) + Ambiente Proposto
+. Sizing em condições de Pico de Utilização: (Volumetria, Acesso, Tempo de Resposta, TPS/RQS) + Proposto
+. Cargas esperadas e uso de padrões de sistemas de software junto com requerimentos baseados nesses fatores
+****
+
+
+== Manutenabilidade
+
+.Explicação
+****
+Traga visões sobre como a solução será mantida ou, caso não sejam identificados indícios afirmar: "Não foram encontradas/identificadas informações relacionadas a este requisito não funcional".
+
+Possíveis cenários a serem abordados nesta sessão:
+
+. Manutenibilidade de código ou da solução como um todo (modularidade, testabilidade, extensibilidade)
+. Como manter uma solução de deploy de aplicações no OpenShift sem uma esteira CI/CD? Este é um exemplo
+****
+
+
+== Observabilidade
+
+.Explicação
+****
+Traga visões sobre como a solução será observável/monitorada ou, caso não sejam identificados indícios afirmar: "Não foram encontradas/identificadas informações relacionadas a este requisito não funcional".
+
+Possíveis cenários a serem abordados nesta sessão:
+
+. Como a solução pode ser monitorada ? Quais stacks de ferramentas usadas ?
+. OpenTracing/Jaeger
+. EFK
+. ServiceMesh
+****
+
+== Confiabilidade
+
+.Explicação
+****
+Traga visões sobre como a solução será confiável ou, caso não sejam identificados indícios afirmar: "Não foram encontradas/identificadas informações relacionadas a este requisito não funcional".
+
+Possíveis cenários a serem abordados nesta sessão:
+
+. Mecanismos/ambientes/técnicas de recovery
+. Pontos de falha
+. Estratégias de backup
+. Pontos de falha/gargalo
+. Mecanismos de assinatura de pacotes/imagens
+****
+
+
+== Suportabilidade
+
+.Explicação
+****
+Traga visões sobre como a solução será suportada ou, caso não sejam identificados indícios afirmar: "Não foram encontradas/identificadas informações relacionadas a este requisito não funcional".
+
+Possíveis cenários a serem abordados nesta sessão:
+Uso de subscrições
+Ferramentas não-Red Hat usadas na solução
+
+Para saber quais subscrições o cliente possui proceder:
+
+. Saber o *Número da Conta* que é o mesmo número usado para abrir chamados
+. Pedir para SA (Service Account) quais subscrições estão ativas. Esse relatório (pdf) pode ser gerado pelo Supportable (veja um exemplo aqui o mesmo que foi usado nas tabelas a seguir)
+. As informações do Número da Conta e quem é o SA deverão constar também no [TEMPLATE] OneStop do projeto.
+. Caso tenha dúvidas ou queira perguntar algo veja a base de conhecimento [App Practice BRA] FAQ Sobre Subscrições
+
+Na tabela https://docs.google.com/spreadsheets/d/1zzLPkPZ4Qtb9vdzmDMC4XtVHXsp-CqE914LP3aVZ2eo/edit#gid=1672806779[Subscrição de produtos instalados] temos (abaixo):
+
+. É apresentando o consumo das subscrições que está sendo proposto/projeto para o cliente.
+. Os componentes listados são exemplificativos e os recursos utilizados levam em consideração uma referência de T-Shirt size Small (no spreadsheet relacionado tem link para cada produto apontando as referências conforme a documentação oficial, e no One Page das Torres tem referência para produtos em específico)
+
+Na tabela https://docs.google.com/spreadsheets/d/1zzLPkPZ4Qtb9vdzmDMC4XtVHXsp-CqE914LP3aVZ2eo/edit#gid=1666987484[Consumo de Subscrição] temos (abaixo):
+
+. É apresentando quanto foi consumido da contratação.
+. Na coluna “Core Disponível” mostra a diferença entre o Total de Cores  e o que foi proposto com base na tipo de Subscrição
+
+
+.Subscrição de produtos instalados (proposta)
+[options="footer"]
+|===
+|Subscrição |Componente |Nodes (qtd) (min)|CPU Cores (min)|Total CPU Cores |Memória Gb (min)|Total Memória Gb
+
+|infranode
+|OpenShift GitOps
+|0.5
+|7
+|3.5
+|5
+|2.5
+
+|infranode
+|OpenShift Pipelines
+|0.5
+|7
+|3.5
+|5
+|2.5
+
+|worker
+|HashiCorp Vault
+|0.5
+|4
+|2
+|8
+|4
+
+|worker
+|External Secret
+|0.5
+|0.5
+|0.25
+|1
+|0.5
+
+|worker
+|Nexus
+|1
+|8
+|8
+|16
+|16
+
+|worker
+|SonarQube
+|1
+|8
+|8
+|16
+|16
+
+|runtime
+|Single Sign-On (RHSSO)
+|1
+|10
+|10
+|8
+|8
+
+|integration
+|AMQ Streams (kakfa)
+|1
+|4
+|4
+|33
+|33
+
+2+|Total
+|4
+|34.5
+|25.25
+|51
+|41.5
+
+|===
+
+
+
+.Consumo de Subscrição
+[options="footer"]
+|===
+|Foco |Descrição do Produto |Qtd|Cores|Total Cores |Usado|Core Disponível
+
+|Red Hat Runtimes
+|Red Hat Runtimes, Premium
+|2
+|16
+|32
+|10
+|22
+
+|User Worker
+|Red Hat Container Platform Premium
+|64
+|2
+|128
+|57.5
+|70.5
+
+|Red Hat Storage
+|Red Hat Openshift Data Foundations Essentials, Premium
+|12
+|2
+|24
+|N/A
+|24
+
+|Red Hat Integration
+|Red Hat Integration, Premium
+|2
+|16
+|32
+|4
+|128
+
+2+|Total
+|80
+|36
+|216
+|71.5
+|144.5
+
+|===
+
+****
+
+== Testabilidade
+
+.Explicação
+****
+Traga visões sobre como a solução será testável ou, caso não sejam identificados indícios afirmar: "Não foram encontradas/identificadas informações relacionadas a este requisito não funcional".
+
+Possíveis cenários a serem abordados nesta sessão:
+
+. O quão é possível testar a solução ?
+. Etapas de testes em esteiras CI/CD ou em soluções DevOps ?
+. Testes ramp-up, unitários, integração, e2e, etc.
+. Planos de teste para obter dados de volumetria de recursos
+. Scripts de testes
+. Testes automatizados
+****
+
+
+== Reusabilidade
+
+.Explicação
+****
+Traga visões sobre como a solução será reutilizável ou, caso não sejam identificados indícios afirmar: "Não foram encontradas/identificadas informações relacionadas a este requisito não funcional".
+
+Possíveis cenários a serem abordados nesta sessão:
+
+. Design de user experience
+. Acessibilidade
+. Facilidade no uso da solução
+. Mecanismos de feedback
+****
+
+
+== Auditabilidade
+
+.Explicação
+****
+Traga visões sobre como a solução será auditável ou, caso não sejam identificados indícios afirmar: "Não foram encontradas/identificadas informações relacionadas a este requisito não funcional".
+
+Possíveis cenários a serem abordados nesta sessão:
+
+. O quão é possível auditar a solução ou seu funcionamento ?
+. Tekton Chains
+. Supply Chains
+. Assinatura de imagens
+. EDA (Event Driven Architecture)
+****

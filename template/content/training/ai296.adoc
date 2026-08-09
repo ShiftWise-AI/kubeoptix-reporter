@@ -1,0 +1,42 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Develop, Test, and Run Granite Family LLMs with Red Hat Enterprise Linux AI (AI296)
+
+[.big]#*Descrição do curso*#
+
+*Uma introdução ao ajuste fino, à disponibilização e ao uso de modelos de IA generativa com o Red Hat Enterprise Linux AI.*
+
+_Develop, Test, and Run Granite Family LLMs with Red Hat Enterprise Linux AI (AI296)_ oferece aos alunos conhecimento fundamental sobre ajuste fino, disponibilização e uso dos modelos de IA generativa personalizados para necessidades empresariais específicas. Este curso ajuda os alunos a desenvolver habilidades essenciais para treinar modelos em um ambiente seguro e privado.
+
+Este curso é baseado no Red Hat Enterprise Linux AI 1.4.
+
+*Observação:* este curso pode ser concluído em dois dias no modelo presencial, em três dias no modelo virtual ou no ritmo que você preferir. As durações podem variar de acordo com o método de entrega. Para obter todos os detalhes, o cronograma e o preço do curso, selecione sua localização e clique em “Enviar” no menu à direita.
+
+[.big]#*Resumo do conteúdo do curso*#
+
+* Fundamentos da IA generativa: recursos, desafios, modelos e técnicas
+* Modelos Granite para IA generativa empresarial
+* Treinamento de Largue Language Models (LLMs) com o Red Hat Enterprise Linux AI
+* Implantação de modelos treinados com o Red Hat Enterprise Linux AI
+
+[.big]#*Público-alvo*#
+
+* Cientistas de dados e especialistas em IA que desejam aprender mais sobre os modelos Granite e como os modelos de IA generativa são treinados e alinhados para atender a demandas empresariais específicas.
+* Desenvolvedores com noções básicas de inteligência artificial e machine learning, ou engenheiros de machine learning, interessados em aprender a desenvolver, testar e executar aplicações empresariais baseadas em IA em um ambiente empresarial e seguro.
+* Administradores de sistemas que desejam aprender a gerenciar a infraestrutura de nuvem híbrida da empresa, com o objetivo de impulsionar a adoção de IA generativa e Large Language Models (LLMs) e aplicar políticas de segurança.
+* Outros profissionais, como especialistas no assunto e empresas de pequeno e médio porte (PME), que desejam aprender a contribuir para o treinamento de modelos de IA seguros e personalizados para as necessidades empresariais.
+
+[.big]#*Treinamentos recomendados*#
+
+* Ter noções básicas de inteligência artificial e machne learning é recomendável, mas não obrigatório.
+* Experiência com a linha de comando do Linux.
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/ai296-develop-test-run-granite-family-llms-red-hat-enterprise-linux-ai

@@ -1,0 +1,121 @@
+////
+Propósito
+-------
+Esta seção tem como objetivo registrar a colaboração deliberada entre a Red Hat e
+o cliente. A transferência de conhecimento é uma atividade de mão dupla, por isso inclui tanto
+atividades nas quais a Red Hat está coletando informações do cliente e como
+as informações estão sendo comunicadas ao cliente. Como esta seção pode ser usada
+Para demonstrar a conclusão de certas tarefas SOW, é importante registrar
+atendimento sempre que possível.
+
+Atividades que devem ser capturadas:
+- Apresentação de workshops
+- Reuniões para chegar a um consenso sobre decisões em tempo de projeto
+- Revisão da documentação
+- Demonstrações do progresso
+- Briefings executivos
+- Treinamento específicos ou revisão para não participantes
+
+Exemplo
+------
+.Sessões de trabalho
+[cols=3*,cols="8,4,16",options="header"]
+|===
+| Sessão
+| Data
+| Finalidade / Participantes
+
+// Sessão
+| Workshop 1
+
+// Data
+| 5/1/2021
+
+// Finalidade / Participantes
+a|
+- Finalidade
+ * Revisão da arquitetura
+ * Estabelecer casos de uso adicionais
+- Participantes
+* John Wick/Red Hat
+* Shinji Mikami/ACME
+
+
+// Sessão
+| Reunião de decisão de cores
+
+// Data
+| 7/1/2021
+
+// Finalidade / Participantes
+a|
+- Finalidade
+ * Escolher se deseja fazer os ícones "Azul Centáurea"
+- Participantes
+ * John Wick/Red Hat
+ * Shinji Mikami/ACME
+ * Nina McInroe/ACME
+
+
+// Sessão
+| Sprint 3 Demo
+
+// Date
+| 20/2/2021
+
+//Finalidade / Participantes
+a|
+- Finalidade
+ * Mostrar progresso à liderança executiva
+ * Solicitar Feedback
+- Participantes
+ * John Wick/Red Hat
+ * Memphis Raines/Red Hat
+ * Pete Mitchell/Red Hat
+ * Shinji Mikami/ACME
+ * Eiji Aounuma/ACME
+
+
+// Sessão
+| Revisão do Relatório de Engajamento
+
+// Data
+| 15/3/2021
+
+// Finalidade / Participantes
+a| //Finalidade / Participantes
+- Finalidade
+ * Analisar o Relatório de Engajamento
+ * Identificar gaps e solicitar informações adicionais
+- Participantes
+ * John Wick/Red Hat
+ * Shinji Mikami/ACME
+
+|===
+////
+
+#TODO#
+
+.Sessões de trabalho
+[cols=3*,cols="8,4,16",options="header"]
+|===
+| Sessão
+| Data
+| Finalidade / Participantes
+
+// Sessão
+| #TODO#
+
+// Data
+| #TODO#
+
+//Finalidade / Participantes
+a|
+- Finalidade
+ * #TODO#
+ * #TODO#
+- Participantes
+ * #TODO#
+ * #TODO#
+
+|===

@@ -1,0 +1,35 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Managing CentOS Migrations and RHEL Upgrades (RH174)
+
+*Saiba como migrar servidores CentOS Linux existentes para versões compatíveis do Red Hat Enterprise Linux.*
+
+[.big]#*Descrição do curso*#
+
+* O "Managing CentOS Migrations and RHEL Upgrades" ajuda na transição do CentOS Linux para o Red Hat Enterprise Linux. Com o curso, os clientes realizam upgrade de uma versão principal do RHEL para uma mais recente, além de ter uma visão geral do processo de migração e ver como evitar e mitigar riscos. O "Managing CentOS Migrations and RHEL Upgrades" ajuda os usuários a migrar do CentOS Linux para o RHEL ou a fazer a atualização para uma versão mais recente do RHEL.
+
+[.big]#*Resumo do conteúdo do curso*#
+
+* Identificação dos possíveis riscos associados ao processo de migração e implementação de um plano para evitá-los, mitigá-los ou corrigi-los
+* Conversão do CentOS Linux para o Red Hat Enterprise Linux
+* Realização de upgrades locais do Red Hat Enterprise Linux
+
+[.big]#*Público-alvo*#
+
+* Administradores de sistema
+* Engenheiros DevOps
+* Profissionais de TI responsáveis por planejar e realizar a transição
+
+[.big]#*Treinamentos recomendados*#
+
+* Ter a certificação https://www.redhat.com/pt-br/services/certification/rhcsa[Red Hat Certified System Administrator (RHCSA)] ou demonstrar habilidades equivalentes em RHEL e CentOS Linux
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/managing-centos-migrations-and-rhel-upgrades-rh174

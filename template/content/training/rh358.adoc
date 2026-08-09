@@ -1,0 +1,47 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat Services Management and Automation (RH358)
+
+[.big]#*Descrição do curso*#
+
+*Aprenda a configurar e gerenciar os principais serviços integrados ao Red Hat Enterprise Linux e escalar seu trabalho verticalmente com a automação do Ansible.*
+
+O curso Red Hat Services Management and Automation (RH358) foi elaborado para profissionais de TI com alguma experiência em gerenciamento de sistemas Linux e que desejam aprender mais sobre como gerenciar e implantar serviços de rede incluídos no Red Hat Enterprise Linux. Você aprenderá como instalar, definir e gerenciar manualmente as configurações básicas desses serviços e, depois, usar o Ansible para automatizar seu trabalho de maneira escalável e reproduzível.
+
+Este curso é baseado no Red Hat Ansible Automation Platform 2.4 e no Red Hat Enterprise Linux 9.4.
+
+Após a conclusão do curso, o acesso prático ao laboratório permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+Observação: este curso é oferecido como uma aula presencial de quatro dias, uma aula virtual de cinco dias ou em ritmo individualizado. A duração do curso pode variar de acordo com o formato escolhido. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Enviar" no menu à direita.
+
+[.big]#*Resumo do conteúdo*#
+
+* Ofereça os principais serviços de rede usando o software que vem com o Red Hat Enterprise Linux 9, incluindo:
+** DNS com Unbound e BIND9
+** Autoconfiguração de rede IPv4 e IPv6 com servidores DHCP e DHCPv6
+** Transmissão de e-mail do cliente
+** Serviço de impressão com IPP Everywhere e CUPS
+** Compartilhamento de arquivos de protocolo NFS e SMB
+** Serviço de banco de dados SQL com MariaDB
+** Serviços web usando o Apache HTTPD e o Nginx
+* Configuração de redes avançadas para casos de uso do servidor, incluindo vinculação de dispositivos
+* Uso do Ansible para automatizar as tarefas manuais de configuração e implantação abordadas neste curso
+
+[.big]#*Público-alvo*#
+
+* Administradores de sistemas Linux, engenheiros de plataforma, desenvolvedores e outros profissionais de TI com experiência em Ansible que estejam interessados em aprender a gerenciar e automatizar a implantação, configuração e operação de serviços de rede importantes incluídos no Red Hat Enterprise Linux
+
+[.big]#*Pré-requisitos do curso*#
+
+* Habilidades de nível RHCSA com administração de sistemas Linux
+* Conhecimento prático do Ansible (RH294 ou habilidades e experiência equivalentes)
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/rh358-red-hat-services-management-automation

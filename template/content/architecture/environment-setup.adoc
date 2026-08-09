@@ -1,0 +1,5 @@
+[id="environment-setup_{context}"]
+= Configuração do ambiente
+Etapas para preparar ou criar o ambiente para a arquitetura implantada.
+
+#TODO#

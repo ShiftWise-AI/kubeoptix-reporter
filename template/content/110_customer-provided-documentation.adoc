@@ -1,0 +1,70 @@
+////
+Propósito
+-------
+Se o cliente forneceu documentação ou outros artefatos eletrônicos em suporte
+ao trabalho, eles devem estar listados aqui.
+
+Exemplos de documentos relevantes incluem diagramas de arquitetura preparados pela
+equipe de arquitetura do cliente, decks de slides descrevendo projetos relevantes do cliente 
+ou iniciativas que a Red Hat Consulting está apoiando, planilhas
+listando aplicações, capacidades, dados históricos de uso, etc.
+
+Nome
+-----
+Preferimos que descreva o nome do arquivo, mas o título da página também é aceitável.
+Exemplo 1: "storage_layout_20190211.xlsx"
+Exemplo 2: "Plano de atualização de armazenamento de 2019"
+
+Versão
+-----
+Inclua a versão mais recente do documento fornecido ou referenciado
+durante o trabalho. Se o documento não usar a numeração de versão, use a
+hora da última atualização do arquivo.
+Exemplo 1: "1,2"
+Exemplo 2: "11/02/2019 14:21:00 EST"
+
+Link
+-----
+Forneça um link para onde o cliente está guardando o documento. É de conhecimento que 
+esse link pode não ser válido fora da rede do cliente.
+Se o cliente não hospedar o documento, você pode fornecer uma breve descrição
+de onde o documento é mantido pelo cliente. A Red Hat não faz e não deveria
+guardar material fornecido pelo cliente; forneça links para as pastas do Google Drive da Red Hat
+nesta seção.
+Exemplo 1: "https://sharepoint.acme.com/Architecture_Team/Drawing23"
+Exemplo 2: "Este documento está registrado na equipe de arquitetura da ACME"
+
+
+Propósito
+-----
+For "Purpose", briefly describe the content of the document and how it was used
+by the engagement.
+Example: "This spreadsheet lists all of the VMware VMs, Resources and Clusters.
+It was referenced to calculate the resources required to move these workloads
+to RHV."
+
+Em "Objetivo", descreva brevemente o conteúdo do documento e como ele foi usado
+por esse trabalho.
+Exemplo: "Esta planilha lista todas as VMs, recursos e clusters do VMware.
+Foi referenciado para calcular os recursos necessários para mover esses workloads para o RHV".
+
+#TODO#
+////
+.Documentação fornecida por {customer}
+[cols=4*,options=header]
+|===
+|Nome
+|Versão
+|Link
+|Objetivo
+
+// Nome
+| #TODO#
+// Versão
+| #TODO#
+// Link ou Localização
+| #TODO#
+// Objetivo
+| #TODO#
+
+|===

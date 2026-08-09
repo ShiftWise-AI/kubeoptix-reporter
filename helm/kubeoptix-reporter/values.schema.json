@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["replicaCount", "build", "persistence", "resources"],
+  "properties": {
+    "replicaCount": {
+      "type": "integer",
+      "const": 1,
+      "description": "This workload must run with exactly one replica."
+    },
+    "build": {
+      "type": "object",
+      "required": ["git"],
+      "properties": {
+        "git": {
+          "type": "object",
+          "required": ["uri", "ref", "sourceSecret"],
+          "properties": {
+            "uri": {"type": "string", "minLength": 1},
+            "ref": {"type": "string", "minLength": 1},
+            "sourceSecret": {"type": "string", "minLength": 1}
+          }
+        },
+        "sourceSecret": {
+          "type": "object",
+          "properties": {
+            "create": {"type": "boolean"},
+            "username": {"type": "string", "minLength": 1},
+            "token": {"type": "string"}
+          }
+        }
+      }
+    },
+    "persistence": {
+      "type": "object",
+      "required": ["existingClaim", "mountPath"],
+      "properties": {
+        "existingClaim": {"type": "string", "minLength": 1},
+        "mountPath": {"type": "string", "pattern": "^/"}
+      }
+    },
+    "resources": {"type": "object"}
+  }
+}

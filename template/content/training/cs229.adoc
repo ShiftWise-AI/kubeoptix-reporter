@@ -1,0 +1,49 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Deploying Production AWS ROSA Clusters: Creation, Configuration, and Application Integration (CS229)
+
+[.big]#*Descrição do curso*#
+
+*Crie e configure clusters de nível de produção do ROSA como parte de área de ocupação maior de um cliente AWS. Em seguida, integre aplicações no ROSA com serviços da AWS e mantenha uma boa postura de segurança.O curso*
+
+_Deploying Production AWS ROSA Clusters: Creation, Configuration, and Application Integration (CS229)_ ensina a configurar clusters do ROSA como parte de ambientes preexistentes da AWS e a integrar o ROSA aos serviços da AWS normalmente usados por equipes de operações de TI, como o Amazon CloudWatch. Este curso também ensina a integrar aplicações implantadas no ROSA com serviços da AWS de maneira que os administradores de cluster e engenheiros de plataforma tenham o controle das credenciais e das funções exigidas pelas aplicações para acessar os serviços da AWS, em vez de expor essas credenciais aos desenvolvedores de aplicações.
+
+*Observação:* este curso é oferecido como quatro aulas presenciais ou como cinco aulas virtuais. A duração pode variar de acordo com a entrega. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Registre-se" no menu à direita.
+
+[.big]#*Resumo do conteúdo do curso*#
+
+* Criar clusters do ROSA pelo PrivateLink com STS
+* Conectar clusters do ROSA pelo PrivateLink às VPCs existentes e permitir que administradores e desenvolvedores acessem esses clusters
+* Configurar pools de máquina dedicados e escalabilidade automática de nós/pods
+* Configurar encaminhamento de log de auditoria, cluster e nó para o Amazon CloudWatch
+* Configurar autenticação e sincronização de grupo com o Amazon Cognito
+* Integre com registros de containers externos, como ECR e Quay.io, para implantar aplicações de repositórios de imagem privados
+* Configure classes de armazenamento para permitir o acesso de aplicações a diferentes tipos de volume do EBS
+* Configure classes de armazenamento e contextos de segurança para permitir o acesso de aplicações a volumes de armazenamento de EFS compartilhados
+* Configure a identidade do pod usando STS/IRSA para permitir o acesso de aplicações a serviços da AWS, como banco de dados (Aurora), integração (SQS) e armazenamento de objetos (S3)
+* Provisione serviços da AWS para aplicações usando os AWS Controllers for Kubernetes (ACK)
+* Agregue e consulte métricas de aplicações (monitoramento de cargas de trabalho de aplicações) com o Amazon Managed Prometheus Service
+* Agregue e consulte logs de aplicações estruturados com o Amazon CloudWatch
+* Configure domínios personalizados e certificados TLS para um acesso público seguro às aplicações
+
+[.big]#*Público-alvo*#
+
+* Principal: administradores do ROSA, engenheiros de plataforma, administradores de nuvem, administradores de sistema e outras funções de TI relacionadas à infraestrutura que são responsáveis pelo suporte e provisionamento da infraestrutura de aplicações implantadas na AWS
+* Secundário: arquitetos empresariais, engenheiros de confiabilidade de sites, engenheiros de DevOps e outras funções de TI relacionadas a aplicações, responsáveis pela criação da infraestrutura de aplicações implantadas na AWS
+
+[.big]#*Treinamentos recomendados*#
+
+* https://skills.ole.redhat.com/en[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para as suas habilidades.
+* DO120 - Introduction to Red Hat OpenShift on AWS (ROSA) ou experiência equivalente: "Sei como criar e acessar um cluster público do ROSA".
+* Administração da AWS com nível de AWS Certified SysOps Administrator - Associate or AWS Certified Solutions Architect - Associate, ou experiência equivalente: "Eu sei como gerenciar os serviços de infraestrutura da AWS"
+* Conhecimentos básicos em OpenShift  DO080 Technical Overview: "Eu sei os conceitos básicos do OpenShift e dos containers."
+* É recomendável que os estudantes também se inscrevam nos https://www.redhat.com/pt-br/services/certification/rhcs-paas[cursos com certificações do Red Hat Certified OpenShift Administration], além do CS220 e do CS221.
+
+[.big]#*Requisitos técnicos*#
+
+* A conexão com a Internet é necessária para acessar os serviços da AWS por meio do portal ou da interface de linha de comando (CLI) dessa plataforma. Você também precisará acessar o console de nuvem híbrida da Red Hat e os serviços associados do Red Hat Cloud Services
+* Os alunos precisam ter uma conta ativa no Portal do Cliente Red Hat ou uma inscrição gratuita no programa Red Hat Developer.
+* A Red Hat oferece um ambiente da AWS para laboratórios hands-on. Se esse ambiente não for utilizado, os alunos devem disponibilizar suas próprias contas de nuvem com cotas da AWS suficientes e também conseguir habilitar novos serviços do marketplace
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/cs229-deploying-production-aws-rosa-clusters-creation-configuration-application-integration

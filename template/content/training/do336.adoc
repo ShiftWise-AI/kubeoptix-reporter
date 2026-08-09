@@ -1,0 +1,51 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Automate and Manage Red Hat OpenShift Virtualization with Ansible (DO336)
+
+[.big]#*Descrição do curso*#
+
+*Aprenda a usar o Red Hat Ansible Automation Platform para automatizar a migração e o gerenciamento de máquinas virtuais no Red Hat OpenShift Virtualization.*
+
+O curso Automate and Manage Red Hat OpenShift Virtualization with Ansible (DO336) foi desenvolvido para administradores de máquinas virtuais interessados em automatizar as tarefas de migração e gerenciamento de máquinas virtuais no OpenShift Virtualization usando o operador do Ansible Automation Platform.
+
+Este curso fornece as seguintes informações e habilidades:
+
+* Uma introdução aos conceitos fundamentais do Ansible e do Ansible Automation Platform
+* Habilidades para implantar o automation controller, a instância privada do automation hub e o operador do Ansible Automation Platform em um cluster do Red Hat OpenShift
+* Estratégias para migrar máquinas virtuais de outro hipervisor para o OpenShift Virtualization usando o operador de kit de ferramentas de migração para máquinas virtuais e o Ansible Automation Platform
+* Habilidades para automatizar tarefas do Dia 2 que ajudam a gerenciar todo o ciclo de vida da VM, como provisionamento de máquinas virtuais, suporte a recursos do Kubernetes, gerenciamento de recursos de computação e dispositivos de rede, e instalação de pacotes de software.
+
+Após a conclusão do curso, você receberá acesso estendido de 45 dias aos laboratórios práticos para todos os cursos que incluem um ambiente virtual.
+
+*Observação:* este curso pode ser concluído em três dias no modelo presencial, em quatro dias no modelo virtual ou no ritmo que você preferir. A duração do curso pode variar de acordo com o formato escolhido. Para conferir todos os detalhes, a programação e os preços do curso, selecione seu país e clique no botão "Enviar" à direita.
+
+[.big]#*Resumo do conteúdo do curso*#
+
+* Introdução aos conceitos básicos, casos de uso e arquitetura do Ansible e do Ansible Automation Platform
+* Implantação e configuração do automation controller, automation hub privado e operador do Ansible Automation Platform em um cluster do Red Hat OpenShift
+* Migração de máquinas virtuais de outro hipervisor para o Red Hat OpenShift Virtualization usando o operador de kit de ferramentas de migração para máquinas virtuais e o Ansible Automation Platform
+* Automação da criação e do gerenciamento de máquinas virtuais em um cluster do Red Hat OpenShift Virtualization usando o operador do Ansible Automation Platform
+
+[.big]#*Público-alvo*#
+
+* *Administradores de máquinas virtuais* interessados em mover cargas de trabalho virtualizadas dos hipervisores tradicionais para o OpenShift Virtualization
+* *Arquitetos empresariais, administradores de sistema* e *arquitetos de automação* responsáveis por projetar, gerenciar e automatizar a infraestrutura de máquina virtual de uma organização.
+
+[.big]#*Treinamentos recomendados*#
+
+* https://skills.ole.redhat.com/en[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para as suas habilidades.
+* https://www.redhat.com/pt-br/services/training/red-hat-certified-specialist-openshift-virtualization-ex316[Red Hat Certified Specialist in OpenShift Virtualization certification (EX316)] ou conhecimento equivalente em gerenciamento de máquinas virtuais no Red Hat OpenShift.
+* Este curso não exige experiência anterior com o Ansible, mas recomendamos que os alunos façam o curso a seguir primeiro:
+** https://www.redhat.com/pt-br/services/training/do007-ansible-essentials-simplicity-automation-technical-overview[Ansible Basics - Automation Technical Overview (DO0007)].
+* Habilidades em Linux não são necessárias para gerenciar os clusters do OpenShift e o OpenShift Virtualization. No entanto, operar VMs individuais do Linux requer habilidades de sysadmin Linux, que os cursos a seguir oferecem:
+** https://www.redhat.com/pt-br/services/training/rh124-red-hat-system-administration-i[Red Hat System Administration I (RH124)] e https://www.redhat.com/pt-br/services/training/rh134-red-hat-system-administration-ii[Red Hat System Administration II (RH134)] ou conhecimento equivalente sobre gerenciamento do sistema operacional em uma VM Linux.
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/do336-automate-manage-red-hat-openshift-virtualization-with-ansible

@@ -1,0 +1,48 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Developing Advanced Automation with Red Hat Ansible Automation Platform (AU374)
+
+[.big]#*Descrição do curso*#
+
+*Adote as de práticas recomendadas para aprimorar suas habilidades no Ansible e desenvolver uma automação escalável com as novas ferramentas voltadas para containers do Red Hat Ansible Automation Platform.*
+
+_O curso Developing Advanced Automation with Red Hat Ansible Automation Platform (AU374)_ foi elaborado para desenvolvedores de conteúdo de automação que usam as ferramentas focadas em containers do Red Hat® Ansible Automation Platform para desenvolver com eficiência uma automação gerenciada na interface de usuário unificada do Ansible Automation Platform. Aprenda práticas recomendadas para o desenvolvimento da automação usando código reutilizável, técnicas avançadas de playbook, automation execution environments compartilhados e preparação para automação escalável com o automation content navigator.
+
+Este curso é baseado no Red Hat Ansible Automation Platform 2.5.
+
+Após a conclusão do curso, o acesso ao laboratório hands-on permanecerá disponível por até 45 dias para qualquer curso presencial que inclua um ambiente virtual.
+
+*Observação:* este curso é oferecido como uma aula presencial de quatro dias, uma aula virtual de cinco dias ou no ritmo que você preferir. A duração do curso pode variar de acordo com o formato escolhido. Para conferir todos os detalhes, a programação e os preços do curso, selecione a localização e clique em "Enviar" no menu à direita.
+
+[.big]#*Resumo do curso*#
+
+* Uso dos recursos do automation content navigator para desenvolver playbooks do Ansible.
+* Aplicação de práticas recomendadas para automatizar de modo eficaz e eficiente com o Ansible.
+* Uso de funcionalidades avançadas do Red Hat Ansible Automation Platform, incluindo filtros e plug-ins, para trabalhar com dados.
+* Execução de operações de automação como atualizações contínuas.
+* Criação de automation execution environments para agrupar e distribuir as dependências necessárias para executar o código de automação.
+
+[.big]#*Público-alvo*#
+
+Este curso foi elaborado para usuários que criam conteúdo de automação, inclusive nestas funções:
+
+* Desenvolvedores
+* Engenheiros de DevOps
+* Administradores de sistema Linux
+* Outros profissionais de TI com experiência no uso do Red Hat Ansible Automation Platform para automatizar, provisionar, configurar e implantar aplicações e serviços em ambientes Linux
+
+[.big]#*Treinamentos recomendados*#
+
+* https://www.redhat.com/rhtapps/assessment/[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para as suas habilidades
+* https://www.redhat.com/pt-br/services/training/rh294-red-hat-linux-automation-with-ansible[Red Hat Enterprise Linux Automation with Ansible (RH294)]
+* Ter a certificação https://www.redhat.com/pt-br/services/certification/rhce[Red Hat Certified Engineer (RHCE®)] no Red Hat Enterprise Linux 9 ou posterior, ou comprovar experiência equivalente em Ansible
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/au374-developing-advanced-automation-red-hat-ansible-automation-platform

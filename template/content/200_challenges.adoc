@@ -1,0 +1,65 @@
+////
+Propósito
+-------
+Quaisquer desafios percebidos durante o trabalho devem ser
+enumerados e descritos aqui. Um desafio é digno de nota se:
+- Impactou o ritmo do progresso ou prazos de entrega
+- Impactou e / ou impediu a conclusão de uma ou mais tarefas
+- Exigia uma solução alternativa a ser implementada (workaround)
+- Um ticket de suporte ou BZ foi aberto com a Red Hat para rastreá-lo
+- Um ticket de suporte para terceiros foi aberto
+- Um ticket de suporte interno ao cliente foi aberto
+
+Descrição do Desafio
+-----
+Seja prático. Tente não atribuir a culpa a quaisquer ações que foram tomadas
+ou falharam ao ser seguido. Dedique uma ou duas frases para cada:
+- O que aconteceu ou deixou de acontecer
+- O impacto disso
+- A causa conhecida ou suspeita
+
+Resolução imediata
+-----
+Limite ao mínimo de frases possível. Inclua todo e qualquer um dos seguintes itens aplicáveis:
+- Soluções alternativas(Workarounds) - uma frase descrevendo a solução alternativa, uma frase explicando quaisquer inconvenientes
+- Support Ticket / BZ. Links para o ticket, se aplicável.
+- Hotfixes fornecidos pela Engenharia
+- Se a solução imediata foi reorganizar a ordem normal das tarefas, isso deve ser observado aqui.
+
+Recomendação futura
+-----
+Essa pode ser a solução "permanente" recomendada, que mais tarde substituirá uma solução alternativa, ou conselhos preventivos.
+
+Exemplo 1
+------
+===== Desafio
+O hardware do servidor necessário para o RHV não tinha o número necessário de conexões de fibra (SAN). Como o RHV exige storage para criar um Data Center lógico, a instalação não pôde continuar até que os servidores estivessem adequadamente conectados a SAN, aumentando o tempo de instalação em dois dias. Os cabos necessários não faziam parte do pedido enviado ao fornecedor.
+
+===== Resolução imediata
+O cliente fez um pedido de emergência para o fornecedor de cabos de fibra. Nesse meio tempo, a Red Hat Consulting reorganizou a ordem planejada de tarefas para se concentrar em itens que não tinham instalação como pré-requisito.
+
+===== Recomendação futura
+Se possível, os requisitos de hardware devem ser concluídos pelo menos uma semana antes da Red Hat Consulting chegar ao local. Isso fornece tempo suficiente para fazer correções sem afetar os cronogramas.
+
+Exemplo 2
+-----
+===== Desafio
+Um erro de autenticação está impedindo a implantação de novos pods no repositório de imagens do cliente. Isso torna impossível implantar e testar alterações de código. Os certificados auto assinados gerados pelo instalador do OpenShift estão inválidos.
+
+===== Resolução imediata
+O ticket 12345 foi aberto com suporte. Esse é um problema conhecido que já está sendo rastreado no BZ 45678. O ticket de suporte foi anexado ao BZ. A Engenharia recomendou a recriação manual dos certificados auto assinados para cada cluster. Isso permitiu que fosse resolvido o problema de autenticação.
+
+===== Recomendação futura
+Uma correção já foi implementada no upstream e esperamos que faça parte da próxima versão do OpenShift. É recomendável que o cliente atualize o OpenShift assim que a próxima versão estiver disponível e verifique se não será necessário gerar novamente os certificados manualmente.
+////
+
+= #TODO_sample_challenge_name_1#
+
+== Desafio
+#TODO#
+
+== Resolução imediata
+#TODO#
+
+== Recomendação futura
+#TODO#

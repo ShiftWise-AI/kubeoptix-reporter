@@ -1,0 +1,35 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Authoring Rules with Red Hat JBoss BRMS (JB461)
+
+[.big]#*Descrição do curso*#
+
+*Aprenda a criar e testar regras usando a interface gráfica do usuário do Business Central*
+
+O Authoring Rules with Red Hat® JBoss® BRMS (JB461) apresenta o aluno ao mecanismo de regras e repositório do Red Hat Decision Manager. Nesse curso, os alunos aprendem a criar e testar regras utilizando a interface gráfica de usuário do Business Central.
+
+Este curso é baseado no Red Hat JBoss BRMS 6.
+
+[.big]#*Resumo do conteúdo*#
+
+* Criação de regras de negócios básicas no Business Central
+* Tabelas de decisão e modelos de regras
+* Desenvolvimento de linguagens específicas do domínio (DSLs)
+* Teste de regras de negócios
+* Criação de regras de negócios complexas no Business Central
+
+[.big]#*Público-alvo*#
+
+* Analistas de negócios e arquitetos corporativos responsáveis pela criação e adaptação de políticas corporativas
+* Autores de regras responsáveis pela criação e teste de regras
+* Desenvolvedores de aplicativos Java™ EE que desejam aprender a utilizar o Business Central para criar regras
+
+[.big]#*Pré-requisitos do curso*#
+
+* Entender o básico das estruturas de dados como tabelas e suas relações. Por exemplo, pedidos e itens do pedido
+* Experiência em desenvolver regras de negócios
+* Experiência em modelagem de negócios
+* Habilidade para trabalhar com planilhas
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/jb461-authoring-rules-red-hat-jboss-brms

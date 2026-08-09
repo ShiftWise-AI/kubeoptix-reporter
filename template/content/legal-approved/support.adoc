@@ -1,0 +1,172 @@
+////
+Propósito
+-------
+Esta seção descreve opções para entrar em contato com o suporte da Red Hat.  Em geral, estas informações não devem ser alteradas. Se você encontrar uma necessidade de alterá-lo, por favor, envie uma solicitação de merge/pull request ao CER no gitlab  para que a atualização possa ser incorporada daqui para frente.
+
+Exemplo
+------
+N/A
+
+////
+[appendix]
+= Engajando os Serviços de Suporte Global da Red Hat
+
+[.normal]
+O suporte da Red Hat(R) o ajuda a obter o máximo de suas assinaturas Red Hat. Abaixo, você irá encontrar informações sobre o Portal do Cliente Red Hat, suporte telefônico Red Hat, seus pontos de contato e como entrar em contato com vendas e atendimento ao cliente.
+
+Estamos sempre disponíveis para ajudá-lo. Se a qualquer momento você não conseguir entrar em contato com seus contatos pessoais de suporte da Red Hat, você pode utilizar as informações de contato abaixo para a contactar a equipe global de liderança do suporte, que está disponível para ajudar em sua solicitação.
+
+== Red Hat portal do cliente: link:https://access.redhat.com/[access.redhat.com]
+O Portal do Cliente Red Hat é uma plataforma digital premiada que fornece base de conhecimento de nossos produtos corporativos, recursos de assinatura e conhecimento técnico que você encontrará apenas vindo da Red Hat. Use o Portal do Cliente para acessar nossa base de conhecimentos técnica, colaborar com colegas e especialistas da Red Hat, criar, rastrear e gerenciar os seus casos de suporte e muito mais.
+
+O uso do Portal do Cliente requer um login/senha (vinculado à sua conta RHN). Se você tiver alguma dúvida sobre seu login e/ou senha, entre em contato com seu TAM ou CSM, se você tiver um atribuído.
+
+== Red Hat phone support:
+Os engenheiros de suporte técnico da Red Hat estão disponíveis através do suporte telefônico para solucionar problemas rapidamente. Mais informações sobre seu número de contato regional e horário comercial podem ser encontradas em: link:https://access.redhat.com/support/contact/technicalSupport[https://access.redhat.com/support/contact/technicalSupport].
+
+.RED HAT CONTATOS DO SUPORTE
+[cols=3,options=header,cols="1,2,2",width=90%]
+|===
+|TIER
+|CONTATO & INFORMAÇÕES
+|DISPONIBILIDADE
+|1
+|Suporte Red Hat Brasil +
+0800-602-5222 / 55 11 3529 6006 +
+link:https://access.redhat.com/support/[]^1^
+|9h as 18h Seg-Sex (Horário de Brasília)
+|===
+^1.^ O uso do Portal do Cliente requer um nome de usuário e senha da Red Hat Network. +
+^2.^ Pressione **3** para "RHEL", depois **1** para "Suporte Premium". Informe o técnico que você está com **{custgss}**, número da conta **{nogss}**
+
+
+<<<
+== Atendimento ao cliente
+Além do Suporte Red Hat, as areas de vendas e atendimento ao cliente da Red Hat estão disponíveis para ajudá-lo. Se você tiver dúvidas sobre vendas, necessidades futuras de produtos ou direitos, use as informações de contato fornecidas abaixo.
+
+.Atendimento ao cliente
+[cols=2,stripes="none",options=header,cols="1,<.<2"]
+|===
+|NOME DE CONTATO & INFORMAÇÕES |NOTAS
+|Atendimento ao cliente, Brasil +
+0800-602-5222
+.2+|Para todas as perguntas relacionadas à sua conta, assinaturas ou direitos, entre em contato com o atendimento ao cliente em +
+link:https://access.redhat.com/support/contact/customerService[https://access.redhat.com/support/contact/customerService] ou informações de contato global. +
+Entre em contato com o Suporte Técnico para todas as questões técnicas ou questões relacionadas aos produtos da Red Hat.
+|RECOMENDAÇÕES PARA A EXPERIÊNCIA DE SUPORTE IDEAL: +
+link:https://access.redhat.com/articles/280093[https://access.redhat.com/articles/280093] +
+PARA ESCALAR UM CASO: +
+link:https://access.redhat.com/support/escalation[https://access.redhat.com/support/escalation]
+|===
+
+== Termos de serviço de suporte à produção
+
+link:https://access.redhat.com/support/offerings/production/sla[https://access.redhat.com/support/offerings/production/sla]
+
+[cols=4,options=header,cols="1,3,3,1,2"]
+|===
+|
+|Self-support
+|Standard
+2+|Premium
+
+|Horas de cobertura
+|N/A
+|Horário comercial padrão ^2^
+2+|Horário comercial padrão (24x7 para severidade 1 e 2) ^3^
+
+|Canal de suporte
+|None
+|Web e telefone
+2+|Web e telefone
+
+|Número de casos
+|N/A
+|Ilimitado
+2+|Ilimitado
+
+|Tempos de resposta
+|Resposta inicial e ongoing
+|Resposta inicial e ongoing
+|Resposta inicial
+|Resposta ongoing
+
+|Severidade 1
+|N/A
+|1 hora útil
+|1 hora
+|1 hora ou conforme combinado
+
+|Severidade 2
+|N/A
+|4 horas uteis
+|2 horas
+|4 horas ou conforme combinado
+
+|Severidade 3
+|N/A
+|1 dia útil
+|4 horas úteis
+|8 horas úteis ou conforme combinado
+
+|Severidade 4
+|N/A
+|2 dias úteis
+|8 horas úteis
+|2 dias úteis ou conforme combinado
+
+|===
+
+== Definições de nível de gravidade do suporte do Red Hat
+link:https://access.redhat.com/support/policy/severity/[https://access.redhat.com/support/policy/severity/]
+
+Abrir um caso de suporte on-line pode facilitar o compartilhamento de dados técnicos, mensagens de erro e informações do sistema com o representante do Suporte da Red Hat. Após a submissão on-line, uma chamada telefônica pode reduzir o tempo de resposta, bem como possíveis erros na captura de informações.
+
+A Red Hat recomenda que os casos de suporte severidade 1 e 2 sejam seguidos de uma chamada telefônica para o seu suporte local.
+
+Red Hat Global Support Services usa as seguintes definições para classificar problemas:
+
+=== Severidade 1 (urgente)
+Um problema que impacta severamente o uso do software em um ambiente de produção (como perda de dados de produção ou em que seus sistemas de produção não estão funcionando). A situação interrompe suas operações comerciais e não existe solução de contorno.
+
+=== Severidade 2 (alta)
+Um problema em que o software está funcionando, mas seu uso em um ambiente de produção é severamente reduzido. A situação está causando um alto impacto em partes de suas operações de negócios e não existe solução de contorno.
+
+=== Severidade 3 (média)
+Um problema que envolve perda parcial e não crítica do uso do software em um ambiente de produção ou ambiente de desenvolvimento. Para ambientes de produção, há um impacto médio a baixo no seu negócio, mas seu negócio continua funcionando, inclusive usando uma solução processual. Para ambientes de desenvolvimento, onde a situação está fazendo com que seu projeto não continue mais ou migre para a produção.
+
+=== Severidade 4 (baixa)
+Uma questão de uso geral, reportando um erro de documentação ou recomendação para um aprimoramento futuro ou modificação do produto. Para ambientes de produção, há pouco ou nenhum impacto no seu negócio, no desempenho ou funcionalidade do seu sistema. Para ambientes de desenvolvimento, há um impacto médio a baixo no seu negócio, mas seu negócio continua funcionando, inclusive usando uma solução de contorno.
+
+
+== Dicas para criar um bom case de suporte
+
+. Preencha o número da conta, seu nome, recomenda-se ser feito usanod uma conta individual em vez de conta global do cliente.
+. Selecione o produto afetado.
+. Versão do produto.
+. A descrição do problema deve ser precisa para que seja possível identificar se já existe algum KCS que o ajude na resolução. Por favor, leia o KCS sugerido antes de abrir o caso. Lembre-se de usar o nome do componente que você está tendo problema – Exemplo: Ceph, Nova, Keystone, etc. Palavras-chave são muito importantes também.
+. Explique seu problema com o máximo de detalhes e adicione os comandos que você está usando com saídas.
+. A descrição do problema deve ser feita como: [Componente][Região] Descrição do problema. +
+Exemplos seriam: +
+_[Nova][Região NL] Falha no módulo nova de em um dos compute nodes_ +
+_[Ceph][Região de Cingapura] Ceph sem OSD_
+. Explique seu problema com o máximo de detalhes e adicione os comandos que você está usando com saídas.
+
+.Portal: Caso
+image::support/portal-ss.png[Red Hat Portal]
+
+. É importante informar o ambiente que é afetado, pré-produção, produção e que região está afetando, ex.: São Paulo, Rio de Janeiro, etc. +
+Lembre-se dos níveis de severidade e atribua-o corretamente.
+. Anexar relatórios sosreports dos servidores/componentes ajudam a acelerar o caso: link:https://access.redhat.com/solutions/3592[https://access.redhat.com/solutions/3592]
+. Selecione o tipo de suporte, use premium sempre que tiver a opção.
+
+
+.Portal: detalhes do caso
+image::support/portal-ss-2.png[Red Hat Portal]
+
+. Selecione o nível de severidade.
+. Adicione notificação para os interessados ou uma lista de distribuição.
+. Se estiver disponível, selecione um grupo de casos para notificar outro membro, por exemplo Cloud alerta todos os membros da equipe de Cloud e eles podem trabalhar no caso também.
+
+.Portal: definir a severidade e adicionar notificação
+image::support/portal-ss-3.png[Red Hat Portal]

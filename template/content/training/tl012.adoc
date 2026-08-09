@@ -1,0 +1,36 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Abordagem de transição para implementar uma visão geral técnica pragmática da engenharia de confiabilidade de sites (SRE) (TL012)
+
+[.big]#*Descrição do curso*#
+
+*Saiba por que a SRE surgiu como uma estratégia de TI para oferecer melhor desempenho e time to market*
+
+A engenharia de confiabilidade de sites (SRE) é um modelo de responsabilidade compartilhada e, se bem executada, pode melhorar a eficiência, a resiliência e a segurança. Mas a implementação da SRE em uma organização exige mudança cultural, formação e treinamento da equipe, além de mudanças no processo. Para alcançar essa mudança, as organizações precisam criar um roteiro para a transição. Esta visão geral técnica aborda a abordagem pragmática da SRE e apresenta as principais ferramentas de responsabilidade compartilhada para permitir uma transição incremental para a SRE.
+
+[.big]#*Resumo do curso*#
+
+Com vídeos online, sob demanda, você aprenderá sobre:
+
+* O que é SRE? Uma abordagem pragmática para SRE
+* Ferramentas para responsabilidade compartilhada 
+* Como escalar a confiabilidade do serviço 
+* Criação de uma cultura de "segurança contra falhas"
+* Avaliação de inconsistências e como elas geram esforço excessivo 
+* Importância do alinhamento de ITSM e DevOps/SRE
+* Modelagem de equipes: construa/execute equipes
+* Definição e alinhamento de metas de gerenciamento de incidentes e DevOps 
+* Hacks de colaboração: o que você pode usar agora para começar a transição
+* Institucionalização de métricas 
+* Resumo: uma abordagem pragmática 
+
+[.big]#*Público-alvo do curso*#
+
+Líderes e tomadores de decisão de TI considerando ou em processo de implementação ou melhoria de suas práticas de SRE.
+
+[.big]#*Pré-requisitos do curso*#
+
+Não há pré-requisitos para este curso.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/transitional-approach-implementing-pragmatic-site-reliability-engineering-sre-technical-overview

@@ -1,0 +1,11 @@
+////
+Propósito
+-------
+Forneça instruções para solicitar cópias adicionais deste documento.
+
+Amostra
+------
+Para solicitar cópias adicionais do Consulting Engagement Report, entre em contato com o Gerente de Projetos da Red Hat identificado na seção <<participants>> ou com o seu gerente de conta da Red Hat.
+////
+
+Para solicitar cópias adicionais do Consulting Engagement Report, entre em contato com o Gerente de Projetos da Red Hat identificado na seção <<participants>> ou com o seu gerente de conta da Red Hat.

@@ -1,0 +1,40 @@
+////
+Propósito
+-------
+O SOW (statement of work - declaração de trabalho) deste trabalho deve ser fornecido em linha
+ao relatório de trabalho para referência e revisão. O SOW representa o
+acordo firmado entre a Red Hat e o cliente e pode ser essencial para
+acompanhamento do progresso e gerenciamento de alterações do escopo
+
+O SOW pode ser inserido como uma imagem ou como uma cópia textual do original
+na declaração de trabalho. De qualquer maneira, a lista de tarefas e quaisquer alterações precisam ser
+claramente legível.
+////
+
+#TODO#
+
+Tarefa principal::
+
+. Subtarefa
+.. Detalhe
+.. Detalhe
+
+Tarefa principal::
+
+. Subtarefa
+.. Detalhe
+.. Detalhe
+
+Esta seção é destinada à apresentação do planejamento técnico para implementação da arquitetura proposta nos tópicos anteriores. Um documento de arquitetura sem o planejamento técnico se mostra ineficaz pois não mostra a viabilidade do plano montado.
+
+.Explicação
+****
+É importante que nessa seção seja apresentada o planejamento técnico, ou seja, uma visão que traga as seguintes informações:
+
+. Tipos de recursos necessários e suas habilidades
+. Escopo e não-escopo
+. Riscos
+. Complexidade do projeto
+. Quantidade de governança necessária
+. Atividades e quantidades em horas
+****

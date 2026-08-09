@@ -1,0 +1,39 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Introduction to Event-Driven Ansible (DO274)
+
+*Crie, implante e configure o Event-Driven Ansible para executar código de automação quando acionado por eventos enviados pela sua infraestrutura de TI.*
+
+[.big]#*Descrição do curso*#
+
+* O curso Introduction to Event-Driven Ansible (DO274) foi elaborado para administradores de sistemas, engenheiros de DevOps e outros profissionais técnicos que desejam aprender a criar, implantar e configurar o Event-Driven Ansible (EDA) para executar códigos de automação acionados por eventos enviados pelas fontes de eventos com suporte, como sistemas de monitoramento, webhooks e Apache Kafka. Escreva Ansible Rulebooks e use-os no controlador do Event-Driven Ansible para reagir a eventos e corrigir ou resolver problemas de infraestrutura. Conheça os principais casos de uso como exemplos de utilização do Event-Driven Ansible na sua infraestrutura de TI.
+* Este curso é baseado no Red Hat® Ansible Automation Platform 2.4.
+
+[.big]#*Resumo do conteúdo do curso*#
+
+* Explicar o que é o Event-Driven Ansible, por que ele é importante, e descrever sua arquitetura e alguns de seus principais casos de uso e benefícios
+* Ler, gravar e testar Ansible Rulebooks básicos que reagem a eventos de várias fontes
+* Explicar as opções de instalação do controlador do Event-Driven Ansible e como instalá-lo
+* Configurar novos projetos, o ambiente de decisão de automação e a integração com o automation controller para que o controlador do Event-Driven Ansible possa lançar templates de tarefas com base em eventos monitorados por Ansible Rulebooks
+* Configurar e usar o Event-Driven Ansible para reagir a eventos gerados por operações Git, como notificações push ou pull requests, e ser capaz de usar isso para criar um fluxo de trabalho do GitOps
+* Configurar o Ansible para usar a telemetria de rede a fim de responder automaticamente a eventos e implementar correções ou alterações de configuração
+
+[.big]#*Público-alvo*#
+
+* Este curso foi elaborado para administradores de sistemas, engenheiros de DevOps, administradores de rede e outros profissionais técnicos responsáveis por garantir respostas rápidas a eventos de infraestrutura ou aplicação e interessados em implementar a correção e a resolução de problemas com a automação.
+
+[.big]#*Treinamentos recomendados*#
+
+* https://skills.ole.redhat.com/[Faça nossa avaliação gratuita] para saber se esta é a melhor opção para suas habilidades.
+* É necessário ter experiência de nível de usuário com o Red Hat Enterprise Linux e execução de comandos do shell; É recomendável ter habilidades de nível RHCSA ou RHCE
+* Este curso exige que os alunos tenham conhecimento básico sobre a linha de comando do Ansible, o Visual Studio Code e o Git. É recomendável ter experiência com o Red Hat Ansible Automation Platform 2 e o automation controller
+
+[.big]#*Requisitos técnicos*#
+
+* Para aprendizado virtual, em ritmo próprio, ou treinamento presencial:
+** É necessário ter acesso à internet.
+** Os laboratórios são realizados no ambiente de aprendizado online da Red Hat.
+** Para treinamento presencial, a Red Hat fornecerá um ambiente de curso instalado localmente como alternativa no futuro.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/introduction-event-driven-ansible-do274

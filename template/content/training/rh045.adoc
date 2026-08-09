@@ -1,0 +1,20 @@
+// Este arquivo é mantido executando scripts/refresh-training.py script
+
+= Red Hat Ansible Automation for SAP (RH045)
+
+[.big]#*Descrição do curso*#
+
+*Saiba como automatizar a criação de ambientes SAP usando o Red Hat Ansible.*
+
+O curso Red Hat Ansible Automation for SAP Technical Overview (RH045) é uma série de vídeos online, on demand e sem custos que explica como automatizar a implantação, configuração, criação e migração das cargas de trabalho do SAP usando o Red Hat Ansible. No primeiro dia, o foco são as operações. Ricardo García Cavero, arquiteto sênior da Red Hat, demonstra como instalar e implantar aplicações SAP HANA e SAP S/4HANA usando o Red Hat Ansible Tower, além de como criar, migrar e configurar ambientes para cargas de trabalho SAP.
+
+[.big]#*Público-alvo*#
+
+Líderes de TI, administradores SAP, engenheiros, arquitetos de soluções e todos que buscam um alto nível de compreensão a respeito da automação de cargas de trabalho SAP pelo Red Hat Ansible.
+
+[.big]#*Treinamentos recomendados*#
+
+Habilidades básicas de administração de sistemas com conhecimento básico dos conceitos de SAP e automação.
+
+Para mais detalhes ou para se inscrever:
+https://www.redhat.com/pt-br/services/training/rh045-red-hat-ansible-automation-sap
