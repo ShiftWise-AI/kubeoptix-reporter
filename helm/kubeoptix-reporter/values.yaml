@@ -53,6 +53,7 @@ scalePolicy:
 
 podEnv:
   TZ: America/Sao_Paulo
+  LOG_LEVEL: INFO
 
 persistence:
   enabled: true

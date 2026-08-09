@@ -1,8 +1,9 @@
-BASE_URL="http://127.0.0.1:8000"
-REPORT_FILE="teste.md" 
+BASE_URL="https://reporter-shiftwise-ai.apps-crc.testing"
+REPORT_FILE="openshift-apiserver-local.md" 
 
+curl -v -k "${BASE_URL}/health
 
-curl --fail-with-body --silent --show-error \
+curl -k --fail-with-body --silent --show-error \
   --request GET \
   --header "Accept: text/markdown" \
   --output "${REPORT_FILE}" \

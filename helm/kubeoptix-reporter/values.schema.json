@@ -33,6 +33,17 @@
         }
       }
     },
+    "podEnv": {
+      "type": "object",
+      "required": ["TZ", "LOG_LEVEL"],
+      "properties": {
+        "TZ": {"type": "string", "minLength": 1},
+        "LOG_LEVEL": {
+          "type": "string",
+          "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL", "OFF"]
+        }
+      }
+    },
     "persistence": {
       "type": "object",
       "required": ["enabled", "existingClaim", "mountPath"],

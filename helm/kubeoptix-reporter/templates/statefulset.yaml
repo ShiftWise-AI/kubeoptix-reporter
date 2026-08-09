@@ -31,8 +31,10 @@ spec:
               drop:
                 - ALL
           env:
-            - name: REPORT_DIR
+            - name: DATA_DIR
               value: {{ .Values.persistence.mountPath | quote }}
+            - name: LOG_LEVEL
+              value: {{ .Values.podEnv.LOG_LEVEL | quote }}
             - name: TZ
               value: {{ .Values.podEnv.TZ | quote }}              
           ports:
