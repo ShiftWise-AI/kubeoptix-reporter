@@ -7,3 +7,10 @@ curl -k --fail-with-body --silent --show-error \
   --request GET \
   --header "Accept: text/markdown" \
   "${BASE_URL}/report/${REPORT_FILE}"
+
+curl -k --fail-with-body \
+  -X POST "${BASE_URL}/report/${REPORT_FILE}" \
+  -H "Content-Type: text/markdown; charset=utf-8" \
+  --data-binary "@teste.txt"
+
+curl -k --fail-with-body "${BASE_URL}/report/${REPORT_FILE}"
