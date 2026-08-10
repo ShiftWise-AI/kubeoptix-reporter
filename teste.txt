@@ -11,6 +11,14 @@ curl -k --fail-with-body --silent --show-error \
 curl -k --fail-with-body \
   -X POST "${BASE_URL}/report/${REPORT_FILE}" \
   -H "Content-Type: text/markdown; charset=utf-8" \
-  --data-binary "@teste.txt"
+  --data-binary "Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (5/5), 1.04 KiB | 1.04 MiB/s, done.
+Total 5 (delta 3), reused 2 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
+To github.com:ShiftWise-AI/kubeoptix-reporter.git
+   e0c7ad6..d4d3446  feature/save -> feature/save"
 
 curl -k --fail-with-body "${BASE_URL}/report/${REPORT_FILE}"
