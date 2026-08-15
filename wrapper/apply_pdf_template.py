@@ -36,7 +36,7 @@ MERMAID_THEME = """%%{init: {
             "yAxisTitleColor": "#151515",
             "yAxisTickColor": "#707070",
             "yAxisLineColor": "#707070",
-            "plotColorPalette": "#0066CC, #EE0000, #3E8635, #5E40BE, #EC7A08, #009596"
+            "plotColorPalette": "#73BCF7, #F4A6A6, #BDE2B9, #B8A7E8, #F9C784, #8BD3D3"
         },
         "background": "#FFFFFF",
         "textColor": "#151515",
@@ -74,14 +74,19 @@ MERMAID_THEME = """%%{init: {
         "noteBkgColor": "#FFF5F5",
         "noteBorderColor": "#EE0000",
         "noteTextColor": "#151515",
-        "pie1": "#0066CC",
-        "pie2": "#EE0000",
-        "pie3": "#3E8635",
-        "pie4": "#5E40BE",
-        "pie5": "#EC7A08",
-        "pie6": "#009596",
-        "pie7": "#73BCF7",
-        "pie8": "#F4C145"
+        "pie1": "#73BCF7",
+        "pie2": "#F4A6A6",
+        "pie3": "#BDE2B9",
+        "pie4": "#B8A7E8",
+        "pie5": "#F9C784",
+        "pie6": "#8BD3D3",
+        "pie7": "#A7C7E7",
+        "pie8": "#F6D6A8",
+        "pieStrokeColor": "#FFFFFF",
+        "pieStrokeWidth": "3px",
+        "pieTitleTextColor": "#151515",
+        "pieSectionTextColor": "#151515",
+        "pieLegendTextColor": "#333333"
     }
 }}%%"""
 MERMAID_FLOWCHART_RE = re.compile(r"^\s*(?:flowchart|graph)\s+", re.IGNORECASE)
@@ -89,9 +94,6 @@ MERMAID_NODE_RE = re.compile(
     r"(?<![\w-])(?P<node_id>[A-Za-z_][\w-]*)\s*"
     r"(?P<shape>\[\(|\[\[|\{\{|\[|\{|\()"
     r"(?P<label>[^\]\})\n]+)"
-)
-MERMAID_PIE_ENTRY_RE = re.compile(
-    r'^\s*"(?P<label>[^"]+)"\s*:\s*(?P<value>[0-9]+(?:\.[0-9]+)?)\s*$'
 )
 MERMAID_SEMANTIC_STYLES = {
     "platform": ("Plataforma", "#FDE8E8", "#EE0000"),
@@ -259,37 +261,14 @@ def style_mermaid_flowchart(source: str) -> str:
 
 def convert_mermaid_pie(source: str) -> str:
     lines = source.splitlines()
-    if not lines or not re.match(r"^\s*pie(?:\s+showData)?\s*$", lines[0], re.IGNORECASE):
+    if not lines or not re.match(
+        r"^\s*pie(?:\s+showData)?\s*$",
+        lines[0],
+        re.IGNORECASE,
+    ):
         return source
-
-    title = "Distribuição"
-    entries: list[tuple[str, str]] = []
-    for line in lines[1:]:
-        title_match = re.match(r"^\s*title\s+(.+?)\s*$", line, re.IGNORECASE)
-        if title_match:
-            title = title_match.group(1).strip().strip('"')
-            continue
-        entry_match = MERMAID_PIE_ENTRY_RE.match(line)
-        if entry_match:
-            entries.append((entry_match.group("label"), entry_match.group("value")))
-
-    if not entries:
-        return source
-
-    labels = ", ".join(f'"{label}"' for label, _ in entries)
-    maximum = max(float(value) for _, value in entries)
-    axis_maximum = max(1, int(maximum * 1.15 + 0.999))
-    chart = (
-        "xychart-beta horizontal\n"
-        f'    title "{title}"\n'
-        f"    x-axis [{labels}]\n"
-        f'    y-axis "Valor" 0 --> {axis_maximum}\n'
-    )
-    for index, (_, value) in enumerate(entries):
-        series = ["0"] * len(entries)
-        series[index] = value
-        chart += f"    bar [{', '.join(series)}]\n"
-    return chart.rstrip()
+    lines[0] = "pie showData"
+    return "\n".join(lines)
 
 
 def prepare_mermaid_source(source: str) -> str:
