@@ -18,6 +18,28 @@ MERMAID_BLOCK_RE = re.compile(
     r"(?P<body>.*?)\n(?P=fence)[ \t]*",
     re.IGNORECASE | re.DOTALL,
 )
+MERMAID_INIT_RE = re.compile(r"%%\{init:.*?\}%%", re.IGNORECASE | re.DOTALL)
+MERMAID_THEME = """%%{init: {
+    "theme": "base",
+    "themeVariables": {
+        "primaryColor": "#FFFFFF",
+        "primaryTextColor": "#151515",
+        "primaryBorderColor": "#EE0000",
+        "secondaryColor": "#F2F2F2",
+        "secondaryTextColor": "#333333",
+        "secondaryBorderColor": "#333333",
+        "tertiaryColor": "#EDEDED",
+        "tertiaryTextColor": "#151515",
+        "tertiaryBorderColor": "#707070",
+        "lineColor": "#333333",
+        "textColor": "#151515",
+        "mainBkg": "#FFFFFF",
+        "nodeBorder": "#333333",
+        "clusterBkg": "#F2F2F2",
+        "clusterBorder": "#707070",
+        "fontFamily": "Red Hat Text, Arial, sans-serif"
+    }
+}}%%"""
 MERMAID_MARKER_RE = re.compile(r"^MERMAIDDIAGRAM(?P<number>[0-9]+)TOKEN$", re.MULTILINE)
 AUTOMATIC_REPORT_NOTE_RE = re.compile(
     r"^[ \t]*\*?Relatório gerado automaticamente a partir dos artefatos "
@@ -94,7 +116,8 @@ def run_command(command: list[str], timeout: int) -> None:
 def render_mermaid(source: str, output_path: Path) -> None:
     mermaid_path = output_path.with_suffix(".mmd")
     puppeteer_config = output_path.with_suffix(".puppeteer.json")
-    mermaid_path.write_text(source, encoding="utf-8")
+    themed_source = MERMAID_INIT_RE.sub("", source).strip()
+    mermaid_path.write_text(f"{MERMAID_THEME}\n\n{themed_source}\n", encoding="utf-8")
     puppeteer_config.write_text(
         '{"args":["--no-sandbox","--disable-setuid-sandbox"]}',
         encoding="utf-8",
