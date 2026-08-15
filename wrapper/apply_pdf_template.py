@@ -10,6 +10,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+import pypandoc
+
 
 MERMAID_BLOCK_RE = re.compile(
     r"(?P<fence>`{3,}|~{3,})[ \t]*(?:mermaid|\{[^\n}]*\.mermaid[^\n}]*\})[ \t]*\n"
@@ -37,6 +39,20 @@ def require_command(command: str, install_hint: str) -> None:
         raise TemplateError(
             f"Comando nao encontrado: {command}. Instale com: {install_hint}"
         )
+
+
+def resolve_pandoc() -> list[str]:
+    executable = shutil.which("pandoc")
+    if executable:
+        return [executable]
+
+    try:
+        bundled_executable = pypandoc.get_pandoc_path()
+    except OSError as exc:
+        raise TemplateError(
+            "pandoc nao encontrado. Instale o pacote pypandoc_binary"
+        ) from exc
+    return [bundled_executable]
 
 
 def resolve_asciidoctor_pdf() -> list[str]:
@@ -176,8 +192,8 @@ def convert_preface_to_asciidoc(
     prepared_preface.write_text(preface_content, encoding="utf-8")
     asciidoc_preface = temp_dir / "prefacio.adoc"
     run_command(
-        [
-            "pandoc",
+        resolve_pandoc()
+        + [
             str(prepared_preface),
             "--from=gfm",
             "--to=asciidoc",
@@ -216,8 +232,8 @@ def convert_to_asciidoc(
 ) -> None:
     preface = convert_preface_to_asciidoc(template_dir, asciidoc_path.parent, customer)
     run_command(
-        [
-            "pandoc",
+        resolve_pandoc()
+        + [
             str(prepared_markdown),
             "--from=gfm",
             "--to=asciidoc",
@@ -318,7 +334,7 @@ def render_pdf(
     if not fonts_dir.is_dir():
         raise TemplateError(f"Pasta de fontes nao encontrada: {fonts_dir}")
 
-    require_command("pandoc", "sudo apt-get install pandoc")
+    resolve_pandoc()
     asciidoctor_command = resolve_asciidoctor_pdf()
 
     if MERMAID_BLOCK_RE.search(markdown_path.read_text(encoding="utf-8")):

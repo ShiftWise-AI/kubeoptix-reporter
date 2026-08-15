@@ -11,9 +11,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse
 from starlette.background import BackgroundTask
 
-from wrapper.md2pdf import MarkdownToPdfError, render_markdown_to_pdf
+from wrapper.apply_pdf_template import TemplateError, render_pdf
 
 REPORTS_DIR = Path(os.getenv("DATA_DIR", "/app/data/reports"))
+TEMPLATE_DIR = Path(os.getenv("PDF_TEMPLATE_DIR", "/app/template"))
+PDF_CUSTOMER = os.getenv("PDF_CUSTOMER", "Cliente")
+PDF_DESCRIPTION = os.getenv("PDF_DESCRIPTION", "OpenShift Application Assessment")
+PDF_VERSION = os.getenv("PDF_VERSION", "1.0")
+PDF_STATUS = os.getenv("PDF_STATUS", "final")
+PDF_CONFIDENTIALITY = os.getenv("PDF_CONFIDENTIALITY", "Confidencial")
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 LOG_LEVELS = {
     "DEBUG": logging.DEBUG,
@@ -181,11 +187,21 @@ async def get_report_pdf(
     temporary_pdf = Path(temporary_name)
     try:
         await anyio.to_thread.run_sync(
-            render_markdown_to_pdf,
+            render_pdf,
             report_path,
             temporary_pdf,
+            TEMPLATE_DIR,
+            PDF_CUSTOMER,
+            PDF_DESCRIPTION,
+            PDF_VERSION,
+            PDF_STATUS,
+            PDF_CONFIDENTIALITY,
+            None,
+            None,
+            None,
+            None,
         )
-    except MarkdownToPdfError as exc:
+    except TemplateError as exc:
         temporary_pdf.unlink(missing_ok=True)
         logger.exception("Failed to render PDF: filename=%s", filename)
         raise HTTPException(status_code=503, detail=str(exc)) from exc
