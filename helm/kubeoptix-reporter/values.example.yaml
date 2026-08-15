@@ -40,13 +40,6 @@ service:
     port: 8000
     targetPort: 8000
 
-route:
-  enabled: true
-  name: reporter
-  host: ""
-  termination: edge
-  insecureEdgeTerminationPolicy: Redirect
-
 scalePolicy:
   enabled: true
   maxReplicas: 1
