@@ -19,6 +19,7 @@ RUN dnf install -y \
     at-spi2-core \
     atk \
     fontconfig \
+    gcc \
     libXcomposite \
     libXdamage \
     libXfixes \
@@ -32,6 +33,10 @@ RUN dnf install -y \
     pango \
     python3 \
     python3-pip \
+    ruby \
+    ruby-devel \
+    rubygems \
+    make \
     unzip \
     && dnf clean all \
     && mkdir -p "$LOG_DIR" "$DATA_DIR" \
@@ -42,9 +47,12 @@ COPY requeriments.txt /app/requeriments.txt
 
 RUN python3 -m pip install --no-cache-dir -r /app/requeriments.txt
 
+RUN gem install asciidoctor-pdf rouge --no-document
+
 RUN npm install --global @mermaid-js/mermaid-cli@11.16.0
 
 COPY src/ /app/src/
+COPY template/ /app/template/
 COPY wrapper/ /app/wrapper/
 
 RUN chgrp -R 0 /app \
