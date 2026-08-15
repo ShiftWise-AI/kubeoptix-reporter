@@ -25,20 +25,33 @@ MERMAID_THEME = """%%{init: {
     "themeVariables": {
         "fontFamily": "Red Hat Text, Red Hat Display, Arial, sans-serif",
         "fontSize": "14px",
+        "xyChart": {
+            "backgroundColor": "#FFFFFF",
+            "titleColor": "#151515",
+            "xAxisLabelColor": "#333333",
+            "xAxisTitleColor": "#151515",
+            "xAxisTickColor": "#707070",
+            "xAxisLineColor": "#707070",
+            "yAxisLabelColor": "#333333",
+            "yAxisTitleColor": "#151515",
+            "yAxisTickColor": "#707070",
+            "yAxisLineColor": "#707070",
+            "plotColorPalette": "#0066CC, #EE0000, #3E8635, #5E40BE, #EC7A08, #009596"
+        },
         "background": "#FFFFFF",
         "textColor": "#151515",
         "primaryColor": "#FFFFFF",
         "primaryTextColor": "#151515",
         "primaryBorderColor": "#EE0000",
-        "secondaryColor": "#F2F2F2",
+        "secondaryColor": "#E7F1FA",
         "secondaryTextColor": "#151515",
-        "secondaryBorderColor": "#707070",
-        "tertiaryColor": "#E0E0E0",
+        "secondaryBorderColor": "#0066CC",
+        "tertiaryColor": "#E9F7E7",
         "tertiaryTextColor": "#151515",
-        "tertiaryBorderColor": "#333333",
+        "tertiaryBorderColor": "#3E8635",
         "lineColor": "#707070",
         "mainBkg": "#FFFFFF",
-        "nodeBorder": "#333333",
+        "nodeBorder": "#EE0000",
         "clusterBkg": "#F2F2F2",
         "clusterBorder": "#707070",
         "edgeLabelBackground": "#FFFFFF",
@@ -60,9 +73,66 @@ MERMAID_THEME = """%%{init: {
         "altSectionBkgColor2": "#FFFFFF",
         "noteBkgColor": "#FFF5F5",
         "noteBorderColor": "#EE0000",
-        "noteTextColor": "#151515"
+        "noteTextColor": "#151515",
+        "pie1": "#0066CC",
+        "pie2": "#EE0000",
+        "pie3": "#3E8635",
+        "pie4": "#5E40BE",
+        "pie5": "#EC7A08",
+        "pie6": "#009596",
+        "pie7": "#73BCF7",
+        "pie8": "#F4C145"
     }
 }}%%"""
+MERMAID_FLOWCHART_RE = re.compile(r"^\s*(?:flowchart|graph)\s+", re.IGNORECASE)
+MERMAID_NODE_RE = re.compile(
+    r"(?<![\w-])(?P<node_id>[A-Za-z_][\w-]*)\s*"
+    r"(?P<shape>\[\(|\[\[|\{\{|\[|\{|\()"
+    r"(?P<label>[^\]\})\n]+)"
+)
+MERMAID_PIE_ENTRY_RE = re.compile(
+    r'^\s*"(?P<label>[^"]+)"\s*:\s*(?P<value>[0-9]+(?:\.[0-9]+)?)\s*$'
+)
+MERMAID_SEMANTIC_STYLES = {
+    "platform": ("Plataforma", "#FDE8E8", "#EE0000"),
+    "application": ("Aplicação", "#E7F1FA", "#0066CC"),
+    "data": ("Dados", "#F2EEFA", "#5E40BE"),
+    "security": ("Segurança", "#FFF1E6", "#EC7A08"),
+    "operations": ("Operações", "#E9F7E7", "#3E8635"),
+    "integration": ("Integração", "#E5F5F5", "#009596"),
+    "external": ("Externo", "#F2F2F2", "#707070"),
+    "decision": ("Decisão", "#FFF4CC", "#F4C145"),
+}
+MERMAID_SEMANTIC_KEYWORDS = {
+    "security": (
+        "auth", "autoriz", "cert", "firewall", "iam", "keycloak", "oauth",
+        "rbac", "secret", "seguran", "sso", "tls", "vault",
+    ),
+    "data": (
+        "cache", "data", "database", "db", "fila", "kafka", "mongo",
+        "mysql", "postgres", "redis", "storage", "banco",
+    ),
+    "operations": (
+        "alert", "grafana", "log", "monitor", "observ", "operador",
+        "operator", "prometheus", "telemetr", "trace",
+    ),
+    "integration": (
+        "api", "broker", "event", "gateway", "integra", "message", "queue",
+        "servicemesh", "webhook",
+    ),
+    "platform": (
+        "cluster", "kubernetes", "namespace", "openshift", "platform",
+        "plataforma", "rhdh", "rosa",
+    ),
+    "application": (
+        "app", "aplica", "backend", "frontend", "microservice", "service",
+        "serviço", "workload",
+    ),
+    "external": (
+        "cliente", "external", "externo", "partner", "parceiro", "user",
+        "usuário", "usuario",
+    ),
+}
 MERMAID_MARKER_RE = re.compile(r"^MERMAIDDIAGRAM(?P<number>[0-9]+)TOKEN$", re.MULTILINE)
 AUTOMATIC_REPORT_NOTE_RE = re.compile(
     r"^[ \t]*\*?Relatório gerado automaticamente a partir dos artefatos "
@@ -136,11 +206,103 @@ def run_command(command: list[str], timeout: int) -> None:
         raise TemplateError(message or f"Falha ao executar: {command[0]}")
 
 
+def classify_mermaid_node(shape: str, definition: str) -> str:
+    normalized = definition.casefold().replace(" ", "")
+    if shape.startswith("{"):
+        return "decision"
+    if shape == "[(":
+        return "data"
+    for category, keywords in MERMAID_SEMANTIC_KEYWORDS.items():
+        if any(keyword in normalized for keyword in keywords):
+            return category
+    return "application"
+
+
+def style_mermaid_flowchart(source: str) -> str:
+    if not MERMAID_FLOWCHART_RE.match(source):
+        return source
+
+    node_categories: dict[str, str] = {}
+    for line in source.splitlines():
+        if line.lstrip().startswith(("class ", "classDef ", "style ")):
+            continue
+        for match in MERMAID_NODE_RE.finditer(line):
+            node_categories.setdefault(
+                match.group("node_id"),
+                classify_mermaid_node(match.group("shape"), match.group("label")),
+            )
+
+    categories = list(dict.fromkeys(node_categories.values()))
+    if not categories:
+        return source
+
+    additions = [""]
+    for category, (_, fill, stroke) in MERMAID_SEMANTIC_STYLES.items():
+        additions.append(
+            f"classDef {category} fill:{fill},stroke:{stroke},color:#151515,"
+            "stroke-width:2px;"
+        )
+    for node_id, category in node_categories.items():
+        additions.append(f"class {node_id} {category};")
+
+    if len(categories) >= 2:
+        additions.extend(("", 'subgraph _legend["Legenda"]', "direction LR"))
+        for category in categories:
+            label = MERMAID_SEMANTIC_STYLES[category][0]
+            additions.append(f'_legend_{category}["{label}"]')
+        additions.append("end")
+        for category in categories:
+            additions.append(f"class _legend_{category} {category};")
+
+    return f"{source.rstrip()}\n" + "\n".join(additions)
+
+
+def convert_mermaid_pie(source: str) -> str:
+    lines = source.splitlines()
+    if not lines or not re.match(r"^\s*pie(?:\s+showData)?\s*$", lines[0], re.IGNORECASE):
+        return source
+
+    title = "Distribuição"
+    entries: list[tuple[str, str]] = []
+    for line in lines[1:]:
+        title_match = re.match(r"^\s*title\s+(.+?)\s*$", line, re.IGNORECASE)
+        if title_match:
+            title = title_match.group(1).strip().strip('"')
+            continue
+        entry_match = MERMAID_PIE_ENTRY_RE.match(line)
+        if entry_match:
+            entries.append((entry_match.group("label"), entry_match.group("value")))
+
+    if not entries:
+        return source
+
+    labels = ", ".join(f'"{label}"' for label, _ in entries)
+    maximum = max(float(value) for _, value in entries)
+    axis_maximum = max(1, int(maximum * 1.15 + 0.999))
+    chart = (
+        "xychart-beta horizontal\n"
+        f'    title "{title}"\n'
+        f"    x-axis [{labels}]\n"
+        f'    y-axis "Valor" 0 --> {axis_maximum}\n'
+    )
+    for index, (_, value) in enumerate(entries):
+        series = ["0"] * len(entries)
+        series[index] = value
+        chart += f"    bar [{', '.join(series)}]\n"
+    return chart.rstrip()
+
+
+def prepare_mermaid_source(source: str) -> str:
+    prepared = MERMAID_INIT_RE.sub("", source).strip()
+    prepared = convert_mermaid_pie(prepared)
+    prepared = style_mermaid_flowchart(prepared)
+    return f"{MERMAID_THEME}\n\n{prepared}\n"
+
+
 def render_mermaid(source: str, output_path: Path) -> None:
     mermaid_path = output_path.with_suffix(".mmd")
     puppeteer_config = output_path.with_suffix(".puppeteer.json")
-    themed_source = MERMAID_INIT_RE.sub("", source).strip()
-    mermaid_path.write_text(f"{MERMAID_THEME}\n\n{themed_source}\n", encoding="utf-8")
+    mermaid_path.write_text(prepare_mermaid_source(source), encoding="utf-8")
     puppeteer_config.write_text(
         '{"args":["--no-sandbox","--disable-setuid-sandbox"]}',
         encoding="utf-8",
