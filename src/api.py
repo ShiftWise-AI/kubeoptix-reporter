@@ -1,12 +1,13 @@
 import logging
 import os
 import tempfile
+from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote
 from uuid import uuid4
 
 import anyio
-from fastapi import FastAPI, HTTPException, Path as PathParameter, Request
+from fastapi import FastAPI, HTTPException, Path as PathParameter, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse
 from starlette.background import BackgroundTask
@@ -19,7 +20,23 @@ PDF_CUSTOMER = os.getenv("PDF_CUSTOMER", "Cliente")
 PDF_DESCRIPTION = os.getenv("PDF_DESCRIPTION", "OpenShift Application Assessment")
 PDF_VERSION = os.getenv("PDF_VERSION", "1.0")
 PDF_STATUS = os.getenv("PDF_STATUS", "final")
+PDF_AUTHOR = os.getenv("PDF_AUTHOR", "Autor")
+PDF_PROJECT_MANAGER = os.getenv("PDF_PROJECT_MANAGER", "Gerente do projeto")
 PDF_CONFIDENTIALITY = os.getenv("PDF_CONFIDENTIALITY", "Confidencial")
+MONTH_NAMES_PT_BR = (
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
+)
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 LOG_LEVELS = {
     "DEBUG": logging.DEBUG,
@@ -52,6 +69,11 @@ app.add_middleware(
 @app.get("/health", tags=["Health"])
 async def health_check():
     return {"status": "ok"}
+
+
+def current_document_date() -> str:
+    current_date = datetime.now().astimezone()
+    return f"{MONTH_NAMES_PT_BR[current_date.month - 1]} de {current_date.year}"
 
 
 @app.api_route("/report/{filename}", methods=["PUT", "POST"])
@@ -163,6 +185,16 @@ async def get_report(
 @app.get("/report/{filename}/pdf")
 async def get_report_pdf(
     filename: str = PathParameter(..., description="Nome do arquivo Markdown"),
+    customer: str = Query(PDF_CUSTOMER, description="Nome do cliente"),
+    description: str = Query(PDF_DESCRIPTION, description="Descrição do documento"),
+    version: str = Query(PDF_VERSION, description="Versão do documento"),
+    status: str = Query(PDF_STATUS, description="Status do documento"),
+    author: str = Query(PDF_AUTHOR, description="Autor do documento"),
+    project_manager: str = Query(
+        PDF_PROJECT_MANAGER,
+        alias="project-manager",
+        description="Gerente do projeto",
+    ),
 ) -> FileResponse:
     reports_dir = REPORTS_DIR.resolve()
 
@@ -191,15 +223,15 @@ async def get_report_pdf(
             report_path,
             temporary_pdf,
             TEMPLATE_DIR,
-            PDF_CUSTOMER,
-            PDF_DESCRIPTION,
-            PDF_VERSION,
-            PDF_STATUS,
+            customer,
+            description,
+            version,
+            status,
             PDF_CONFIDENTIALITY,
             None,
-            None,
-            None,
-            None,
+            author,
+            project_manager,
+            current_document_date(),
         )
     except TemplateError as exc:
         temporary_pdf.unlink(missing_ok=True)
