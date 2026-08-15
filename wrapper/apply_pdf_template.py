@@ -360,7 +360,7 @@ def render_pdf(
 
 
 def parse_args() -> argparse.Namespace:
-    project_root = Path(__file__).resolve().parent.parent.parent
+    project_root = Path(__file__).resolve().parent.parent
     parser = argparse.ArgumentParser(
         description="Aplica um template visual a um Markdown e gera PDF"
     )
