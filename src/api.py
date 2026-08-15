@@ -1,5 +1,6 @@
 import logging
 import os
+import tempfile
 from pathlib import Path
 from urllib.parse import quote
 from uuid import uuid4
@@ -7,8 +8,10 @@ from uuid import uuid4
 import anyio
 from fastapi import FastAPI, HTTPException, Path as PathParameter, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from starlette.background import BackgroundTask
+
+from wrapper.md2pdf import MarkdownToPdfError, render_markdown_to_pdf
 
 REPORTS_DIR = Path(os.getenv("DATA_DIR", "/app/data/reports"))
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
@@ -148,4 +151,52 @@ async def get_report(
             "Content-Disposition": f"inline; filename*=UTF-8''{quote(filename)}"
         },
         background=BackgroundTask(report.close),
+    )
+
+
+@app.get("/report/{filename}/pdf")
+async def get_report_pdf(
+    filename: str = PathParameter(..., description="Nome do arquivo Markdown"),
+) -> FileResponse:
+    reports_dir = REPORTS_DIR.resolve()
+
+    if Path(filename).name != filename or not filename.lower().endswith(".md"):
+        raise HTTPException(
+            status_code=400,
+            detail="Informe somente o nome de um arquivo com extensão .md",
+        )
+
+    report_path = (reports_dir / filename).resolve()
+    if not report_path.is_relative_to(reports_dir) or not report_path.is_file():
+        raise HTTPException(
+            status_code=404,
+            detail=f"Arquivo não encontrado: {filename}",
+        )
+
+    temporary_fd, temporary_name = tempfile.mkstemp(
+        prefix=f"{report_path.stem}-",
+        suffix=".pdf",
+    )
+    os.close(temporary_fd)
+    temporary_pdf = Path(temporary_name)
+    try:
+        await anyio.to_thread.run_sync(
+            render_markdown_to_pdf,
+            report_path,
+            temporary_pdf,
+        )
+    except MarkdownToPdfError as exc:
+        temporary_pdf.unlink(missing_ok=True)
+        logger.exception("Failed to render PDF: filename=%s", filename)
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except BaseException:
+        temporary_pdf.unlink(missing_ok=True)
+        raise
+
+    pdf_filename = f"{report_path.stem}.pdf"
+    return FileResponse(
+        temporary_pdf,
+        media_type="application/pdf",
+        filename=pdf_filename,
+        background=BackgroundTask(temporary_pdf.unlink, missing_ok=True),
     )
