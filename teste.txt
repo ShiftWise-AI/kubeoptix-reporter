@@ -1,14 +1,16 @@
-BASE_URL="https://reporter-shiftwise-ai.apps-crc.testing"
-REPORT_FILE="openshift-apiserver-local.md" 
+set -Eeuo pipefail
 
-curl -v -k "${BASE_URL}/health"
+BASE_URL="http://localhost:8000"
+REPORT_FILE="shiftwise-ai-llm.md"
 
-curl -k --fail-with-body --silent --show-error \
+curl -v  "${BASE_URL}/health"
+
+curl  --fail-with-body --silent --show-error \
   --request GET \
   --header "Accept: text/markdown" \
   "${BASE_URL}/report/${REPORT_FILE}"
 
-curl -k --fail-with-body \
+curl  --fail-with-body \
   -X POST "${BASE_URL}/report/${REPORT_FILE}" \
   -H "Content-Type: text/markdown; charset=utf-8" \
   --data-binary "Enumerating objects: 9, done.
@@ -21,4 +23,21 @@ remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
 To github.com:ShiftWise-AI/kubeoptix-reporter.git
    e0c7ad6..d4d3446  feature/save -> feature/save"
 
-curl -k --fail-with-body "${BASE_URL}/report/${REPORT_FILE}"
+curl  --fail-with-body "${BASE_URL}/report/${REPORT_FILE}"
+
+PDF_OUTPUT="/home/parraes/Downloads/${REPORT_FILE%.md}.pdf"
+PDF_HEADERS="$(mktemp)"
+trap 'rm -f "${PDF_HEADERS}"' EXIT
+
+curl --fail-with-body --silent --show-error \
+  --request GET \
+  --header "Accept: application/pdf" \
+  --dump-header "${PDF_HEADERS}" \
+  --output "${PDF_OUTPUT}" \
+  "${BASE_URL}/report/${REPORT_FILE}/pdf"
+
+grep -Eiq '^content-type:[[:space:]]*application/pdf([;[:space:]]|$)' "${PDF_HEADERS}"
+head -c 5 "${PDF_OUTPUT}" | grep -q '^%PDF'
+test -s "${PDF_OUTPUT}"
+
+printf 'PDF válido: %s (%s bytes)\n' "${PDF_OUTPUT}" "$(wc -c < "${PDF_OUTPUT}")"

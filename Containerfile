@@ -13,6 +13,9 @@ ENV LOG_DIR=/app/logs/ \
     LOG_LEVEL=INFO
 
 RUN dnf install -y \
+    fontconfig \
+    libjpeg-turbo \
+    pango \
     python3 \
     python3-pip \
     && dnf clean all \
@@ -25,6 +28,7 @@ COPY requeriments.txt /app/requeriments.txt
 RUN python3 -m pip install --no-cache-dir -r /app/requeriments.txt
 
 COPY src/ /app/src/
+COPY wrapper/ /app/wrapper/
 
 RUN chgrp -R 0 /app \
     && chmod -R g=u /app

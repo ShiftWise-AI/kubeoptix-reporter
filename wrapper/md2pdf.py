@@ -16,6 +16,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+import pypandoc
+
 MERMAID_BLOCK_RE = re.compile(
     r"(?P<fence>`{3,}|~{3,})[ \t]*(?:mermaid|\{[^\n}]*\.mermaid[^\n}]*\})[ \t]*\n"
     r"(?P<body>.*?)\n(?P=fence)[ \t]*",
@@ -52,7 +54,6 @@ def convert_mermaid_to_png(mermaid_content: str, output_path: Path) -> None:
 
 
 def render_markdown_to_pdf(markdown_path: Path, output_pdf: Path) -> None:
-    require_command("pandoc", "sudo apt-get install pandoc")
     require_command("weasyprint", "sudo apt-get install weasyprint")
 
     content = markdown_path.read_text(encoding="utf-8")
@@ -74,23 +75,20 @@ def render_markdown_to_pdf(markdown_path: Path, output_pdf: Path) -> None:
         temp_markdown = temp_dir / f"{markdown_path.stem}.md"
         temp_markdown.write_text(transformed_content, encoding="utf-8")
 
-        result = subprocess.run(
-            [
-                "pandoc",
+        try:
+            pypandoc.convert_file(
                 str(temp_markdown),
-                "-o",
-                str(output_pdf),
-                "--pdf-engine=weasyprint",
-                "--standalone",
-                "--resource-path",
-                str(temp_dir),
-            ],
-            capture_output=True,
-            text=True,
-            timeout=300,
-        )
-        if result.returncode != 0:
-            raise MarkdownToPdfError(result.stderr.strip() or result.stdout.strip() or "Falha ao gerar PDF")
+                "pdf",
+                outputfile=str(output_pdf),
+                extra_args=[
+                    "--pdf-engine=weasyprint",
+                    "--standalone",
+                    "--resource-path",
+                    str(temp_dir),
+                ],
+            )
+        except RuntimeError as exc:
+            raise MarkdownToPdfError(str(exc)) from exc
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
 
