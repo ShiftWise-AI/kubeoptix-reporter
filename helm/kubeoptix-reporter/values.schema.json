@@ -54,16 +54,6 @@
         "reportsPath": {"type": "string", "pattern": "^/"}
       }
     },
-    "route": {
-      "type": "object",
-      "required": ["enabled", "host", "termination", "insecureEdgeTerminationPolicy"],
-      "properties": {
-        "enabled": {"type": "boolean"},
-        "host": {"type": "string"},
-        "termination": {"type": "string", "enum": ["edge", "passthrough", "reencrypt"]},
-        "insecureEdgeTerminationPolicy": {"type": "string", "enum": ["Allow", "Disable", "Redirect"]}
-      }
-    },
     "scalePolicy": {
       "type": "object",
       "required": ["enabled", "maxReplicas"],

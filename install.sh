@@ -166,17 +166,6 @@ SERVICE="$(oc get service \
     -l "app.kubernetes.io/instance=${RELEASE_NAME},app.kubernetes.io/name=kubeoptix-reporter" \
     -o jsonpath='{.items[?(@.spec.clusterIP!="None")].metadata.name}')"
 
-ROUTE_HOST="$(oc get route \
-    -n "$NAMESPACE" \
-    -l "app.kubernetes.io/instance=${RELEASE_NAME},app.kubernetes.io/name=kubeoptix-reporter" \
-    -o jsonpath='{.items[0].spec.host}' 2>/dev/null || true)"
-
 log "Instalação concluída"
-printf 'Release:   %s\nNamespace: %s\nService:   %s:8000\n' \
+printf 'Release:   %s\nNamespace: %s\nService:   %s:8000\nHealth:    /health\n' \
     "$RELEASE_NAME" "$NAMESPACE" "$SERVICE"
-
-if [[ -n "$ROUTE_HOST" ]]; then
-    printf 'Route:     https://%s\nHealth:    https://%s/health\n' "$ROUTE_HOST" "$ROUTE_HOST"
-else
-    printf 'Route:     disabled\nHealth:    /health\n'
-fi
