@@ -93,21 +93,32 @@ def run_command(command: list[str], timeout: int) -> None:
 
 def render_mermaid(source: str, output_path: Path) -> None:
     mermaid_path = output_path.with_suffix(".mmd")
+    puppeteer_config = output_path.with_suffix(".puppeteer.json")
     mermaid_path.write_text(source, encoding="utf-8")
-    run_command(
-        [
-            "mmdc",
-            "-i",
-            str(mermaid_path),
-            "-o",
-            str(output_path),
-            "-b",
-            "white",
-            "-s",
-            "2",
-        ],
-        timeout=180,
+    puppeteer_config.write_text(
+        '{"args":["--no-sandbox","--disable-setuid-sandbox"]}',
+        encoding="utf-8",
     )
+    try:
+        run_command(
+            [
+                "mmdc",
+                "-p",
+                str(puppeteer_config),
+                "-i",
+                str(mermaid_path),
+                "-o",
+                str(output_path),
+                "-b",
+                "white",
+                "-s",
+                "2",
+            ],
+            timeout=180,
+        )
+    finally:
+        mermaid_path.unlink(missing_ok=True)
+        puppeteer_config.unlink(missing_ok=True)
 
 
 def prepare_markdown(markdown_path: Path, temp_dir: Path) -> Path:
