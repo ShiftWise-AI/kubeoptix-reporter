@@ -103,8 +103,7 @@ footer:
                 {confidentiality}
     center:
       content: |
-                {document-title} +
-                {description}
+                {document-title}
     right:
       content: |
                 {page-number} +
@@ -116,8 +115,7 @@ footer:
                 {confidentiality}
     center:
       content: |
-                {document-title} +
-                {description}
+                {document-title}
     right:
       content: |
                 {page-number} +
