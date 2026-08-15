@@ -35,13 +35,28 @@ def require_command(command: str, install_hint: str) -> None:
 
 
 def convert_mermaid_to_png(mermaid_content: str, output_path: Path) -> None:
-    require_command("mmdc", "npm install -g mermaid-cli")
+    require_command("mmdc", "npm install -g @mermaid-js/mermaid-cli")
 
     temp_mmd = output_path.with_suffix(".mmd")
+    puppeteer_config = output_path.with_suffix(".puppeteer.json")
     temp_mmd.write_text(mermaid_content, encoding="utf-8")
+    puppeteer_config.write_text(
+        '{"args":["--no-sandbox","--disable-setuid-sandbox"]}',
+        encoding="utf-8",
+    )
     try:
         result = subprocess.run(
-            ["mmdc", "-i", str(temp_mmd), "-o", str(output_path), "-b", "white"],
+            [
+                "mmdc",
+                "-p",
+                str(puppeteer_config),
+                "-i",
+                str(temp_mmd),
+                "-o",
+                str(output_path),
+                "-b",
+                "white",
+            ],
             capture_output=True,
             text=True,
             timeout=180,
@@ -49,8 +64,8 @@ def convert_mermaid_to_png(mermaid_content: str, output_path: Path) -> None:
         if result.returncode != 0:
             raise MarkdownToPdfError(result.stderr.strip() or result.stdout.strip() or "Falha ao converter Mermaid")
     finally:
-        if temp_mmd.exists():
-            temp_mmd.unlink()
+        temp_mmd.unlink(missing_ok=True)
+        puppeteer_config.unlink(missing_ok=True)
 
 
 def render_markdown_to_pdf(markdown_path: Path, output_pdf: Path) -> None:
