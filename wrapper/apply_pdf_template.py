@@ -472,6 +472,7 @@ def convert_to_asciidoc(
     attribute_lines = [
             ":doctype: book",
             ":toc: macro",
+            ":toc-title: Sumário",
             ":toclevels: 3",
             ":chapter-label:",
             ":icons: font",
