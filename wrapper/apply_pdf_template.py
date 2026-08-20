@@ -11,131 +11,6 @@ import tempfile
 from pathlib import Path
 
 import pypandoc
-
-
-MERMAID_BLOCK_RE = re.compile(
-    r"(?P<fence>`{3,}|~{3,})[ \t]*(?:mermaid|\{[^\n}]*\.mermaid[^\n}]*\})[ \t]*\n"
-    r"(?P<body>.*?)\n(?P=fence)[ \t]*",
-    re.IGNORECASE | re.DOTALL,
-)
-MERMAID_INIT_RE = re.compile(r"%%\{init:.*?\}%%", re.IGNORECASE | re.DOTALL)
-MERMAID_THEME = """%%{init: {
-    "theme": "base",
-    "fontFamily": "Red Hat Text, Red Hat Display, Arial, sans-serif",
-    "themeVariables": {
-        "fontFamily": "Red Hat Text, Red Hat Display, Arial, sans-serif",
-        "fontSize": "14px",
-        "xyChart": {
-            "backgroundColor": "#FFFFFF",
-            "titleColor": "#151515",
-            "xAxisLabelColor": "#333333",
-            "xAxisTitleColor": "#151515",
-            "xAxisTickColor": "#707070",
-            "xAxisLineColor": "#707070",
-            "yAxisLabelColor": "#333333",
-            "yAxisTitleColor": "#151515",
-            "yAxisTickColor": "#707070",
-            "yAxisLineColor": "#707070",
-            "plotColorPalette": "#73BCF7, #F4A6A6, #BDE2B9, #B8A7E8, #F9C784, #8BD3D3"
-        },
-        "background": "#FFFFFF",
-        "textColor": "#151515",
-        "primaryColor": "#FFFFFF",
-        "primaryTextColor": "#151515",
-        "primaryBorderColor": "#EE0000",
-        "secondaryColor": "#E7F1FA",
-        "secondaryTextColor": "#151515",
-        "secondaryBorderColor": "#0066CC",
-        "tertiaryColor": "#E9F7E7",
-        "tertiaryTextColor": "#151515",
-        "tertiaryBorderColor": "#3E8635",
-        "lineColor": "#707070",
-        "mainBkg": "#FFFFFF",
-        "nodeBorder": "#EE0000",
-        "clusterBkg": "#F2F2F2",
-        "clusterBorder": "#707070",
-        "edgeLabelBackground": "#FFFFFF",
-        "labelBackground": "#FFFFFF",
-        "actorBkg": "#FFFFFF",
-        "actorBorder": "#EE0000",
-        "actorTextColor": "#151515",
-        "actorLineColor": "#707070",
-        "signalColor": "#333333",
-        "signalTextColor": "#151515",
-        "activationBkgColor": "#F2F2F2",
-        "activationBorderColor": "#707070",
-        "sequenceNumberColor": "#FFFFFF",
-        "classText": "#151515",
-        "stateBkg": "#FFFFFF",
-        "stateBorder": "#EE0000",
-        "labelColor": "#151515",
-        "altSectionBkgColor": "#F2F2F2",
-        "altSectionBkgColor2": "#FFFFFF",
-        "noteBkgColor": "#FFF5F5",
-        "noteBorderColor": "#EE0000",
-        "noteTextColor": "#151515",
-        "pie1": "#73BCF7",
-        "pie2": "#F4A6A6",
-        "pie3": "#BDE2B9",
-        "pie4": "#B8A7E8",
-        "pie5": "#F9C784",
-        "pie6": "#8BD3D3",
-        "pie7": "#A7C7E7",
-        "pie8": "#F6D6A8",
-        "pieStrokeColor": "#FFFFFF",
-        "pieStrokeWidth": "3px",
-        "pieTitleTextColor": "#151515",
-        "pieSectionTextColor": "#151515",
-        "pieLegendTextColor": "#333333"
-    }
-}}%%"""
-MERMAID_FLOWCHART_RE = re.compile(r"^\s*(?:flowchart|graph)\s+", re.IGNORECASE)
-MERMAID_NODE_RE = re.compile(
-    r"(?<![\w-])(?P<node_id>[A-Za-z_][\w-]*)\s*"
-    r"(?P<shape>\[\(|\[\[|\{\{|\[|\{|\()"
-    r"(?P<label>[^\]\})\n]+)"
-)
-MERMAID_SEMANTIC_STYLES = {
-    "platform": ("Plataforma", "#FDE8E8", "#EE0000"),
-    "application": ("Aplicação", "#E7F1FA", "#0066CC"),
-    "data": ("Dados", "#F2EEFA", "#5E40BE"),
-    "security": ("Segurança", "#FFF1E6", "#EC7A08"),
-    "operations": ("Operações", "#E9F7E7", "#3E8635"),
-    "integration": ("Integração", "#E5F5F5", "#009596"),
-    "external": ("Externo", "#F2F2F2", "#707070"),
-    "decision": ("Decisão", "#FFF4CC", "#F4C145"),
-}
-MERMAID_SEMANTIC_KEYWORDS = {
-    "security": (
-        "auth", "autoriz", "cert", "firewall", "iam", "keycloak", "oauth",
-        "rbac", "secret", "seguran", "sso", "tls", "vault",
-    ),
-    "data": (
-        "cache", "data", "database", "db", "fila", "kafka", "mongo",
-        "mysql", "postgres", "redis", "storage", "banco",
-    ),
-    "operations": (
-        "alert", "grafana", "log", "monitor", "observ", "operador",
-        "operator", "prometheus", "telemetr", "trace",
-    ),
-    "integration": (
-        "api", "broker", "event", "gateway", "integra", "message", "queue",
-        "servicemesh", "webhook",
-    ),
-    "platform": (
-        "cluster", "kubernetes", "namespace", "openshift", "platform",
-        "plataforma", "rhdh", "rosa",
-    ),
-    "application": (
-        "app", "aplica", "backend", "frontend", "microservice", "service",
-        "serviço", "workload",
-    ),
-    "external": (
-        "cliente", "external", "externo", "partner", "parceiro", "user",
-        "usuário", "usuario",
-    ),
-}
-MERMAID_MARKER_RE = re.compile(r"^MERMAIDDIAGRAM(?P<number>[0-9]+)TOKEN$", re.MULTILINE)
 AUTOMATIC_REPORT_NOTE_RE = re.compile(
     r"^[ \t]*\*?Relatório gerado automaticamente a partir dos artefatos "
     r"exportados em .*?\.?\*?[ \t]*$\n?",
@@ -208,136 +83,16 @@ def run_command(command: list[str], timeout: int) -> None:
         raise TemplateError(message or f"Falha ao executar: {command[0]}")
 
 
-def classify_mermaid_node(shape: str, definition: str) -> str:
-    normalized = definition.casefold().replace(" ", "")
-    if shape.startswith("{"):
-        return "decision"
-    if shape == "[(":
-        return "data"
-    for category, keywords in MERMAID_SEMANTIC_KEYWORDS.items():
-        if any(keyword in normalized for keyword in keywords):
-            return category
-    return "application"
-
-
-def style_mermaid_flowchart(source: str) -> str:
-    if not MERMAID_FLOWCHART_RE.match(source):
-        return source
-
-    node_categories: dict[str, str] = {}
-    for line in source.splitlines():
-        if line.lstrip().startswith(("class ", "classDef ", "style ")):
-            continue
-        for match in MERMAID_NODE_RE.finditer(line):
-            node_categories.setdefault(
-                match.group("node_id"),
-                classify_mermaid_node(match.group("shape"), match.group("label")),
-            )
-
-    categories = list(dict.fromkeys(node_categories.values()))
-    if not categories:
-        return source
-
-    additions = [""]
-    for category, (_, fill, stroke) in MERMAID_SEMANTIC_STYLES.items():
-        additions.append(
-            f"classDef {category} fill:{fill},stroke:{stroke},color:#151515,"
-            "stroke-width:2px;"
-        )
-    for node_id, category in node_categories.items():
-        additions.append(f"class {node_id} {category};")
-
-    if len(categories) >= 2:
-        additions.extend(("", 'subgraph _legend["Legenda"]', "direction LR"))
-        for category in categories:
-            label = MERMAID_SEMANTIC_STYLES[category][0]
-            additions.append(f'_legend_{category}["{label}"]')
-        additions.append("end")
-        for category in categories:
-            additions.append(f"class _legend_{category} {category};")
-
-    return f"{source.rstrip()}\n" + "\n".join(additions)
-
-
-def convert_mermaid_pie(source: str) -> str:
-    lines = source.splitlines()
-    if not lines or not re.match(
-        r"^\s*pie(?:\s+showData)?\s*$",
-        lines[0],
-        re.IGNORECASE,
-    ):
-        return source
-    lines[0] = "pie showData"
-    return "\n".join(lines)
-
-
-def prepare_mermaid_source(source: str) -> str:
-    prepared = MERMAID_INIT_RE.sub("", source).strip()
-    prepared = convert_mermaid_pie(prepared)
-    prepared = style_mermaid_flowchart(prepared)
-    return f"{MERMAID_THEME}\n\n{prepared}\n"
-
-
-def render_mermaid(source: str, output_path: Path) -> None:
-    mermaid_path = output_path.with_suffix(".mmd")
-    puppeteer_config = output_path.with_suffix(".puppeteer.json")
-    mermaid_path.write_text(prepare_mermaid_source(source), encoding="utf-8")
-    puppeteer_config.write_text(
-        '{"args":["--no-sandbox","--disable-setuid-sandbox"]}',
-        encoding="utf-8",
-    )
-    try:
-        run_command(
-            [
-                "mmdc",
-                "-p",
-                str(puppeteer_config),
-                "-i",
-                str(mermaid_path),
-                "-o",
-                str(output_path),
-                "-b",
-                "white",
-                "-s",
-                "2",
-            ],
-            timeout=180,
-        )
-    finally:
-        mermaid_path.unlink(missing_ok=True)
-        puppeteer_config.unlink(missing_ok=True)
-
-
 def prepare_markdown(markdown_path: Path, temp_dir: Path) -> Path:
     content = markdown_path.read_text(encoding="utf-8")
     content = AUTOMATIC_REPORT_NOTE_RE.sub("", content)
-    diagram_number = 0
-
-    def replace_mermaid(match: re.Match[str]) -> str:
-        nonlocal diagram_number
-        diagram_number += 1
-        image_path = temp_dir / f"mermaid-{diagram_number}.png"
-        render_mermaid(match.group("body").strip(), image_path)
-        return f"\n\nMERMAIDDIAGRAM{diagram_number}TOKEN\n\n"
-
-    transformed = MERMAID_BLOCK_RE.sub(replace_mermaid, content)
     prepared_path = temp_dir / markdown_path.name
-    prepared_path.write_text(transformed, encoding="utf-8")
+    prepared_path.write_text(content, encoding="utf-8")
     return prepared_path
 
 
 def quote_attribute(value: str) -> str:
     return value.replace("\\", "\\\\").replace("{", "\\{").replace("}", "\\}")
-
-
-def mermaid_pdf_width(image_path: Path) -> int:
-    width, height = read_png_dimensions(image_path)
-    aspect_ratio = width / height
-    if aspect_ratio >= 2.2:
-        return 90
-    if aspect_ratio >= 1.5:
-        return 78
-    return 68
 
 
 def read_png_dimensions(image_path: Path) -> tuple[int, int]:
@@ -443,15 +198,6 @@ def convert_to_asciidoc(
     )
 
     content = asciidoc_path.read_text(encoding="utf-8")
-    content = MERMAID_MARKER_RE.sub(
-        lambda match: (
-            f".Diagrama Mermaid\n"
-            f"image::{asciidoc_path.parent / ('mermaid-' + match.group('number') + '.png')}"
-            "[Diagrama Mermaid,align=center,pdfwidth="
-            f"{mermaid_pdf_width(asciidoc_path.parent / ('mermaid-' + match.group('number') + '.png'))}%]"
-        ),
-        content,
-    )
     content = re.sub(r"^\[\[[^\n]+\]\]\n", "", content, flags=re.MULTILINE)
     content = re.sub(r"^(={2,}) ", lambda match: f"{match.group(1)[1:]} ", content, flags=re.MULTILINE)
     content = re.sub(
@@ -535,9 +281,6 @@ def render_pdf(
 
     resolve_pandoc()
     asciidoctor_command = resolve_asciidoctor_pdf()
-
-    if MERMAID_BLOCK_RE.search(markdown_path.read_text(encoding="utf-8")):
-        require_command("mmdc", "npm install -g @mermaid-js/mermaid-cli")
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="assessment_pdf_") as temp_name:
