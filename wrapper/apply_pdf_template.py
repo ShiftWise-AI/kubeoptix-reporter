@@ -12,6 +12,9 @@ import tempfile
 from pathlib import Path
 
 import pypandoc
+# Front matter is document metadata, not content: the PDF attributes come from the
+# request instead. Removing it also avoids pandoc aborting on malformed YAML.
+YAML_FRONT_MATTER_RE = re.compile(r"\A\ufeff?---[ \t]*\r?\n.*?\r?\n(?:---|\.\.\.)[ \t]*\r?\n", re.DOTALL)
 AUTOMATIC_REPORT_NOTE_RE = re.compile(
     r"^[ \t]*\*?Relatório gerado automaticamente a partir dos artefatos "
     r"exportados em .*?\.?\*?[ \t]*$\n?",
@@ -129,8 +132,13 @@ def run_command(command: list[str], timeout: int) -> None:
         raise TemplateError(message or f"Falha ao executar: {command[0]}")
 
 
+def strip_yaml_front_matter(content: str) -> str:
+    return YAML_FRONT_MATTER_RE.sub("", content, count=1).lstrip("\n")
+
+
 def prepare_markdown(markdown_path: Path, temp_dir: Path) -> Path:
     content = markdown_path.read_text(encoding="utf-8")
+    content = strip_yaml_front_matter(content)
     content = AUTOMATIC_REPORT_NOTE_RE.sub("", content)
     content = materialize_inline_png_images(content, temp_dir)
     prepared_path = temp_dir / markdown_path.name
@@ -271,7 +279,7 @@ def convert_preface_to_asciidoc(
     if not preface_path.is_file():
         raise TemplateError(f"Prefacio nao encontrado: {preface_path}")
 
-    preface_content = preface_path.read_text(encoding="utf-8")
+    preface_content = strip_yaml_front_matter(preface_path.read_text(encoding="utf-8"))
     preface_content = preface_content.replace("<customer>", customer)
     prepared_preface = temp_dir / "prefacio.md"
     prepared_preface.write_text(preface_content, encoding="utf-8")
@@ -280,7 +288,7 @@ def convert_preface_to_asciidoc(
         resolve_pandoc()
         + [
             str(prepared_preface),
-            "--from=gfm",
+            "--from=gfm-yaml_metadata_block",
             "--to=asciidoc",
             "--wrap=none",
             "--output",
@@ -321,7 +329,7 @@ def convert_to_asciidoc(
         resolve_pandoc()
         + [
             str(prepared_markdown),
-            "--from=gfm",
+            "--from=gfm-yaml_metadata_block",
             "--to=asciidoc",
             "--wrap=none",
             "--output",
