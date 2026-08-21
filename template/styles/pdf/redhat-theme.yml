@@ -56,6 +56,16 @@ role:
 caption:
   align: center
 
+# Pagination: markdown "##" sections become AsciiDoc chapters (level 1), which
+# always start on a fresh page by default (heading-chapter break-before) — this
+# keeps every primary section clearly separated. Markdown "###" subsections
+# become plain sections (level 2), which never force a page break by default,
+# so subtitles stay attached to their own content instead of the previous
+# section's. min-height-after keeps a heading from being orphaned at the
+# bottom of a page with no room for at least one line of content below it.
+heading:
+  min-height-after: auto
+
 title-page:
   text-align: left
   background-image: image:redhatConsulting.png[]

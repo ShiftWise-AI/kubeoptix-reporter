@@ -2,6 +2,7 @@
 """Aplica o template Red Hat Consulting a um Markdown e gera um PDF A4."""
 
 import argparse
+import base64
 import re
 import shutil
 import struct
@@ -20,10 +21,55 @@ DOCUMENT_DATE_RE = re.compile(
     r"^(?:Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|"
     r"Setembro|Outubro|Novembro|Dezembro) de [0-9]{4}$"
 )
+MARKDOWN_PNG_DATA_URI_RE = re.compile(
+    r"!\[(?P<alt>[^\]]*)\]\((?P<uri>data:image/png;base64,[A-Za-z0-9+/=\r\n]+)\)",
+    re.IGNORECASE,
+)
+HTML_PNG_DATA_URI_RE = re.compile(
+    r"(?P<prefix><img\b[^>]*\bsrc=)(?P<quote>[\"'])"
+    r"(?P<uri>data:image/png;base64,[A-Za-z0-9+/=\r\n]+)"
+    r"(?P=quote)",
+    re.IGNORECASE,
+)
 
 
 class TemplateError(Exception):
     pass
+
+
+def decode_data_uri_png(data_uri: str) -> bytes:
+    _, encoded_payload = data_uri.split(",", 1)
+    normalized_payload = "".join(encoded_payload.split())
+    try:
+        return base64.b64decode(normalized_payload, validate=True)
+    except (ValueError, base64.binascii.Error) as exc:
+        raise TemplateError("Data URI PNG base64 invalido") from exc
+
+
+def materialize_inline_png_images(content: str, temp_dir: Path) -> str:
+    image_dir = temp_dir / "embedded-images"
+    image_dir.mkdir(parents=True, exist_ok=True)
+    image_counter = 0
+
+    def write_png(data_uri: str) -> Path:
+        nonlocal image_counter
+        image_counter += 1
+        image_path = image_dir / f"inline-image-{image_counter}.png"
+        image_path.write_bytes(decode_data_uri_png(data_uri))
+        return image_path.resolve()
+
+    def replace_markdown_image(match: re.Match[str]) -> str:
+        image_path = write_png(match.group("uri"))
+        alt = match.group("alt")
+        return f"![{alt}]({image_path})"
+
+    def replace_html_image(match: re.Match[str]) -> str:
+        image_path = write_png(match.group("uri"))
+        return f"{match.group('prefix')}{match.group('quote')}{image_path}{match.group('quote')}"
+
+    content = MARKDOWN_PNG_DATA_URI_RE.sub(replace_markdown_image, content)
+    content = HTML_PNG_DATA_URI_RE.sub(replace_html_image, content)
+    return content
 
 
 def require_command(command: str, install_hint: str) -> None:
@@ -86,6 +132,7 @@ def run_command(command: list[str], timeout: int) -> None:
 def prepare_markdown(markdown_path: Path, temp_dir: Path) -> Path:
     content = markdown_path.read_text(encoding="utf-8")
     content = AUTOMATIC_REPORT_NOTE_RE.sub("", content)
+    content = materialize_inline_png_images(content, temp_dir)
     prepared_path = temp_dir / markdown_path.name
     prepared_path.write_text(content, encoding="utf-8")
     return prepared_path
@@ -112,22 +159,107 @@ def company_logo_width(image_path: Path) -> int:
     return max(1, round(min(520, 267 * width / height)))
 
 
-def add_section_page_breaks(content: str) -> str:
-    section_number = 0
+IMAGE_BLOCK_RE = re.compile(r"^image::(?P<target>\S+)\[(?P<attrs>[^\]]*)\]$", re.MULTILINE)
+IMAGE_INLINE_RE = re.compile(r"(?<!:)image:(?!:)(?P<target>\S+?)\[(?P<attrs>[^\]]*)\]")
+# Matches the "image paragraph" + "italic caption paragraph" pattern that
+# pandoc produces from a Markdown image immediately followed by an italic
+# caption line (e.g. "![alt](img.png)" then "*Figura 1: ...*").
+IMAGE_WITH_CAPTION_PARAGRAPH_RE = re.compile(
+    r"^image:(?P<target>\S+)\[(?P<attrs>[^\]]*)\]\n\n_(?P<caption>[^\n_]+)_[ \t]*$",
+    re.MULTILINE,
+)
+# Asciidoctor PDF auto-numbers block titles used as image captions (e.g.
+# "Figura 1. "), so a manually written "Figura 1:" prefix is stripped to
+# avoid a duplicated figure number.
+CAPTION_FIGURE_PREFIX_RE = re.compile(r"^figura\s+\d+\s*[:.]?\s*", re.IGNORECASE)
 
-    def add_page_break(match: re.Match[str]) -> str:
-        nonlocal section_number
-        section_number += 1
-        if section_number == 1:
+# A4 page (210mm) minus the theme's left/right margins (17mm each).
+PAGE_CONTENT_WIDTH_MM = 176.0
+# Leaves room on the page for the heading, caption and surrounding text.
+MAX_IMAGE_HEIGHT_MM = 170.0
+# Floor so a downscaled image never becomes illegible.
+MIN_IMAGE_WIDTH_MM = 40.0
+PNG_ASSUMED_DPI = 96.0
+
+
+def attach_image_captions(content: str) -> str:
+    """Turn a standalone italic paragraph right after an image into a native
+    AsciiDoc block title, so the image and its caption always paginate as one
+    unbreakable unit instead of risking a page break between them.
+    """
+
+    def replace(match: re.Match[str]) -> str:
+        caption = CAPTION_FIGURE_PREFIX_RE.sub("", match.group("caption").strip())
+        return f".{caption}\nimage::{match.group('target')}[{match.group('attrs')}]"
+
+    return IMAGE_WITH_CAPTION_PARAGRAPH_RE.sub(replace, content)
+
+
+def fit_png_width_mm(image_path: Path) -> float | None:
+    """Largest width (mm) keeping a PNG inside the page content box, same aspect ratio.
+
+    Returns None when the image already fits, so its natural size is left untouched.
+    """
+    try:
+        width_px, height_px = read_png_dimensions(image_path)
+    except TemplateError:
+        return None
+
+    width_mm = width_px / PNG_ASSUMED_DPI * 25.4
+    height_mm = height_px / PNG_ASSUMED_DPI * 25.4
+    scale = min(PAGE_CONTENT_WIDTH_MM / width_mm, MAX_IMAGE_HEIGHT_MM / height_mm)
+    if scale >= 1.0:
+        return None
+
+    constrained_width_mm = width_mm * scale
+    # Only raise a downscaled image to the legibility floor when that width
+    # still respects the height ceiling; otherwise the height ceiling wins,
+    # since staying on the same page as its caption/text matters more.
+    width_at_floor_mm = MIN_IMAGE_WIDTH_MM
+    height_at_floor_mm = width_at_floor_mm * (height_mm / width_mm)
+    if constrained_width_mm < width_at_floor_mm and height_at_floor_mm <= MAX_IMAGE_HEIGHT_MM:
+        constrained_width_mm = width_at_floor_mm
+    return round(constrained_width_mm, 1)
+
+
+def has_explicit_image_size(attrs: str) -> bool:
+    if re.search(r"\b(width|pdfwidth|scaledwidth)\s*=", attrs):
+        return True
+    positional = [part.strip() for part in attrs.split(",")][1:]
+    return any(positional)
+
+
+def resolve_local_image_path(target: str, base_dir: Path) -> Path | None:
+    if re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*://", target):
+        return None
+    candidate = Path(target)
+    if not candidate.is_absolute():
+        candidate = base_dir / candidate
+    return candidate if candidate.is_file() else None
+
+
+def apply_image_size_constraints(content: str, base_dir: Path) -> str:
+    """Proportionally shrink oversized local PNGs so they stay on the page with
+    their referencing text/caption, without ever distorting their aspect ratio.
+    """
+
+    def constrain(match: re.Match[str], macro: str) -> str:
+        target = match.group("target")
+        attrs = match.group("attrs")
+        if has_explicit_image_size(attrs):
             return match.group(0)
-        return f"\n<<<\n\n{match.group('heading')}"
+        image_path = resolve_local_image_path(target, base_dir)
+        if image_path is None or image_path.suffix.lower() != ".png":
+            return match.group(0)
+        width_mm = fit_png_width_mm(image_path)
+        if width_mm is None:
+            return match.group(0)
+        new_attrs = f"{attrs},width={width_mm}mm" if attrs.strip() else f"width={width_mm}mm"
+        return f"{macro}{target}[{new_attrs}]"
 
-    return re.sub(
-        r"^\n?(?P<heading>== [^\n]+)$",
-        add_page_break,
-        content,
-        flags=re.MULTILINE,
-    )
+    content = IMAGE_BLOCK_RE.sub(lambda m: constrain(m, "image::"), content)
+    content = IMAGE_INLINE_RE.sub(lambda m: constrain(m, "image:"), content)
+    return content
 
 
 def convert_preface_to_asciidoc(
@@ -173,6 +305,7 @@ def convert_to_asciidoc(
     prepared_markdown: Path,
     asciidoc_path: Path,
     template_dir: Path,
+    source_dir: Path,
     customer: str,
     description: str,
     version: str,
@@ -207,7 +340,8 @@ def convert_to_asciidoc(
         count=1,
         flags=re.DOTALL,
     )
-    content = add_section_page_breaks(content)
+    content = attach_image_captions(content)
+    content = apply_image_size_constraints(content, source_dir)
 
     title_match = re.match(r"^= (?P<title>[^\n]+)\n", content)
     if not title_match:
@@ -221,6 +355,8 @@ def convert_to_asciidoc(
             ":toc-title: Sumário",
             ":toclevels: 3",
             ":chapter-label:",
+            ":figure-caption: Figura",
+            ":table-caption: Tabela",
             ":icons: font",
             ":source-highlighter: rouge",
             ":pdf-page-size: A4",
@@ -291,6 +427,7 @@ def render_pdf(
             prepared_path,
             asciidoc_path,
             template_dir,
+            markdown_path.parent,
             customer,
             description,
             version,
