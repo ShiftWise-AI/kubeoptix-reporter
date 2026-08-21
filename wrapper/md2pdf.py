@@ -1,28 +1,20 @@
 #!/usr/bin/env python3
 """
-Converte arquivos Markdown para PDF com suporte a blocos Mermaid.
+Converte arquivos Markdown para PDF.
 
 Exemplos:
-  python3 md_to_pdf.py arquivo.md
-  python3 md_to_pdf.py arquivo.md saida.pdf
-  python3 md_to_pdf.py ./docs ./pdfs
+    python3 md_to_pdf.py arquivo.md
+    python3 md_to_pdf.py arquivo.md saida.pdf
+    python3 md_to_pdf.py ./docs ./pdfs
 """
 
 import argparse
-import re
 import shutil
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 import pypandoc
-
-MERMAID_BLOCK_RE = re.compile(
-    r"(?P<fence>`{3,}|~{3,})[ \t]*(?:mermaid|\{[^\n}]*\.mermaid[^\n}]*\})[ \t]*\n"
-    r"(?P<body>.*?)\n(?P=fence)[ \t]*",
-    re.IGNORECASE | re.DOTALL,
-)
 
 
 class MarkdownToPdfError(Exception):
@@ -34,78 +26,22 @@ def require_command(command: str, install_hint: str) -> None:
         raise MarkdownToPdfError(f"Comando não encontrado: {command}. Instale com: {install_hint}")
 
 
-def convert_mermaid_to_png(mermaid_content: str, output_path: Path) -> None:
-    require_command("mmdc", "npm install -g @mermaid-js/mermaid-cli")
-
-    temp_mmd = output_path.with_suffix(".mmd")
-    puppeteer_config = output_path.with_suffix(".puppeteer.json")
-    temp_mmd.write_text(mermaid_content, encoding="utf-8")
-    puppeteer_config.write_text(
-        '{"args":["--no-sandbox","--disable-setuid-sandbox"]}',
-        encoding="utf-8",
-    )
-    try:
-        result = subprocess.run(
-            [
-                "mmdc",
-                "-p",
-                str(puppeteer_config),
-                "-i",
-                str(temp_mmd),
-                "-o",
-                str(output_path),
-                "-b",
-                "white",
-            ],
-            capture_output=True,
-            text=True,
-            timeout=180,
-        )
-        if result.returncode != 0:
-            raise MarkdownToPdfError(result.stderr.strip() or result.stdout.strip() or "Falha ao converter Mermaid")
-    finally:
-        temp_mmd.unlink(missing_ok=True)
-        puppeteer_config.unlink(missing_ok=True)
-
-
 def render_markdown_to_pdf(markdown_path: Path, output_pdf: Path) -> None:
     require_command("weasyprint", "sudo apt-get install weasyprint")
-
-    content = markdown_path.read_text(encoding="utf-8")
-
-    temp_dir = Path(tempfile.mkdtemp(prefix="md_to_pdf_", dir=str(output_pdf.parent)))
     try:
-        counter = 0
-
-        def replace_mermaid(match: re.Match[str]) -> str:
-            nonlocal counter
-            counter += 1
-            image_name = f"mermaid_{counter}.png"
-            image_path = temp_dir / image_name
-            convert_mermaid_to_png(match.group("body").strip(), image_path)
-            return f"\n\n![Diagrama Mermaid]({image_path.as_uri()})\n\n"
-
-        transformed_content = MERMAID_BLOCK_RE.sub(replace_mermaid, content)
-
-        temp_markdown = temp_dir / f"{markdown_path.stem}.md"
-        temp_markdown.write_text(transformed_content, encoding="utf-8")
-
-        try:
-            pypandoc.convert_file(
-                str(temp_markdown),
-                "pdf",
-                outputfile=str(output_pdf),
-                extra_args=[
-                    "--pdf-engine=weasyprint",
-                    "--standalone",
-                    "--resource-path",
-                    str(temp_dir),
-                ],
-            )
-        except RuntimeError as exc:
-            raise MarkdownToPdfError(str(exc)) from exc
-    finally:
-        shutil.rmtree(temp_dir, ignore_errors=True)
+        pypandoc.convert_file(
+            str(markdown_path),
+            "pdf",
+            outputfile=str(output_pdf),
+            extra_args=[
+                "--pdf-engine=weasyprint",
+                "--standalone",
+                "--resource-path",
+                str(markdown_path.parent),
+            ],
+        )
+    except RuntimeError as exc:
+        raise MarkdownToPdfError(str(exc)) from exc
 
 
 def resolve_output_path(input_path: Path, output_path: Path | None) -> Path:
@@ -149,7 +85,7 @@ def convert_directory(input_dir: Path, output_dir: Path | None) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Converte Markdown para PDF com suporte a Mermaid")
+    parser = argparse.ArgumentParser(description="Converte Markdown para PDF")
     parser.add_argument("input", help="Arquivo .md ou diretório")
     parser.add_argument("output", nargs="?", help="Caminho do PDF ou diretório de saída")
     args = parser.parse_args()

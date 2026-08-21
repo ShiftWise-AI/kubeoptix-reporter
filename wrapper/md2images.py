@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Script: md_to_images.py
-Descrição: Percorre arquivos .md, extrai imagens e gráficos Mermaid e 
+Descrição: Percorre arquivos .md, extrai imagens e
            converte para PNG com suporte a múltiplos formatos.
 Uso: python3 md_to_images.py [diretório_entrada] [diretório_saída] [--verbose]
 Exemplo: python3 md_to_images.py . ./output_images --verbose
@@ -13,7 +13,7 @@ import re
 import subprocess
 import hashlib
 from pathlib import Path
-from typing import List, Tuple
+from typing import List
 from datetime import datetime
 
 class MDToImagesConverter:
@@ -27,7 +27,6 @@ class MDToImagesConverter:
         
         # Contadores
         self.count_images = 0
-        self.count_mermaid = 0
         self.count_errors = 0
         
         # Criar diretório de saída para modo diretório.
@@ -69,7 +68,6 @@ class MDToImagesConverter:
         self.log('INFO', '🔍 Verificando dependências...')
         
         dependencies = {
-            'mmdc': 'npm install -g mermaid-cli',
             'convert': 'sudo apt-get install imagemagick',
         }
         
@@ -90,20 +88,6 @@ class MDToImagesConverter:
         )
         return result.returncode == 0
     
-    def _extract_mermaid_blocks(self, md_file: Path) -> List[Tuple[int, str]]:
-        """Extrai blocos mermaid do arquivo markdown"""
-        blocks = []
-        content = md_file.read_text(encoding='utf-8')
-        
-        # Regex para encontrar blocos ```mermaid ... ```
-        pattern = r'```mermaid\n(.*?)\n```'
-        matches = re.finditer(pattern, content, re.DOTALL)
-        
-        for idx, match in enumerate(matches, 1):
-            blocks.append((idx, match.group(1)))
-        
-        return blocks
-    
     def _extract_image_references(self, md_file: Path) -> List[str]:
         """Extrai referências de imagem ![alt](path) do markdown"""
         images = []
@@ -118,72 +102,6 @@ class MDToImagesConverter:
             images.append(img_path)
         
         return images
-    
-    def _convert_mermaid_to_png(self, mermaid_content: str, output_path: Path) -> bool:
-        """Converte diagrama Mermaid para arquivo de imagem (preferencialmente PNG)."""
-        try:
-            # Salvar conteúdo Mermaid temporário
-            temp_mmd = output_path.with_name(f'{output_path.stem}__tmp.mmd')
-            temp_png = output_path.with_name(f'{output_path.stem}__tmp.png')
-            
-            temp_mmd.write_text(mermaid_content)
-            
-            cmd_mmdc_png = [
-                'mmdc',
-                '-i', str(temp_mmd),
-                '-o', str(temp_png),
-                '-s', '2',
-                '-w', '16000',
-                '-H', '16000',
-                '-b', 'white'
-            ]
-
-            result_png = subprocess.run(
-                cmd_mmdc_png,
-                capture_output=True,
-                timeout=180
-            )
-
-            if result_png.returncode != 0:
-                self.log('DEBUG', f'mmdc png stderr: {result_png.stderr.decode()}')
-                return False
-            
-            # Normalizar PNG removendo canvas excedente e preservando legibilidade.
-            cmd_convert = [
-                'convert',
-                str(temp_png),
-                '-background', 'white',
-                '-alpha', 'remove',
-                '-alpha', 'off',
-                '-trim',
-                '+repage',
-                '-bordercolor', 'white',
-                '-border', '20',
-                str(output_path)
-            ]
-            
-            result = subprocess.run(
-                cmd_convert,
-                capture_output=True,
-                timeout=30
-            )
-            
-            if result.returncode != 0:
-                self.log('DEBUG', f'convert stderr: {result.stderr.decode()}')
-                return False
-            
-            # Limpeza
-            temp_mmd.unlink(missing_ok=True)
-            temp_png.unlink(missing_ok=True)
-            
-            return True
-        
-        except subprocess.TimeoutExpired:
-            self.log('ERROR', f'Timeout ao converter Mermaid: {output_path.name}')
-            return False
-        except Exception as e:
-            self.log('ERROR', f'Erro ao converter Mermaid: {str(e)}')
-            return False
     
     def _convert_image_to_png(self, src_path: Path, dst_path: Path) -> bool:
         """Converte imagem para PNG"""
@@ -270,21 +188,6 @@ class MDToImagesConverter:
         output_subdir = self.output_dir
         output_subdir.mkdir(parents=True, exist_ok=True)
         
-        # Extrair e converter Mermaid
-        mermaid_blocks = self._extract_mermaid_blocks(md_file)
-        for block_idx, content in mermaid_blocks:
-            tmp_path = output_subdir / f'.tmp_mermaid_{self.next_image_index}_{block_idx}.png'
-            self.log('DEBUG', 'Convertendo Mermaid para PNG')
-            
-            if self._convert_mermaid_to_png(content, tmp_path):
-                origin = f'{md_file}#mermaid{block_idx}'
-                final_name = self._register_image(tmp_path, origin)
-                self.log('INFO', f'  ✓ Mermaid -> {output_subdir / final_name}')
-                self.count_mermaid += 1
-            else:
-                self.log('ERROR', f'  ❌ Erro ao converter Mermaid #{block_idx}')
-                self.count_errors += 1
-        
         # Extrair e converter imagens referenciadas
         image_refs = self._extract_image_references(md_file)
         for img_ref in image_refs:
@@ -342,9 +245,8 @@ class MDToImagesConverter:
         self.log('INFO', '📊 RESUMO DA CONVERSÃO')
         self.log('INFO', '─' * 60)
         self.log('INFO', f'Imagens convertidas: {self.count_images}')
-        self.log('INFO', f'Diagramas Mermaid convertidos: {self.count_mermaid}')
         self.log('INFO', f'Erros encontrados: {self.count_errors}')
-        self.log('INFO', f'Total de arquivos: {self.count_images + self.count_mermaid}')
+        self.log('INFO', f'Total de arquivos: {self.count_images}')
         self.log('INFO', '─' * 60)
         
         return self.count_errors == 0
@@ -354,7 +256,7 @@ def main():
     import argparse
     
     parser = argparse.ArgumentParser(
-        description='Extrai imagens e gráficos Mermaid de arquivos markdown e converte para PNG'
+        description='Extrai imagens de arquivos markdown e converte para PNG'
     )
     parser.add_argument(
         'input_dir',

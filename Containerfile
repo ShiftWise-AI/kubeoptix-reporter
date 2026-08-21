@@ -27,7 +27,6 @@ RUN dnf install -y \
     libjpeg-turbo \
     libxkbcommon \
     mesa-libgbm \
-    nodejs \
     nspr \
     nss \
     pango \
@@ -48,8 +47,6 @@ COPY requeriments.txt /app/requeriments.txt
 RUN python3 -m pip install --no-cache-dir -r /app/requeriments.txt
 
 RUN gem install asciidoctor-pdf rouge --no-document
-
-RUN npm install --global @mermaid-js/mermaid-cli@11.16.0
 
 COPY src/ /app/src/
 COPY template/ /app/template/
