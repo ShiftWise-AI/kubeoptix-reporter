@@ -7,6 +7,7 @@ CHART_DIR="${CHART_DIR:-${SCRIPT_DIR}/helm/kubeoptix-reporter}"
 NAMESPACE="${NAMESPACE:-shiftwise-ai}"
 RELEASE_NAME="${RELEASE_NAME:-kubeoptix-reporter}"
 TIMEOUT="${TIMEOUT:-10m}"
+CLEANUP_ORPHANS="${CLEANUP_ORPHANS:-true}"
 VALUES_FILE=""
 HELM_ARGS=()
 
@@ -21,6 +22,130 @@ fail() {
 
 require_command() {
     command -v "$1" >/dev/null 2>&1 || fail "Comando obrigatório não encontrado: $1"
+}
+
+is_true() {
+    case "${1,,}" in
+        true|1|yes|y|on)
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+is_managed_or_legacy_name() {
+    local resource_name="$1"
+    local instance_label="$2"
+
+    if [[ "$instance_label" == "$RELEASE_NAME" ]]; then
+        return 0
+    fi
+
+    [[ "$resource_name" == "$RELEASE_NAME"* ]] && return 0
+    [[ "$resource_name" == *kubeoptix-reporter* ]] && return 0
+    [[ "$resource_name" == reporter* ]] && return 0
+
+    return 1
+}
+
+cleanup_post_install_residue() {
+    if ! is_true "$CLEANUP_ORPHANS"; then
+        log "Limpeza pós-instalação desabilitada (CLEANUP_ORPHANS=$CLEANUP_ORPHANS)"
+        return 0
+    fi
+
+    log "Limpando recursos órfãos e não utilizados do release"
+
+    declare -A used_secrets=()
+    declare -A used_configmaps=()
+    local line=""
+    local kind=""
+    local name=""
+
+    while IFS= read -r line; do
+        [[ -n "$line" ]] || continue
+        kind="${line%%:*}"
+        name="${line#*:}"
+        [[ -n "$name" && "$name" != "<no value>" ]] || continue
+
+        if [[ "$kind" == "secret" ]]; then
+            used_secrets["$name"]=1
+        elif [[ "$kind" == "configmap" ]]; then
+            used_configmaps["$name"]=1
+        fi
+    done < <(
+        oc get statefulset "$STATEFULSET" -n "$NAMESPACE" -o jsonpath='{range .spec.template.spec.imagePullSecrets[*]}secret:{.name}{"\n"}{end}{range .spec.template.spec.volumes[*]}secret:{.secret.secretName}{"\n"}configmap:{.configMap.name}{"\n"}{range .projected.sources[*]}secret:{.secret.name}{"\n"}configmap:{.configMap.name}{"\n"}{end}{end}{range .spec.template.spec.containers[*].env[*]}secret:{.valueFrom.secretKeyRef.name}{"\n"}configmap:{.valueFrom.configMapKeyRef.name}{"\n"}{end}{range .spec.template.spec.containers[*].envFrom[*]}secret:{.secretRef.name}{"\n"}configmap:{.configMapRef.name}{"\n"}{end}' 2>/dev/null
+    )
+
+    if [[ -n "$GITHUB_SECRET" ]]; then
+        used_secrets["$GITHUB_SECRET"]=1
+    fi
+
+    while IFS= read -r name; do
+        [[ -n "$name" ]] || continue
+        if [[ -z "${used_secrets[$name]+x}" ]]; then
+            log "Removendo Secret não utilizado: $name"
+            oc delete secret "$name" -n "$NAMESPACE" --ignore-not-found >/dev/null
+        fi
+    done < <(
+        oc get secret -n "$NAMESPACE" \
+            -l "app.kubernetes.io/instance=${RELEASE_NAME},app.kubernetes.io/name=kubeoptix-reporter" \
+            -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'
+    )
+
+    while IFS= read -r name; do
+        [[ -n "$name" ]] || continue
+        if [[ -z "${used_configmaps[$name]+x}" ]]; then
+            log "Removendo ConfigMap não utilizado: $name"
+            oc delete configmap "$name" -n "$NAMESPACE" --ignore-not-found >/dev/null
+        fi
+    done < <(
+        oc get configmap -n "$NAMESPACE" \
+            -l "app.kubernetes.io/instance=${RELEASE_NAME},app.kubernetes.io/name=kubeoptix-reporter" \
+            -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'
+    )
+
+    local instance_label=""
+    local origin_alpha=""
+    local origin_beta=""
+    local origin_service=""
+    local is_used="false"
+
+    for kind in secret configmap; do
+        while IFS=$'\t' read -r name instance_label origin_alpha origin_beta; do
+            [[ -n "$name" ]] || continue
+            origin_service="${origin_alpha:-$origin_beta}"
+            [[ -n "$origin_service" && "$origin_service" != "<no value>" ]] || continue
+
+            if ! is_managed_or_legacy_name "$name" "$instance_label"; then
+                continue
+            fi
+
+            is_used="false"
+            if [[ "$kind" == "secret" ]]; then
+                [[ -n "${used_secrets[$name]+x}" ]] && is_used="true"
+            else
+                [[ -n "${used_configmaps[$name]+x}" ]] && is_used="true"
+            fi
+
+            if [[ "$is_used" == "true" ]]; then
+                continue
+            fi
+
+            if ! oc get service "$origin_service" -n "$NAMESPACE" >/dev/null 2>&1; then
+                log "Removendo $kind órfão vinculado a serviço inexistente ($origin_service): $name"
+                oc delete "$kind" "$name" -n "$NAMESPACE" --ignore-not-found >/dev/null
+            else
+                log "Removendo $kind de certificado não utilizado na aplicação ($origin_service): $name"
+                oc delete "$kind" "$name" -n "$NAMESPACE" --ignore-not-found >/dev/null
+            fi
+        done < <(
+            oc get "$kind" -n "$NAMESPACE" \
+                -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.metadata.labels.app\.kubernetes\.io/instance}{"\t"}{.metadata.annotations.service\.alpha\.openshift\.io/originating-service-name}{"\t"}{.metadata.annotations.service\.beta\.openshift\.io/originating-service-name}{"\n"}{end}'
+        )
+    done
 }
 
 usage() {
@@ -160,6 +285,8 @@ oc rollout restart "statefulset/$STATEFULSET" -n "$NAMESPACE"
 
 log "Aguardando StatefulSet $STATEFULSET"
 oc rollout status "statefulset/$STATEFULSET" -n "$NAMESPACE" --timeout="$TIMEOUT"
+
+cleanup_post_install_residue
 
 SERVICE="$(oc get service \
     -n "$NAMESPACE" \

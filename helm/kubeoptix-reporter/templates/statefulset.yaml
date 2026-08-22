@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "kubeoptix-reporter.labels" . | nindent 4 }}
 spec:
-  serviceName: {{ include "kubeoptix-reporter.headlessServiceName" . }}
+  serviceName: {{ .Values.service.api.name }}
   replicas: {{ .Values.scalePolicy.maxReplicas }}
   podManagementPolicy: OrderedReady
   selector:
