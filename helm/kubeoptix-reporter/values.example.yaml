@@ -29,10 +29,6 @@ image:
   pullPolicy: Always
 
 service:
-  headless:
-    enabled: true
-    name: reporter
-    port: 8000
   api:
     enabled: true
     name: reporter-api

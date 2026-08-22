@@ -28,15 +28,6 @@ app.kubernetes.io/name: {{ include "kubeoptix-reporter.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{- define "kubeoptix-reporter.headlessServiceName" -}}
-{{- $statefulSet := lookup "apps/v1" "StatefulSet" .Release.Namespace (include "kubeoptix-reporter.fullname" .) -}}
-{{- if $statefulSet -}}
-{{- $statefulSet.spec.serviceName -}}
-{{- else -}}
-{{- .Values.service.headless.name -}}
-{{- end -}}
-{{- end }}
-
 {{- define "kubeoptix-reporter.image" -}}
 {{- if .Values.image.useBuildOutput }}
 {{- printf "image-registry.openshift-image-registry.svc:5000/%s/%s:%s" .Release.Namespace (include "kubeoptix-reporter.fullname" .) .Values.image.tag }}
