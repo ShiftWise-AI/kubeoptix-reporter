@@ -8,6 +8,8 @@ NAMESPACE="${NAMESPACE:-shiftwise-ai}"
 RELEASE_NAME="${RELEASE_NAME:-kubeoptix-reporter}"
 TIMEOUT="${TIMEOUT:-10m}"
 CLEANUP_ORPHANS="${CLEANUP_ORPHANS:-true}"
+PRUNE_HELM_RELEASE_SECRETS="${PRUNE_HELM_RELEASE_SECRETS:-true}"
+PRUNE_BUILD_HISTORY="${PRUNE_BUILD_HISTORY:-true}"
 VALUES_FILE=""
 HELM_ARGS=()
 
@@ -146,6 +148,65 @@ cleanup_post_install_residue() {
                 -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.metadata.labels.app\.kubernetes\.io/instance}{"\t"}{.metadata.annotations.service\.alpha\.openshift\.io/originating-service-name}{"\t"}{.metadata.annotations.service\.beta\.openshift\.io/originating-service-name}{"\n"}{end}'
         )
     done
+}
+
+cleanup_helm_release_secrets() {
+    if ! is_true "$PRUNE_HELM_RELEASE_SECRETS"; then
+        log "Remoção de secrets do Helm desabilitada (PRUNE_HELM_RELEASE_SECRETS=$PRUNE_HELM_RELEASE_SECRETS)"
+        return 0
+    fi
+
+    log "Removendo secrets internos do Helm do release"
+
+    local secret_name=""
+    while IFS= read -r secret_name; do
+        [[ -n "$secret_name" ]] || continue
+        log "Removendo secret do Helm: $secret_name"
+        oc delete secret "$secret_name" -n "$NAMESPACE" --ignore-not-found >/dev/null
+    done < <(
+        oc get secret -n "$NAMESPACE" -o jsonpath='{range .items[?(@.type=="helm.sh/release.v1")]}{.metadata.name}{"\n"}{end}' \
+            | grep -E "^sh\.helm\.release\.v1\.${RELEASE_NAME}\.v[0-9]+$" || true
+    )
+}
+
+cleanup_build_history() {
+    if ! is_true "$PRUNE_BUILD_HISTORY"; then
+        log "Remoção de histórico de builds desabilitada (PRUNE_BUILD_HISTORY=$PRUNE_BUILD_HISTORY)"
+        return 0
+    fi
+
+    log "Removendo histórico de builds do BuildConfig $BUILD_CONFIG"
+
+    local build_name=""
+    while IFS= read -r build_name; do
+        [[ -n "$build_name" ]] || continue
+        if [[ "$build_name" == "$BUILD_NAME" || "$build_name" == "build/$BUILD_NAME" ]]; then
+            continue
+        fi
+        log "Removendo build antigo: $build_name"
+        oc delete "$build_name" -n "$NAMESPACE" --ignore-not-found >/dev/null
+    done < <(
+        oc get builds -n "$NAMESPACE" -l "buildconfig=${BUILD_CONFIG}" -o name 2>/dev/null || true
+    )
+}
+
+cleanup_explicit_unused_configmaps() {
+    local cm_name="kubeoptix-reporter-1-sys-config"
+
+    if ! oc get configmap "$cm_name" -n "$NAMESPACE" >/dev/null 2>&1; then
+        return 0
+    fi
+
+    local cm_in_use=""
+    cm_in_use="$(oc get statefulset "$STATEFULSET" -n "$NAMESPACE" -o jsonpath='{range .spec.template.spec.volumes[*]}{.configMap.name}{"\n"}{range .projected.sources[*]}{.configMap.name}{"\n"}{end}{end}{range .spec.template.spec.containers[*].env[*]}{.valueFrom.configMapKeyRef.name}{"\n"}{end}{range .spec.template.spec.containers[*].envFrom[*]}{.configMapRef.name}{"\n"}{end}' 2>/dev/null | grep -Fx "$cm_name" || true)"
+
+    if [[ -n "$cm_in_use" ]]; then
+        log "ConfigMap $cm_name ainda está em uso pelo StatefulSet; remoção ignorada"
+        return 0
+    fi
+
+    log "Removendo ConfigMap não utilizado: $cm_name"
+    oc delete configmap "$cm_name" -n "$NAMESPACE" --ignore-not-found >/dev/null
 }
 
 usage() {
@@ -287,6 +348,9 @@ log "Aguardando StatefulSet $STATEFULSET"
 oc rollout status "statefulset/$STATEFULSET" -n "$NAMESPACE" --timeout="$TIMEOUT"
 
 cleanup_post_install_residue
+cleanup_explicit_unused_configmaps
+cleanup_build_history
+cleanup_helm_release_secrets
 
 SERVICE="$(oc get service \
     -n "$NAMESPACE" \
