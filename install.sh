@@ -178,15 +178,17 @@ cleanup_build_history() {
     log "Removendo histórico de builds do BuildConfig $BUILD_CONFIG"
 
     local build_name=""
-    while IFS= read -r build_name; do
+    local build_phase=""
+    while IFS=$'\t' read -r build_name build_phase; do
         [[ -n "$build_name" ]] || continue
-        if [[ "$build_name" == "$BUILD_NAME" || "$build_name" == "build/$BUILD_NAME" ]]; then
-            continue
-        fi
-        log "Removendo build antigo: $build_name"
-        oc delete "$build_name" -n "$NAMESPACE" --ignore-not-found >/dev/null
+        [[ "$build_name" == kubeoptix-reporter-* ]] || continue
+        [[ "$build_phase" == "Complete" ]] || continue
+
+        log "Removendo build concluído: $build_name"
+        oc delete build "$build_name" -n "$NAMESPACE" --ignore-not-found >/dev/null
     done < <(
-        oc get builds -n "$NAMESPACE" -l "buildconfig=${BUILD_CONFIG}" -o name 2>/dev/null || true
+        oc get builds -n "$NAMESPACE" \
+            -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.phase}{"\n"}{end}' 2>/dev/null || true
     )
 }
 
