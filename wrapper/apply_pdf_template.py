@@ -9,6 +9,7 @@ import struct
 import subprocess
 import sys
 import tempfile
+from datetime import datetime
 from pathlib import Path
 
 import pypandoc
@@ -309,6 +310,97 @@ def convert_preface_to_asciidoc(
     return content.strip()
 
 
+def render_template(template_path: Path, values: dict[str, str]) -> str:
+    if not template_path.is_file():
+        raise TemplateError(f"Template nao encontrado: {template_path}")
+
+    content = strip_yaml_front_matter(template_path.read_text(encoding="utf-8"))
+    for placeholder, value in values.items():
+        content = content.replace(placeholder, value)
+    return content
+
+
+def format_template_table_rows(
+    content: str,
+    placeholder: str,
+    records: list[dict[str, str]],
+) -> str:
+    row = next((line for line in content.splitlines() if placeholder in line), None)
+    if row is None:
+        return content
+
+    rows = []
+    for record in records:
+        rendered_row = row
+        for field in ("name", "position", "email"):
+            value = str(record.get(field) or "")
+            rendered_row = rendered_row.replace(f"<{placeholder}.{field}>", value)
+            if placeholder == "autors":
+                rendered_row = rendered_row.replace(f"<authors.{field}>", value)
+        rows.append(rendered_row)
+    return content.replace(row, "\n".join(rows))
+
+
+def format_version_date(value: str) -> str:
+    if not value:
+        return ""
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00")).strftime("%d/%m/%Y")
+    except ValueError:
+        return value
+
+
+def format_version_history_rows(
+    content: str,
+    versions: list[dict[str, str]],
+    authors: list[dict[str, str]],
+) -> str:
+    row = next((line for line in content.splitlines() if "<versions." in line), None)
+    if row is None:
+        return content
+
+    rows = []
+    for version in versions:
+        version_authors = (
+            [version["author"]]
+            if isinstance(version.get("author"), dict)
+            else authors or [{}]
+        )
+        for author in version_authors:
+            rendered_row = row.replace(
+                "<versions.version_number>", str(version.get("versionNumber") or "")
+            ).replace(
+                "<versions.created_at>",
+                format_version_date(str(version.get("createdAt") or "")),
+            ).replace(
+                "<version.description>", str(version.get("description") or "")
+            )
+            for field in ("name", "position"):
+                rendered_row = rendered_row.replace(
+                    f"<authors.{field}>", str(author.get(field) or "")
+                )
+            rows.append(rendered_row)
+    return content.replace(row, "\n".join(rows))
+
+
+def convert_template_to_asciidoc(content: str, output_path: Path) -> str:
+    markdown_path = output_path.with_suffix(".md")
+    markdown_path.write_text(content, encoding="utf-8")
+    run_command(
+        resolve_pandoc()
+        + [
+            str(markdown_path),
+            "--from=gfm-yaml_metadata_block",
+            "--to=asciidoc",
+            "--wrap=none",
+            "--output",
+            str(output_path),
+        ],
+        timeout=120,
+    )
+    return output_path.read_text(encoding="utf-8").strip()
+
+
 def convert_to_asciidoc(
     prepared_markdown: Path,
     asciidoc_path: Path,
@@ -323,8 +415,36 @@ def convert_to_asciidoc(
     author: str | None,
     project_manager: str | None,
     document_date: str | None,
+    versions: list[dict[str, str]],
+    authors: list[dict[str, str]],
+    customers: list[dict[str, str]],
 ) -> None:
     preface = convert_preface_to_asciidoc(template_dir, asciidoc_path.parent, customer)
+    version_template = format_version_history_rows(
+        render_template(template_dir / "version.md", {}),
+        versions,
+        authors or ([{"name": author or "", "position": ""}] if author else []),
+    )
+    participants_template = render_template(
+        template_dir / "participantes.md",
+        {"<documents.customer>": customer},
+    )
+    participants_template = format_template_table_rows(
+        participants_template,
+        "autors",
+        authors,
+    )
+    participants_template = format_template_table_rows(
+        participants_template,
+        "costumers_list",
+        customers,
+    )
+    version_history = convert_template_to_asciidoc(
+        version_template, asciidoc_path.parent / "version.adoc"
+    )
+    participants = convert_template_to_asciidoc(
+        participants_template, asciidoc_path.parent / "participantes.adoc"
+    )
     run_command(
         resolve_pandoc()
         + [
@@ -397,7 +517,7 @@ def convert_to_asciidoc(
     report_content = content[title_end:].lstrip()
     content = (
         f"= {cover_title}\n{author_line}{attributes}\n\n"
-        f"{preface}\n\n<<<\n\ntoc::[]\n\n<<<\n\n{report_content}"
+        f"{preface}\n\n<<<\n\n{version_history}\n\n<<<\n\n{participants}\n\n<<<\n\ntoc::[]\n\n<<<\n\n{report_content}"
     )
     asciidoc_path.write_text(content, encoding="utf-8")
 
@@ -415,6 +535,9 @@ def render_pdf(
     author: str | None,
     project_manager: str | None,
     document_date: str | None,
+    versions: list[dict[str, str]] | None = None,
+    authors: list[dict[str, str]] | None = None,
+    customers: list[dict[str, str]] | None = None,
 ) -> None:
     theme = template_dir / "styles" / "pdf" / "redhat-theme.yml"
     fonts_dir = template_dir / "fonts"
@@ -445,6 +568,9 @@ def render_pdf(
             author,
             project_manager,
             document_date,
+            versions or [{"versionNumber": version, "createdAt": ""}],
+            authors or [],
+            customers or [],
         )
         run_command(
             asciidoctor_command
