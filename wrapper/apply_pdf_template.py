@@ -372,6 +372,8 @@ def format_version_history_rows(
             ).replace(
                 "<versions.created_at>",
                 format_version_date(str(version.get("createdAt") or "")),
+            ).replace(
+                "<version.description>", str(version.get("description") or "")
             )
             for field in ("name", "position"):
                 rendered_row = rendered_row.replace(
