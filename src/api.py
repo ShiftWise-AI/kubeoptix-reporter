@@ -7,7 +7,7 @@ from urllib.parse import quote
 from uuid import uuid4
 
 import anyio
-from fastapi import FastAPI, HTTPException, Path as PathParameter, Query, Request
+from fastapi import FastAPI, HTTPException, Path as PathParameter, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse
 from starlette.background import BackgroundTask
@@ -185,17 +185,16 @@ async def get_report(
 @app.get("/report/{filename}/pdf")
 async def get_report_pdf(
     filename: str = PathParameter(..., description="Nome do arquivo Markdown"),
-    customer: str = Query(PDF_CUSTOMER, description="Nome do cliente"),
-    description: str = Query(PDF_DESCRIPTION, description="Descrição do documento"),
-    version: str = Query(PDF_VERSION, description="Versão do documento"),
-    status: str = Query(PDF_STATUS, description="Status do documento"),
-    author: str = Query(PDF_AUTHOR, description="Autor do documento"),
-    project_manager: str = Query(
-        PDF_PROJECT_MANAGER,
-        alias="project-manager",
-        description="Gerente do projeto",
-    ),
 ) -> FileResponse:
+    # De-para: valores antes recebidos via query params agora vêm das env vars.
+    # customer -> PDF_CUSTOMER, description -> PDF_DESCRIPTION, version -> PDF_VERSION,
+    # status -> PDF_STATUS, author -> PDF_AUTHOR, project_manager -> PDF_PROJECT_MANAGER
+    customer = PDF_CUSTOMER
+    description = PDF_DESCRIPTION
+    version = PDF_VERSION
+    status = PDF_STATUS
+    author = PDF_AUTHOR
+    project_manager = PDF_PROJECT_MANAGER
     reports_dir = REPORTS_DIR.resolve()
 
     if Path(filename).name != filename or not filename.lower().endswith(".md"):
