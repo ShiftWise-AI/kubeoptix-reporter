@@ -143,11 +143,6 @@ async def fetch_pdf_metadata(
             if resolved_document_name is None:
                 return metadata, None, authors, customers, versions
 
-            versions = [
-                version
-                for version in versions
-                if version.get("documentName") == resolved_document_name
-            ]
             document_response = await client.get(f"/documents/{resolved_document_name}")
             if document_response.status_code == 200:
                 document = document_response.json()
@@ -157,22 +152,53 @@ async def fetch_pdf_metadata(
                     document.get("projectManager") or metadata["project_manager"]
                 )
 
-                author_id = document.get("authorId")
-                if author_id:
+                documents_response = await client.get("/documents")
+                report_documents = [document]
+                if documents_response.status_code == 200:
+                    report_documents = [
+                        item
+                        for item in documents_response.json()
+                        if item.get("documentName") == document_name
+                        or item.get("documentName", "").startswith(
+                            f"{document_name}::"
+                        )
+                    ]
+
+                author_ids = dict.fromkeys(
+                    item.get("authorId")
+                    for item in report_documents
+                    if item.get("authorId")
+                )
+                customer_ids = dict.fromkeys(
+                    item.get("costumersListId")
+                    for item in report_documents
+                    if item.get("costumersListId")
+                )
+                authors_by_id = {}
+                for author_id in author_ids:
                     author_response = await client.get(f"/authors/{author_id}")
                     if author_response.status_code == 200:
                         author = author_response.json()
+                        authors_by_id[author_id] = author
                         author_name = author.get("name")
                         metadata["author"] = author_name or metadata["author"]
                         authors.append(author)
 
-                customer_id = document.get("costumersListId")
-                if customer_id:
+                for customer_id in customer_ids:
                     customer_response = await client.get(
                         f"/costumers-list/{customer_id}"
                     )
                     if customer_response.status_code == 200:
                         customers.append(customer_response.json())
+
+                author_id_by_document = {
+                    item.get("documentName"): item.get("authorId")
+                    for item in report_documents
+                }
+                for version in versions:
+                    version["author"] = authors_by_id.get(
+                        author_id_by_document.get(version.get("documentName"))
+                    )
     except httpx.HTTPError:
         logger.exception(
             "Failed to fetch PDF metadata from configurations-api: "

@@ -361,7 +361,12 @@ def format_version_history_rows(
 
     rows = []
     for version in versions:
-        for author in authors or [{}]:
+        version_authors = (
+            [version["author"]]
+            if isinstance(version.get("author"), dict)
+            else authors or [{}]
+        )
+        for author in version_authors:
             rendered_row = row.replace(
                 "<versions.version_number>", str(version.get("versionNumber") or "")
             ).replace(
