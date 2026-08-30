@@ -12,7 +12,10 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
+import cairosvg
 import pypandoc
+from PIL import Image, ImageOps
+
 # Front matter is document metadata, not content: the PDF attributes come from the
 # request instead. Removing it also avoids pandoc aborting on malformed YAML.
 YAML_FRONT_MATTER_RE = re.compile(r"\A\ufeff?---[ \t]*\r?\n.*?\r?\n(?:---|\.\.\.)[ \t]*\r?\n", re.DOTALL)
@@ -166,6 +169,23 @@ def read_png_dimensions(image_path: Path) -> tuple[int, int]:
 def company_logo_width(image_path: Path) -> int:
     width, height = read_png_dimensions(image_path)
     return max(1, round(min(520, 267 * width / height)))
+
+
+def normalize_company_logo(image_path: Path, output_path: Path) -> None:
+    try:
+        source_path = image_path
+        if image_path.suffix.lower() == ".svg":
+            cairosvg.svg2png(
+                bytestring=image_path.read_bytes(),
+                write_to=str(output_path),
+            )
+            source_path = output_path
+        with Image.open(source_path) as source_image:
+            image = ImageOps.exif_transpose(source_image)
+            image.thumbnail((1600, 600), Image.Resampling.LANCZOS)
+            image.save(output_path, format="PNG", optimize=True)
+    except (cairosvg.CairoSVGError, OSError, ValueError) as exc:
+        raise TemplateError(f"Logomarca invalida: {image_path}") from exc
 
 
 IMAGE_BLOCK_RE = re.compile(r"^image::(?P<target>\S+)\[(?P<attrs>[^\]]*)\]$", re.MULTILINE)
@@ -502,9 +522,10 @@ def convert_to_asciidoc(
     if company_logo:
         logo_width = company_logo_width(company_logo)
         attribute_lines.append(
-            f":title-logo-image: image:{company_logo}"
+            f":customerlogo: image:{company_logo}"
             f"[Logomarca da empresa,width={logo_width},align=center]"
         )
+        attribute_lines.append(":title-logo-image: {customerlogo}")
     if project_manager:
         attribute_lines.append(
             f":project-manager: {quote_attribute(project_manager)}"
@@ -554,6 +575,10 @@ def render_pdf(
         temp_dir = Path(temp_name)
         prepared_path = prepare_markdown(markdown_path, temp_dir)
         asciidoc_path = temp_dir / f"{markdown_path.stem}.adoc"
+        normalized_logo = None
+        if company_logo:
+            normalized_logo = temp_dir / "customer-logo.png"
+            normalize_company_logo(company_logo, normalized_logo)
         convert_to_asciidoc(
             prepared_path,
             asciidoc_path,
@@ -564,7 +589,7 @@ def render_pdf(
             version,
             status,
             confidentiality,
-            company_logo,
+            normalized_logo,
             author,
             project_manager,
             document_date,
@@ -651,8 +676,8 @@ def main() -> int:
     if company_logo and not company_logo.is_file():
         print(f"Erro: logomarca nao encontrada: {company_logo}", file=sys.stderr)
         return 1
-    if company_logo and company_logo.suffix.lower() != ".png":
-        print("Erro: a logomarca deve ter extensao .png", file=sys.stderr)
+    if company_logo and company_logo.suffix.lower() not in {".png", ".jpeg", ".jpg", ".webp", ".svg"}:
+        print("Erro: a logomarca deve ser PNG, JPEG, WEBP ou SVG", file=sys.stderr)
         return 1
     if args.document_date and not DOCUMENT_DATE_RE.fullmatch(args.document_date):
         print(

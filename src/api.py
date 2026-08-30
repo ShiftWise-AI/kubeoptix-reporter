@@ -78,6 +78,19 @@ def current_document_date() -> str:
     return f"{MONTH_NAMES_PT_BR[current_date.month - 1]} de {current_date.year}"
 
 
+def detect_logo_suffix(content: bytes, content_type: str) -> str | None:
+    normalized_content_type = content_type.split(";", 1)[0].strip().lower()
+    if content.startswith(b"\x89PNG\r\n\x1a\n"):
+        return ".png"
+    if content.startswith(b"\xff\xd8\xff"):
+        return ".jpg"
+    if content.startswith(b"RIFF") and content[8:12] == b"WEBP":
+        return ".webp"
+    if normalized_content_type == "image/svg+xml" or b"<svg" in content[:4096].lower():
+        return ".svg"
+    return None
+
+
 async def fetch_pdf_metadata(
     document_name: str, version_number: str
 ) -> tuple[
@@ -86,6 +99,7 @@ async def fetch_pdf_metadata(
     list[dict[str, str]],
     list[dict[str, str]],
     list[dict[str, str]],
+    tuple[bytes, str] | None,
 ]:
     """De-para: customer/description/projectManager/author vêm de /documents e
     /authors; version e status usam o versionNumber informado por parâmetro.
@@ -105,6 +119,7 @@ async def fetch_pdf_metadata(
     authors: list[dict[str, str]] = []
     customers: list[dict[str, str]] = []
     versions: list[dict[str, str]] = []
+    logo: tuple[bytes, str] | None = None
 
     try:
         async with httpx.AsyncClient(base_url=CONFIGURATIONS_API_URL, timeout=5.0) as client:
@@ -141,7 +156,7 @@ async def fetch_pdf_metadata(
                         break
 
             if resolved_document_name is None:
-                return metadata, None, authors, customers, versions
+                return metadata, None, authors, customers, versions, logo
 
             document_response = await client.get(f"/documents/{resolved_document_name}")
             if document_response.status_code == 200:
@@ -199,6 +214,17 @@ async def fetch_pdf_metadata(
                     version["author"] = authors_by_id.get(
                         author_id_by_document.get(version.get("documentName"))
                     )
+
+                logo_response = await client.get("/system-settings/logo")
+                if logo_response.status_code == 200:
+                    logo_suffix = detect_logo_suffix(
+                        logo_response.content,
+                        logo_response.headers.get("content-type", ""),
+                    )
+                    if logo_suffix:
+                        logo = (logo_response.content, logo_suffix)
+                    else:
+                        logger.warning("Ignoring unsupported system logo format")
     except httpx.HTTPError:
         logger.exception(
             "Failed to fetch PDF metadata from configurations-api: "
@@ -207,7 +233,7 @@ async def fetch_pdf_metadata(
             version_number,
         )
 
-    return metadata, markdown_content, authors, customers, versions
+    return metadata, markdown_content, authors, customers, versions, logo
 
 
 @app.api_route("/report/{filename}", methods=["PUT", "POST"])
@@ -330,7 +356,7 @@ async def get_report_pdf(
         )
 
     document_name = Path(filename).stem
-    metadata, markdown_content, authors, customers, versions = (
+    metadata, markdown_content, authors, customers, versions, logo = (
         await fetch_pdf_metadata(document_name, version_number)
     )
     if markdown_content is None:
@@ -349,6 +375,13 @@ async def get_report_pdf(
         temporary_md_file.write(markdown_content)
     temporary_md = Path(temporary_md_name)
 
+    temporary_logo = None
+    if logo:
+        temporary_logo_fd, temporary_logo_name = tempfile.mkstemp(suffix=logo[1])
+        with os.fdopen(temporary_logo_fd, "wb") as temporary_logo_file:
+            temporary_logo_file.write(logo[0])
+        temporary_logo = Path(temporary_logo_name)
+
     temporary_fd, temporary_name = tempfile.mkstemp(
         prefix=f"{document_name}-",
         suffix=".pdf",
@@ -366,7 +399,7 @@ async def get_report_pdf(
             metadata["version"],
             metadata["status"],
             PDF_CONFIDENTIALITY,
-            None,
+            temporary_logo,
             metadata["author"],
             metadata["project_manager"],
             current_document_date(),
@@ -383,6 +416,8 @@ async def get_report_pdf(
         raise
     finally:
         temporary_md.unlink(missing_ok=True)
+        if temporary_logo:
+            temporary_logo.unlink(missing_ok=True)
 
     pdf_filename = f"{document_name}.pdf"
     return FileResponse(
