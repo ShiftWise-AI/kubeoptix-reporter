@@ -80,7 +80,7 @@ def current_document_date() -> str:
 
 async def fetch_pdf_metadata(
     document_name: str, version_number: str
-) -> tuple[dict[str, str], str | None]:
+) -> tuple[dict[str, str], str | None, list[dict[str, str]], list[dict[str, str]]]:
     """De-para: customer/description/projectManager/author vêm de /documents e
     /authors; version e status usam o versionNumber informado por parâmetro.
     confidentiality permanece com o valor default. O conteúdo Markdown, antes
@@ -96,6 +96,8 @@ async def fetch_pdf_metadata(
         "project_manager": PDF_PROJECT_MANAGER,
     }
     markdown_content: str | None = None
+    authors: list[dict[str, str]] = []
+    customers: list[dict[str, str]] = []
 
     try:
         async with httpx.AsyncClient(base_url=CONFIGURATIONS_API_URL, timeout=5.0) as client:
@@ -114,10 +116,16 @@ async def fetch_pdf_metadata(
                     ):
                         resolved_document_name = version_document_name
                         markdown_content = version.get("markdownContent")
+                        metadata["version_created_at"] = (
+                            version.get("createdAt")
+                            or version.get("created_at")
+                            or version.get("screated_at")
+                            or ""
+                        )
                         break
 
             if resolved_document_name is None:
-                return metadata, None
+                return metadata, None, authors, customers
 
             document_response = await client.get(f"/documents/{resolved_document_name}")
             if document_response.status_code == 200:
@@ -132,8 +140,29 @@ async def fetch_pdf_metadata(
                 if author_id:
                     author_response = await client.get(f"/authors/{author_id}")
                     if author_response.status_code == 200:
-                        author_name = author_response.json().get("name")
+                        author = author_response.json()
+                        author_name = author.get("name")
                         metadata["author"] = author_name or metadata["author"]
+                        authors.append(author)
+
+                document_id = document.get("id") or resolved_document_name
+                authors_response = await client.get("/authors")
+                if authors_response.status_code == 200:
+                    authors = [
+                        author
+                        for author in authors_response.json()
+                        if author.get("documentId") == document_id
+                        or author.get("documentName") == resolved_document_name
+                    ] or authors
+
+                customers_response = await client.get("/costumers")
+                if customers_response.status_code == 200:
+                    customers = [
+                        customer
+                        for customer in customers_response.json()
+                        if customer.get("documentId") == document_id
+                        or customer.get("documentName") == resolved_document_name
+                    ]
     except httpx.HTTPError:
         logger.exception(
             "Failed to fetch PDF metadata from configurations-api: "
@@ -142,7 +171,7 @@ async def fetch_pdf_metadata(
             version_number,
         )
 
-    return metadata, markdown_content
+    return metadata, markdown_content, authors, customers
 
 
 @app.api_route("/report/{filename}", methods=["PUT", "POST"])
@@ -265,7 +294,9 @@ async def get_report_pdf(
         )
 
     document_name = Path(filename).stem
-    metadata, markdown_content = await fetch_pdf_metadata(document_name, version_number)
+    metadata, markdown_content, authors, customers = await fetch_pdf_metadata(
+        document_name, version_number
+    )
     if markdown_content is None:
         raise HTTPException(
             status_code=404,
@@ -303,6 +334,10 @@ async def get_report_pdf(
             metadata["author"],
             metadata["project_manager"],
             current_document_date(),
+            version_number,
+            metadata.get("version_created_at", ""),
+            authors,
+            customers,
         )
     except TemplateError as exc:
         temporary_pdf.unlink(missing_ok=True)
