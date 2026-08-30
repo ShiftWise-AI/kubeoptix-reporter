@@ -80,7 +80,13 @@ def current_document_date() -> str:
 
 async def fetch_pdf_metadata(
     document_name: str, version_number: str
-) -> tuple[dict[str, str], str | None, list[dict[str, str]], list[dict[str, str]]]:
+) -> tuple[
+    dict[str, str],
+    str | None,
+    list[dict[str, str]],
+    list[dict[str, str]],
+    list[dict[str, str]],
+]:
     """De-para: customer/description/projectManager/author vêm de /documents e
     /authors; version e status usam o versionNumber informado por parâmetro.
     confidentiality permanece com o valor default. O conteúdo Markdown, antes
@@ -98,20 +104,30 @@ async def fetch_pdf_metadata(
     markdown_content: str | None = None
     authors: list[dict[str, str]] = []
     customers: list[dict[str, str]] = []
+    versions: list[dict[str, str]] = []
 
     try:
         async with httpx.AsyncClient(base_url=CONFIGURATIONS_API_URL, timeout=5.0) as client:
             versions_response = await client.get("/versions")
             resolved_document_name: str | None = None
             if versions_response.status_code == 200:
-                for version in versions_response.json():
+                versions = [
+                    version
+                    for version in versions_response.json()
+                    if (
+                        isinstance(version.get("documentName"), str)
+                        and (
+                            version["documentName"] == document_name
+                            or version["documentName"].startswith(
+                                f"{document_name}::"
+                            )
+                        )
+                    )
+                ]
+                for version in versions:
                     version_document_name = version.get("documentName")
                     if (
-                        isinstance(version_document_name, str)
-                        and (
-                            version_document_name == document_name
-                            or version_document_name.startswith(f"{document_name}::")
-                        )
+                        version_document_name
                         and str(version.get("versionNumber")) == version_number
                     ):
                         resolved_document_name = version_document_name
@@ -125,8 +141,13 @@ async def fetch_pdf_metadata(
                         break
 
             if resolved_document_name is None:
-                return metadata, None, authors, customers
+                return metadata, None, authors, customers, versions
 
+            versions = [
+                version
+                for version in versions
+                if version.get("documentName") == resolved_document_name
+            ]
             document_response = await client.get(f"/documents/{resolved_document_name}")
             if document_response.status_code == 200:
                 document = document_response.json()
@@ -145,24 +166,13 @@ async def fetch_pdf_metadata(
                         metadata["author"] = author_name or metadata["author"]
                         authors.append(author)
 
-                document_id = document.get("id") or resolved_document_name
-                authors_response = await client.get("/authors")
-                if authors_response.status_code == 200:
-                    authors = [
-                        author
-                        for author in authors_response.json()
-                        if author.get("documentId") == document_id
-                        or author.get("documentName") == resolved_document_name
-                    ] or authors
-
-                customers_response = await client.get("/costumers")
-                if customers_response.status_code == 200:
-                    customers = [
-                        customer
-                        for customer in customers_response.json()
-                        if customer.get("documentId") == document_id
-                        or customer.get("documentName") == resolved_document_name
-                    ]
+                customer_id = document.get("costumersListId")
+                if customer_id:
+                    customer_response = await client.get(
+                        f"/costumers-list/{customer_id}"
+                    )
+                    if customer_response.status_code == 200:
+                        customers.append(customer_response.json())
     except httpx.HTTPError:
         logger.exception(
             "Failed to fetch PDF metadata from configurations-api: "
@@ -171,7 +181,7 @@ async def fetch_pdf_metadata(
             version_number,
         )
 
-    return metadata, markdown_content, authors, customers
+    return metadata, markdown_content, authors, customers, versions
 
 
 @app.api_route("/report/{filename}", methods=["PUT", "POST"])
@@ -294,8 +304,8 @@ async def get_report_pdf(
         )
 
     document_name = Path(filename).stem
-    metadata, markdown_content, authors, customers = await fetch_pdf_metadata(
-        document_name, version_number
+    metadata, markdown_content, authors, customers, versions = (
+        await fetch_pdf_metadata(document_name, version_number)
     )
     if markdown_content is None:
         raise HTTPException(
@@ -334,8 +344,7 @@ async def get_report_pdf(
             metadata["author"],
             metadata["project_manager"],
             current_document_date(),
-            version_number,
-            metadata.get("version_created_at", ""),
+            versions,
             authors,
             customers,
         )

@@ -2,4 +2,4 @@
 
 | Versão | Data | Contribuição | Função | Descrição |
 | --- | --- | --- | --- | --- |
-| <versions.version_number> | <version.screated_at> | <authors.name> | <authors.position> | <version.description> |
+| <versions.version_number> | <versions.created_at> | <authors.name> | <authors.position> | <version.description> |

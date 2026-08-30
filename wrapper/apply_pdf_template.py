@@ -9,6 +9,7 @@ import struct
 import subprocess
 import sys
 import tempfile
+from datetime import datetime
 from pathlib import Path
 
 import pypandoc
@@ -340,6 +341,41 @@ def format_template_table_rows(
     return content.replace(row, "\n".join(rows))
 
 
+def format_version_date(value: str) -> str:
+    if not value:
+        return ""
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00")).strftime("%d/%m/%Y")
+    except ValueError:
+        return value
+
+
+def format_version_history_rows(
+    content: str,
+    versions: list[dict[str, str]],
+    authors: list[dict[str, str]],
+) -> str:
+    row = next((line for line in content.splitlines() if "<versions." in line), None)
+    if row is None:
+        return content
+
+    rows = []
+    for version in versions:
+        for author in authors or [{}]:
+            rendered_row = row.replace(
+                "<versions.version_number>", str(version.get("versionNumber") or "")
+            ).replace(
+                "<versions.created_at>",
+                format_version_date(str(version.get("createdAt") or "")),
+            )
+            for field in ("name", "position"):
+                rendered_row = rendered_row.replace(
+                    f"<authors.{field}>", str(author.get(field) or "")
+                )
+            rows.append(rendered_row)
+    return content.replace(row, "\n".join(rows))
+
+
 def convert_template_to_asciidoc(content: str, output_path: Path) -> str:
     markdown_path = output_path.with_suffix(".md")
     markdown_path.write_text(content, encoding="utf-8")
@@ -372,20 +408,15 @@ def convert_to_asciidoc(
     author: str | None,
     project_manager: str | None,
     document_date: str | None,
-    version_number: str,
-    version_created_at: str,
+    versions: list[dict[str, str]],
     authors: list[dict[str, str]],
     customers: list[dict[str, str]],
 ) -> None:
     preface = convert_preface_to_asciidoc(template_dir, asciidoc_path.parent, customer)
-    version_template = render_template(
-        template_dir / "version.md",
-        {
-            "<versions.version_number>": version_number,
-            "<version.screated_at>": version_created_at,
-            "<authors.name>": (authors[0].get("name") if authors else author) or "",
-            "<authors.position>": (authors[0].get("position") if authors else "") or "",
-        },
+    version_template = format_version_history_rows(
+        render_template(template_dir / "version.md", {}),
+        versions,
+        authors or ([{"name": author or "", "position": ""}] if author else []),
     )
     participants_template = render_template(
         template_dir / "participantes.md",
@@ -497,8 +528,7 @@ def render_pdf(
     author: str | None,
     project_manager: str | None,
     document_date: str | None,
-    version_number: str = "1.0",
-    version_created_at: str = "",
+    versions: list[dict[str, str]] | None = None,
     authors: list[dict[str, str]] | None = None,
     customers: list[dict[str, str]] | None = None,
 ) -> None:
@@ -531,8 +561,7 @@ def render_pdf(
             author,
             project_manager,
             document_date,
-            version_number,
-            version_created_at,
+            versions or [{"versionNumber": version, "createdAt": ""}],
             authors or [],
             customers or [],
         )
