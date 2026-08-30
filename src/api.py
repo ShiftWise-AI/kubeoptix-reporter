@@ -99,7 +99,27 @@ async def fetch_pdf_metadata(
 
     try:
         async with httpx.AsyncClient(base_url=CONFIGURATIONS_API_URL, timeout=5.0) as client:
-            document_response = await client.get(f"/documents/{document_name}")
+            versions_response = await client.get("/versions")
+            resolved_document_name: str | None = None
+            if versions_response.status_code == 200:
+                for version in versions_response.json():
+                    version_document_name = version.get("documentName")
+                    if (
+                        isinstance(version_document_name, str)
+                        and (
+                            version_document_name == document_name
+                            or version_document_name.startswith(f"{document_name}::")
+                        )
+                        and str(version.get("versionNumber")) == version_number
+                    ):
+                        resolved_document_name = version_document_name
+                        markdown_content = version.get("markdownContent")
+                        break
+
+            if resolved_document_name is None:
+                return metadata, None
+
+            document_response = await client.get(f"/documents/{resolved_document_name}")
             if document_response.status_code == 200:
                 document = document_response.json()
                 metadata["customer"] = document.get("costumer") or metadata["customer"]
@@ -114,16 +134,6 @@ async def fetch_pdf_metadata(
                     if author_response.status_code == 200:
                         author_name = author_response.json().get("name")
                         metadata["author"] = author_name or metadata["author"]
-
-            versions_response = await client.get("/versions")
-            if versions_response.status_code == 200:
-                for version in versions_response.json():
-                    if (
-                        version.get("documentName") == document_name
-                        and version.get("versionNumber") == version_number
-                    ):
-                        markdown_content = version.get("markdownContent")
-                        break
     except httpx.HTTPError:
         logger.exception(
             "Failed to fetch PDF metadata from configurations-api: "
