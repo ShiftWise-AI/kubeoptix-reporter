@@ -1,15 +1,16 @@
 # KubeOptix Reporter
 
-KubeOptix Reporter is a FastAPI-based document reporting service for generating PDF documents from Markdown content and serving them in OpenShift or Kubernetes environments.
+KubeOptix Reporter is a FastAPI service that stores Markdown reports and generates Red Hat Consulting-style PDF documents. It is designed to run as a non-root container on OpenShift and can be deployed with the Helm chart in this repository.
 
 ## Overview
 
 The project combines:
 
-- a FastAPI API for uploading and retrieving Markdown reports
-- a PDF rendering pipeline with Red Hat-themed report formatting
-- utilities to convert Markdown into PDF, DOCX, Excel tables, and PNG images
-- a Helm chart for deployment in OpenShift
+- a FastAPI API for saving and retrieving Markdown reports
+- a PDF endpoint that resolves document versions and metadata from a configurations API
+- a PDF rendering pipeline with Red Hat report formatting, images, captions, and optional logo support
+- command-line utilities to convert Markdown into PDF, DOCX, Excel tables, and PNG images
+- an OpenShift-oriented Helm chart with a BuildConfig, ImageStream, StatefulSet, Service, probes, and persistent storage
 
 ## Repository structure
 
@@ -22,16 +23,20 @@ The project combines:
   - `apply_pdf_template.py`: applies the report template and generates the final PDF
 - `template/`: template assets, styles, fonts, and Markdown documents used for report generation
 - `helm/kubeoptix-reporter/`: Helm chart for deployment
+- `install.sh`: validates access to OpenShift, installs or upgrades the Helm release, starts the build, and waits for the rollout
+- `requeriments.txt`: pinned Python runtime dependencies
 
 ## Requirements
 
 - Python 3.11+
 - `pip` and a virtual environment
-- system tools used by the wrappers, depending on the conversion flow:
-  - `ImageMagick` (`convert` command)
-  - `pandoc`
-  - `weasyprint`
-  - `asciidoctor-pdf` and Ruby gems for PDF generation
+- local PDF generation also requires the tools used by the selected wrapper:
+   - `pandoc` (the API can use the bundled copy supplied by `pypandoc_binary`)
+   - `weasyprint` for `wrapper/md2pdf.py`
+   - Ruby and the `asciidoctor-pdf` and `rouge` gems for the Red Hat template renderer
+   - `cairosvg`, Pillow, and the other Python packages in `requeriments.txt` for template image processing
+
+The provided `Containerfile` installs Python, Ruby, the required native libraries, Python dependencies, and the `asciidoctor-pdf` and `rouge` gems. The local host still needs any commands required by the wrapper being run.
 
 ## Local setup
 
@@ -60,6 +65,12 @@ The project combines:
    curl http://localhost:8000/health
    ```
 
+The API listens on port `8000` by default. For local execution, create the configured report directory before saving a report if it does not already exist:
+
+```bash
+mkdir -p /app/data/reports
+```
+
 ## API endpoints
 
 ### Health check
@@ -83,11 +94,24 @@ POST /report/{filename}
 
 The request body is the Markdown content. The filename must end in `.md`.
 
+```bash
+curl --data-binary @report.md \
+   -X PUT http://localhost:8000/report/report.md
+```
+
+The endpoint accepts only a plain filename ending in `.md`; path traversal and subdirectories are rejected. The file is written atomically and returns:
+
+```json
+{ "filename": "report.md", "status": "saved" }
+```
+
 ### Download a Markdown report
 
 ```bash
 GET /report/{filename}
 ```
+
+The response has media type `text/markdown` and returns `404` when the file does not exist.
 
 ### Generate a PDF report
 
@@ -95,7 +119,22 @@ GET /report/{filename}
 GET /report/{filename}/pdf?versionNumber=1.0
 ```
 
-This endpoint fetches the matching document metadata and version content from the configured configuration service and renders the final PDF.
+This endpoint does not render the Markdown file stored by the upload endpoint. It uses the filename stem as `documentName`, then queries the configured configurations API:
+
+1. `GET /versions` to find the requested `versionNumber` and its `markdownContent`.
+2. `GET /documents/{documentName}` to resolve the title, customer, and project manager.
+3. `GET /documents` to find related document records.
+4. `GET /authors/{authorId}` and `GET /costumers-list/{customerListId}` for report participants.
+5. `GET /system-settings/logo` for an optional PNG, JPEG, WebP, or SVG logo.
+
+The Markdown content returned by `/versions` is rendered with the template under `PDF_TEMPLATE_DIR`. A missing document version returns `404`; rendering failures return `503`.
+
+```bash
+curl -f -o report.pdf \
+   "http://localhost:8000/report/report.md/pdf?versionNumber=1.0"
+```
+
+The configurations API must be reachable from the reporter container. Its default base URL is `http://configurations-api:8000`.
 
 ## Environment variables
 
@@ -113,6 +152,8 @@ The service uses the following variables:
 - `PDF_PROJECT_MANAGER`: default project manager value
 - `PDF_CONFIDENTIALITY`: default confidentiality value
 
+The PDF metadata defaults are used when the configurations API does not provide a corresponding value. `PDF_CONFIDENTIALITY` is currently always passed to the renderer as the confidentiality value.
+
 ## Wrapper tools
 
 ### Convert Markdown to PDF
@@ -121,6 +162,8 @@ The service uses the following variables:
 python wrapper/md2pdf.py input.md output.pdf
 python wrapper/md2pdf.py ./docs ./pdf-output
 ```
+
+This standalone wrapper uses Pandoc with WeasyPrint and is separate from the API's Red Hat template flow.
 
 ### Convert Markdown to DOCX
 
@@ -150,10 +193,39 @@ The Helm chart is located in:
 
 - `helm/kubeoptix-reporter/`
 
-It is intended for OpenShift/Kubernetes deployment and includes the application manifest and supporting resources.
+It is intended primarily for OpenShift and includes:
+
+- a `BuildConfig` that builds `Containerfile` from the configured Git repository;
+- an `ImageStream` and a `StatefulSet` running one replica by default;
+- a `ClusterIP` service on port `8000`;
+- startup, readiness, and liveness probes using `/health`;
+- an optional existing PVC mounted at `/app/data`, with reports stored at `/app/data/reports`;
+- a single-replica policy enabled by default.
+
+The example values expect an existing Git authentication Secret named `github-auth` and an existing PVC named `harvester-app-data`. Change these values for another cluster or disable the build/persistence features when appropriate.
+
+### Install with `install.sh`
+
+The script requires `oc`, `helm`, an authenticated OpenShift session, the Git Secret, and the values file:
+
+```bash
+oc login <cluster-url>
+./install.sh --values helm/kubeoptix-reporter/values.example.yaml
+```
+
+The script creates the `shiftwise-ai` namespace when needed, runs `helm lint`, installs or upgrades the release, starts or follows the OpenShift build, waits for the rollout, and prints the service name. Override defaults with `NAMESPACE`, `RELEASE_NAME`, `TIMEOUT`, and the cleanup flags documented in the script's `--help` output.
+
+For a plain Helm installation without the build helper:
+
+```bash
+helm lint helm/kubeoptix-reporter -f values.yaml
+helm upgrade --install kubeoptix-reporter helm/kubeoptix-reporter \
+   --namespace shiftwise-ai --create-namespace -f values.yaml
+```
 
 ## Notes
 
-- The project is designed for OpenShift-style environments and expects a configuration service to provide document metadata and version history.
+- The project is designed for OpenShift-style environments and expects a configurations API to provide document metadata, version history, participant data, and optionally a logo.
 - The conversion wrappers may require package installation on the host environment before use.
-- The project uses English as the code-comment language, while the generated document metadata can be customized by environment variables and API responses.
+- The container runs as UID `1001` after the image build and keeps `/app` group-writable for OpenShift-compatible arbitrary UID behavior.
+- The project uses English as the code-comment language, while generated document content and metadata can be customized by environment variables and API responses.
