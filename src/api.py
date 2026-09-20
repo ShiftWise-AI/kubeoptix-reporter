@@ -14,6 +14,7 @@ from fastapi.responses import FileResponse, StreamingResponse
 from starlette.background import BackgroundTask
 
 from wrapper.apply_pdf_template import TemplateError, render_pdf
+from wrapper.i18n import UnsupportedLocaleError, format_document_date, validate_locale
 
 REPORTS_DIR = Path(os.getenv("DATA_DIR", "/app/data/reports"))
 TEMPLATE_DIR = Path(os.getenv("PDF_TEMPLATE_DIR", "/app/template"))
@@ -25,20 +26,6 @@ PDF_STATUS = os.getenv("PDF_STATUS", "final")
 PDF_AUTHOR = os.getenv("PDF_AUTHOR", "Autor")
 PDF_PROJECT_MANAGER = os.getenv("PDF_PROJECT_MANAGER", "Gerente do projeto")
 PDF_CONFIDENTIALITY = os.getenv("PDF_CONFIDENTIALITY", "Confidencial")
-MONTH_NAMES_PT_BR = (
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro",
-)
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 LOG_LEVELS = {
     "DEBUG": logging.DEBUG,
@@ -73,9 +60,35 @@ async def health_check():
     return {"status": "ok"}
 
 
-def current_document_date() -> str:
+async def fetch_report_locale() -> str:
+    """Fetch and validate the report locale from /system-settings.
+
+    The `language` field is treated as a BCP 47 locale and must be one of the
+    supported locales. No fallback is applied: a missing/invalid `language`
+    or an unavailable /system-settings endpoint raises an HTTPException,
+    following the same error-handling pattern used elsewhere in this API.
+    """
+    try:
+        async with httpx.AsyncClient(base_url=CONFIGURATIONS_API_URL, timeout=5.0) as client:
+            response = await client.get("/system-settings")
+            response.raise_for_status()
+            language = response.json().get("language")
+    except httpx.HTTPError as exc:
+        logger.exception("Failed to fetch system settings from configurations-api")
+        raise HTTPException(
+            status_code=503,
+            detail="Não foi possível obter as configurações do sistema em /system-settings",
+        ) from exc
+
+    try:
+        return validate_locale(language)
+    except UnsupportedLocaleError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+def current_document_date(locale: str) -> str:
     current_date = datetime.now().astimezone()
-    return f"{MONTH_NAMES_PT_BR[current_date.month - 1]} de {current_date.year}"
+    return format_document_date(locale, current_date)
 
 
 def detect_logo_suffix(content: bytes, content_type: str) -> str | None:
@@ -355,6 +368,8 @@ async def get_report_pdf(
             detail="Informe somente o nome de um arquivo com extensão .md",
         )
 
+    locale = await fetch_report_locale()
+
     document_name = Path(filename).stem
     metadata, markdown_content, authors, customers, versions, logo = (
         await fetch_pdf_metadata(document_name, version_number)
@@ -402,10 +417,11 @@ async def get_report_pdf(
             temporary_logo,
             metadata["author"],
             metadata["project_manager"],
-            current_document_date(),
+            current_document_date(locale),
             versions,
             authors,
             customers,
+            locale,
         )
     except TemplateError as exc:
         temporary_pdf.unlink(missing_ok=True)

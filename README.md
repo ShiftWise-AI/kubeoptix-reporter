@@ -21,6 +21,7 @@ The project combines:
   - `md2excel.py`: convert Markdown tables to Excel worksheets
   - `md2images.py`: extract images from Markdown and convert them to PNG
   - `apply_pdf_template.py`: applies the report template and generates the final PDF
+  - `i18n/`: locale catalogs and rendering helpers used to localize the generated report (`pt-BR`, `en-US`, `es-ES`, `it-IT`)
 - `template/`: template assets, styles, fonts, and Markdown documents used for report generation
 - `helm/kubeoptix-reporter/`: Helm chart for deployment
 - `install.sh`: validates access to OpenShift, installs or upgrades the Helm release, starts the build, and waits for the rollout
@@ -121,13 +122,14 @@ GET /report/{filename}/pdf?versionNumber=1.0
 
 This endpoint does not render the Markdown file stored by the upload endpoint. It uses the filename stem as `documentName`, then queries the configured configurations API:
 
-1. `GET /versions` to find the requested `versionNumber` and its `markdownContent`.
-2. `GET /documents/{documentName}` to resolve the title, customer, and project manager.
-3. `GET /documents` to find related document records.
-4. `GET /authors/{authorId}` and `GET /costumers-list/{customerListId}` for report participants.
-5. `GET /system-settings/logo` for an optional PNG, JPEG, WebP, or SVG logo.
+1. `GET /system-settings` to resolve the report locale from the `language` field (BCP 47). Supported locales are `pt-BR`, `en-US`, `es-ES`, and `it-IT`; any other value, an empty/missing `language`, or an unreachable `/system-settings` fails the request instead of silently falling back to another locale.
+2. `GET /versions` to find the requested `versionNumber` and its `markdownContent`.
+3. `GET /documents/{documentName}` to resolve the title, customer, and project manager.
+4. `GET /documents` to find related document records.
+5. `GET /authors/{authorId}` and `GET /costumers-list/{customerListId}` for report participants.
+6. `GET /system-settings/logo` for an optional PNG, JPEG, WebP, or SVG logo.
 
-The Markdown content returned by `/versions` is rendered with the template under `PDF_TEMPLATE_DIR`. A missing document version returns `404`; rendering failures return `503`.
+The Markdown content returned by `/versions` is rendered with the template under `PDF_TEMPLATE_DIR`. All fixed report text (preface, participants and version-history sections, table of contents/figure/table captions, and the cover date) is generated from the locale resolved above via [`wrapper/i18n`](wrapper/i18n). A missing document version returns `404`; an unsupported/missing locale returns `400`; an unreachable `/system-settings` or rendering failures return `503`.
 
 ```bash
 curl -f -o report.pdf \
@@ -135,6 +137,17 @@ curl -f -o report.pdf \
 ```
 
 The configurations API must be reachable from the reporter container. Its default base URL is `http://configurations-api:8000`.
+
+### Report localization (i18n)
+
+The generated report is fully localized based on the `language` field returned by the configurations API's `/system-settings` endpoint, treated as a BCP 47 locale. Only four locales are supported, with no fallback for any other value:
+
+- `pt-BR`
+- `en-US`
+- `es-ES`
+- `it-IT`
+
+Translations are centralized in [`wrapper/i18n/`](wrapper/i18n), with one message-catalog module per locale (`pt_br.py`, `en_us.py`, `es_es.py`, `it_it.py`) and shared rendering/validation helpers in `wrapper/i18n/__init__.py`. This is the single place to add or adjust translated report text; the Markdown/AsciiDoc generation code in `wrapper/apply_pdf_template.py` never hardcodes locale-specific strings.
 
 ## Environment variables
 
@@ -185,7 +198,18 @@ python wrapper/md2excel.py --md-file report.md --files-dir ./files --inventory-e
 
 ## PDF generation details
 
-The PDF renderer reads Markdown input, removes front matter if present, materializes embedded images, applies the Red Hat report template, and generates an A4 PDF using `pandoc` and `asciidoctor-pdf`.
+The PDF renderer reads Markdown input, removes front matter if present, materializes embedded images, applies the Red Hat report template, and generates an A4 PDF using `pandoc` and `asciidoctor-pdf`. All fixed report text is localized through [`wrapper/i18n`](wrapper/i18n) based on the locale resolved from `/system-settings` (see [Report localization (i18n)](#report-localization-i18n)).
+
+## Running tests
+
+Install the test dependencies and run `pytest`:
+
+```bash
+pip install -r requeriments.txt -r requirements-dev.txt
+pytest
+```
+
+The suite covers the `wrapper/i18n` catalogs for all four supported locales and the `/system-settings` locale-resolution logic in `src/api.py`, including unsupported/missing/empty `language` values and an unavailable configurations API.
 
 ## Helm deployment
 
