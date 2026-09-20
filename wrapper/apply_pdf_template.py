@@ -16,6 +16,11 @@ import cairosvg
 import pypandoc
 from PIL import Image, ImageOps
 
+try:
+    from wrapper import i18n
+except ModuleNotFoundError:
+    import i18n
+
 # Front matter is document metadata, not content: the PDF attributes come from the
 # request instead. Removing it also avoids pandoc aborting on malformed YAML.
 YAML_FRONT_MATTER_RE = re.compile(r"\A\ufeff?---[ \t]*\r?\n.*?\r?\n(?:---|\.\.\.)[ \t]*\r?\n", re.DOTALL)
@@ -292,16 +297,11 @@ def apply_image_size_constraints(content: str, base_dir: Path) -> str:
 
 
 def convert_preface_to_asciidoc(
-    template_dir: Path,
     temp_dir: Path,
     customer: str,
+    locale: str,
 ) -> str:
-    preface_path = template_dir / "prefacio.md"
-    if not preface_path.is_file():
-        raise TemplateError(f"Prefacio nao encontrado: {preface_path}")
-
-    preface_content = strip_yaml_front_matter(preface_path.read_text(encoding="utf-8"))
-    preface_content = preface_content.replace("<customer>", customer)
+    preface_content = i18n.render_preface_markdown(locale, customer)
     prepared_preface = temp_dir / "prefacio.md"
     prepared_preface.write_text(preface_content, encoding="utf-8")
     asciidoc_preface = temp_dir / "prefacio.adoc"
@@ -328,16 +328,6 @@ def convert_preface_to_asciidoc(
         flags=re.MULTILINE,
     )
     return content.strip()
-
-
-def render_template(template_path: Path, values: dict[str, str]) -> str:
-    if not template_path.is_file():
-        raise TemplateError(f"Template nao encontrado: {template_path}")
-
-    content = strip_yaml_front_matter(template_path.read_text(encoding="utf-8"))
-    for placeholder, value in values.items():
-        content = content.replace(placeholder, value)
-    return content
 
 
 def format_template_table_rows(
@@ -438,17 +428,15 @@ def convert_to_asciidoc(
     versions: list[dict[str, str]],
     authors: list[dict[str, str]],
     customers: list[dict[str, str]],
+    locale: str,
 ) -> None:
-    preface = convert_preface_to_asciidoc(template_dir, asciidoc_path.parent, customer)
+    preface = convert_preface_to_asciidoc(asciidoc_path.parent, customer, locale)
     version_template = format_version_history_rows(
-        render_template(template_dir / "version.md", {}),
+        i18n.render_version_history_template(locale),
         versions,
         authors or ([{"name": author or "", "position": ""}] if author else []),
     )
-    participants_template = render_template(
-        template_dir / "participantes.md",
-        {"<documents.customer>": customer},
-    )
+    participants_template = i18n.render_participants_template(locale, customer)
     participants_template = format_template_table_rows(
         participants_template,
         "autors",
@@ -500,11 +488,11 @@ def convert_to_asciidoc(
     attribute_lines = [
             ":doctype: book",
             ":toc: macro",
-            ":toc-title: Sumário",
+            f":toc-title: {i18n.translate(locale, 'toc_title')}",
             ":toclevels: 3",
             ":chapter-label:",
-            ":figure-caption: Figura",
-            ":table-caption: Tabela",
+            f":figure-caption: {i18n.translate(locale, 'figure_caption')}",
+            f":table-caption: {i18n.translate(locale, 'table_caption')}",
             ":icons: font",
             ":source-highlighter: rouge",
             ":pdf-page-size: A4",
@@ -559,7 +547,13 @@ def render_pdf(
     versions: list[dict[str, str]] | None = None,
     authors: list[dict[str, str]] | None = None,
     customers: list[dict[str, str]] | None = None,
+    locale: str = "pt-BR",
 ) -> None:
+    try:
+        locale = i18n.validate_locale(locale)
+    except i18n.UnsupportedLocaleError as exc:
+        raise TemplateError(str(exc)) from exc
+
     theme = template_dir / "styles" / "pdf" / "redhat-theme.yml"
     fonts_dir = template_dir / "fonts"
     if not theme.is_file():
@@ -596,6 +590,7 @@ def render_pdf(
             versions or [{"versionNumber": version, "createdAt": ""}],
             authors or [],
             customers or [],
+            locale,
         )
         run_command(
             asciidoctor_command
@@ -658,6 +653,12 @@ def parse_args() -> argparse.Namespace:
         "--document-date",
         help='Mes e ano exibidos na capa, por exemplo: "Janeiro de 2026"',
     )
+    parser.add_argument(
+        "--locale",
+        default="pt-BR",
+        choices=i18n.SUPPORTED_LOCALES,
+        help="Locale BCP 47 usado no conteudo textual do relatorio",
+    )
     return parser.parse_args()
 
 
@@ -679,7 +680,7 @@ def main() -> int:
     if company_logo and company_logo.suffix.lower() not in {".png", ".jpeg", ".jpg", ".webp", ".svg"}:
         print("Erro: a logomarca deve ser PNG, JPEG, WEBP ou SVG", file=sys.stderr)
         return 1
-    if args.document_date and not DOCUMENT_DATE_RE.fullmatch(args.document_date):
+    if args.document_date and args.locale == "pt-BR" and not DOCUMENT_DATE_RE.fullmatch(args.document_date):
         print(
             'Erro: --document-date deve usar o formato "Janeiro de 2026"',
             file=sys.stderr,
@@ -709,6 +710,7 @@ def main() -> int:
             args.author,
             args.project_manager,
             args.document_date,
+            locale=args.locale,
         )
     except (TemplateError, OSError, UnicodeError, subprocess.TimeoutExpired) as exc:
         print(f"Erro: {exc}", file=sys.stderr)
