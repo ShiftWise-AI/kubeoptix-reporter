@@ -247,6 +247,12 @@ helm upgrade --install kubeoptix-reporter helm/kubeoptix-reporter \
    --namespace shiftwise-ai --create-namespace -f values.yaml
 ```
 
+## License
+
+Unless otherwise noted, the original source code and project configuration in this repository are licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full text.
+
+The `template/` directory is excluded from this license because it contains Red Hat report-template content and third-party assets. Those materials, as well as third-party dependencies and components, remain subject to their respective license terms. The Apache License does not grant permission to use Red Hat or other trademarks.
+
 ## Notes
 
 - The project is designed for OpenShift-style environments and expects a configurations API to provide document metadata, version history, participant data, and optionally a logo.
