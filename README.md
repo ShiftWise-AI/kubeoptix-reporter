@@ -1,5 +1,7 @@
 # KubeOptix Reporter
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the branch workflow and contribution process.
+
 KubeOptix Reporter is a FastAPI service that stores Markdown reports and generates Red Hat Consulting-style PDF documents. It is designed to run as a non-root container on OpenShift and can be deployed with the Helm chart in this repository.
 
 ## Overview
