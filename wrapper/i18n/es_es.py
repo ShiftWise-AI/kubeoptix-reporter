@@ -19,49 +19,9 @@ MESSAGES = {
         "diciembre",
     ),
     "document_date_format": "{month} de {year}",
-    "preface": {
-        "heading": "Prefacio",
-        "confidentiality_heading": "Confidencialidad, Derechos de Autor, Aviso Legal",
-        "confidentiality_paragraphs": (
-            "Este documento contiene información de propiedad exclusiva de Red Hat, Inc "
-            "y <customer>, y no debe compartirse con personal ajeno a Red Hat, Inc. Este "
-            "documento, o cualquier parte de él, no puede copiarse, reproducirse, "
-            "fotocopiarse, almacenarse electrónicamente en un sistema de recuperación ni "
-            "transmitirse sin el consentimiento expreso por escrito de su propietario.",
-            "Red Hat Consulting no garantiza que este documento esté libre de errores u "
-            "omisiones. Red Hat Consulting se reserva el derecho de realizar correcciones, "
-            "actualizaciones, revisiones o cambios en la información aquí contenida. Red "
-            "Hat Consulting Services no garantiza que el material aquí descrito esté libre "
-            "de infracción de patentes.",
-            "La información y los programas aquí descritos se proporcionan \"tal cual\", "
-            "sin garantía de ningún tipo, incluyendo, entre otras, las garantías "
-            "implícitas de comerciabilidad e idoneidad para un propósito particular. En "
-            "ningún caso Red Hat Consulting Services, sus directivos, empleados o "
-            "afiliados, ni sus respectivos directivos o empleados, serán responsables "
-            "ante ninguna entidad por daños especiales, colaterales, incidentales o "
-            "indirectos, incluyendo sin limitación cualquier pérdida de beneficios o de "
-            "ahorros, relacionados con o derivados del uso o la incapacidad de usar la "
-            "información o los programas aquí establecidos, incluso si se hubiera "
-            "notificado de la posibilidad de tal daño al comprador o a cualquier tercero.",
-        ),
-        "distribution_heading": "Distribución",
-        "distribution_paragraph": (
-            "A lo largo de este documento pueden aparecer logotipos y marcas comerciales. "
-            "En lugar de enumerar los nombres y entidades propietarias de cada marca o "
-            "insertar los logotipos a los que hace referencia cada nombre de marca, los "
-            "nombres se utilizan únicamente con fines editoriales y en beneficio exclusivo "
-            "del propietario de la marca, sin intención de infringirla."
-        ),
-        "audience_heading": "Audiencia",
-        "audience_paragraphs": (
-            "No distribuya ni copie sin el permiso por escrito de Red Hat Consulting.",
-            "Las copias de este documento están restringidas a los siguientes nombres:",
-        ),
-        "audience_names": ("Red Hat, Inc.", "<customer>"),
-    },
     "participants": {
         "heading": "Participantes del Proyecto",
-        "redhat_heading": "Red Hat",
+        "provider_heading": "ShiftWise AI",
         "col_name": "Nombre",
         "col_role": "Cargo/Función",
         "col_email": "Dirección de correo electrónico",
@@ -73,5 +33,24 @@ MESSAGES = {
         "col_contribution": "Contribución",
         "col_role": "Función",
         "col_description": "Descripción",
+    },
+    "terms": {
+        "heading": "Términos de Uso y Responsabilidad",
+        "paragraphs": (
+            "Este informe es generado automáticamente por ShiftWise AI, un proyecto "
+            "experimental y de código abierto. Su contenido puede contener errores, "
+            "omisiones, incoherencias o información desactualizada y no constituye "
+            "asesoramiento profesional, jurídico, técnico, financiero ni de seguridad.",
+            "ShiftWise AI, sus mantenedores, colaboradores y distribuidores no garantizan "
+            "la exactitud, integridad, idoneidad ni disponibilidad de la información "
+            "generada. En la máxima medida permitida por la legislación aplicable, no serán "
+            "responsables de decisiones, pérdidas, daños o consecuencias derivados del uso, "
+            "la interpretación o la imposibilidad de usar este informe.",
+            "El usuario es el único responsable de revisar, validar y aprobar toda la "
+            "información antes de utilizarla en decisiones, configuraciones o entornos. "
+            "Cualquier uso o implementación se realiza por cuenta y riesgo del usuario y "
+            "debe ser evaluado por profesionales cualificados cuando corresponda.",
+            "Al utilizar este informe, el usuario declara conocer y aceptar estas condiciones.",
+        ),
     },
 }

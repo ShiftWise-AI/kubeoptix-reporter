@@ -1,3 +1,0 @@
-[id="failover_{context}"]
-= Failover
-#TODO#

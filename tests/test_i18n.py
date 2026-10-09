@@ -35,13 +35,6 @@ def test_validate_locale_rejects_unsupported_locale(language):
 
 
 @pytest.mark.parametrize("locale", SUPPORTED_LOCALES)
-def test_render_preface_markdown_replaces_customer_placeholder(locale):
-    content = i18n.render_preface_markdown(locale, "Acme Corp")
-    assert "<customer>" not in content
-    assert "Acme Corp" in content
-
-
-@pytest.mark.parametrize("locale", SUPPORTED_LOCALES)
 def test_render_participants_template_keeps_row_placeholders(locale):
     content = i18n.render_participants_template(locale, "Acme Corp")
     assert "<documents.customer>" not in content
@@ -55,6 +48,13 @@ def test_render_participants_template_keeps_row_placeholders(locale):
 
 
 @pytest.mark.parametrize("locale", SUPPORTED_LOCALES)
+def test_render_terms_contains_experimental_project_and_user_responsibility(locale):
+    content = i18n.render_terms_markdown(locale)
+    assert "ShiftWise AI" in content
+    assert len(content.split("\n\n")) == 5
+
+
+@pytest.mark.parametrize("locale", SUPPORTED_LOCALES)
 def test_render_version_history_template_keeps_row_placeholders(locale):
     content = i18n.render_version_history_template(locale)
     assert "<versions.version_number>" in content
@@ -64,13 +64,12 @@ def test_render_version_history_template_keeps_row_placeholders(locale):
     assert "<version.description>" in content
 
 
-def test_translated_content_differs_per_locale():
+def test_render_terms_are_localized():
     rendered = {
-        locale: i18n.render_preface_markdown(locale, "Acme Corp")
+        locale: i18n.render_terms_markdown(locale)
         for locale in SUPPORTED_LOCALES
     }
-    values = list(rendered.values())
-    assert len(set(values)) == len(values)
+    assert len(set(rendered.values())) == len(SUPPORTED_LOCALES)
 
 
 @pytest.mark.parametrize(

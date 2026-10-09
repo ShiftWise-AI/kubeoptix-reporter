@@ -65,29 +65,13 @@ def format_document_date(locale: str, when: datetime) -> str:
     return catalog["document_date_format"].format(month=month_name, year=when.year)
 
 
-def render_preface_markdown(locale: str, customer: str) -> str:
-    messages = _catalog(locale)["preface"]
-    paragraphs = "\n\n".join(messages["confidentiality_paragraphs"])
-    audience_body = "\n".join((*messages["audience_paragraphs"], *messages["audience_names"]))
-    content = (
-        f"# {messages['heading']}\n\n"
-        f"## {messages['confidentiality_heading']}\n\n"
-        f"{paragraphs}\n\n"
-        f"## {messages['distribution_heading']}\n\n"
-        f"{messages['distribution_paragraph']}\n\n"
-        f"## {messages['audience_heading']}\n"
-        f"{audience_body}\n"
-    )
-    return content.replace("<customer>", customer)
-
-
 def render_participants_template(locale: str, customer: str) -> str:
     messages = _catalog(locale)["participants"]
     header = f"| {messages['col_name']} | {messages['col_role']} | {messages['col_email']} | "
     separator = "| --- | --- | --- | "
     content = (
         f"# {messages['heading']}\n\n"
-        f"## {messages['redhat_heading']}\n"
+        f"## {messages['provider_heading']}\n"
         f"{header}\n{separator}\n"
         f"| <autors.name> | <authors.position> | <autors.email> | \n\n\n"
         f"## <documents.customer>\n"
@@ -112,13 +96,19 @@ def render_version_history_template(locale: str) -> str:
     return f"# {messages['heading']}\n\n{header}\n{separator}\n{row}\n"
 
 
+def render_terms_markdown(locale: str) -> str:
+    messages = _catalog(locale)["terms"]
+    paragraphs = "\n\n".join(messages["paragraphs"])
+    return f"# {messages['heading']}\n\n{paragraphs}\n"
+
+
 __all__ = [
     "SUPPORTED_LOCALES",
     "UnsupportedLocaleError",
     "validate_locale",
     "translate",
     "format_document_date",
-    "render_preface_markdown",
     "render_participants_template",
     "render_version_history_template",
+    "render_terms_markdown",
 ]

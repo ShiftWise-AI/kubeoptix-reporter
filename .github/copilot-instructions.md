@@ -2,8 +2,8 @@
 
 ## Context
 - **Language/Framework:** Python 3.11+ / FastAPI
-- **Base Image:** Red Hat UBI 10 (Universal Base Image)
-- **Platform:** Red Hat OpenShift (Kubernetes)
+- **Base Image:** UBI 10 (Universal Base Image)
+- **Platform:** OpenShift (Kubernetes)
 - **Deployment:** Helm Charts
 - **Token Efficiency:** Extreme. Code-only or diff-only outputs.
 
@@ -14,7 +14,7 @@
 - **Asynchronous Python:** Always use `async def` for FastAPI endpoints and operations.
 
 ## OpenShift & UBI 10 Standards
-- **Container Image:** Strictly use `://redhat.com...` as the base image.
+- **Container Image:** Use the UBI 10 base image configured in `Containerfile`.
 - **Non-Root Execution:** App must run with arbitrary UIDs (OpenShift standard). Never hardcode user `0` or rely on root-level directory permissions.
 - **FastAPI Server:** Run using `uvicorn` or `gunicorn` binding to port `8000` (standard non-privileged port).
 - **Probes:** Map Kubernetes liveness/readiness probes directly to FastAPI endpoints (e.g., `/health`).
