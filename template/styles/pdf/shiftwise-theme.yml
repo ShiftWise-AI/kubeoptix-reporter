@@ -1,0 +1,178 @@
+extends:
+  - default-with-font-fallbacks
+
+# Brand tokens extracted from the ShiftWise AI logo.
+brand-primary: 1F68DA
+brand-secondary: 184EB2
+brand-ink: 0A2E5A
+brand-surface: D6E5F6
+brand-muted: 60758F
+brand-border: B8C8DB
+brand-code-background: F3F7FC
+
+page:
+  background-color: FFFFFF
+  margin: [25mm, 17mm, 26mm, 17mm]
+
+base:
+  font-family: Noto Serif
+  font-color: $brand-ink
+  font-size: 10
+  line-height-length: 15
+  text-align: left
+
+prose:
+  margin-bottom: 8
+
+link:
+  font-color: $brand-secondary
+
+heading:
+  font-family: Noto Serif
+  font-color: $brand-ink
+  font-style: bold
+  line-height: 1.15
+  margin-top: 14
+  margin-bottom: 7
+  min-height-after: auto
+  h1:
+    font-size: 24
+    border-color: $brand-primary
+    border-width: [0, 0, 1.5, 0]
+    padding: [0, 0, 6, 0]
+  h2:
+    font-size: 18
+    font-color: $brand-secondary
+  h3:
+    font-size: 14
+  h4:
+    font-size: 12
+  h5:
+    font-size: 11
+  h6:
+    font-size: 10
+
+title-page:
+  align: left
+  background-color: FFFFFF
+  logo:
+    top: 13%
+    align: center
+    image-width: 112
+  title:
+    top: 47%
+    font-family: Noto Serif
+    font-color: $brand-ink
+    font-size: 30
+    font-style: bold
+    line-height: 1.1
+  subtitle:
+    font-color: $brand-secondary
+    font-size: 15
+  authors:
+    margin-top: 24
+    font-color: $brand-muted
+    font-size: 9
+    line-height: 1.5
+    content: |
+      *{author}* +
+      {project-manager} +
+      {document-date}
+  revision:
+    display: none
+
+header:
+  height: 18mm
+  border-color: $brand-border
+  border-width: 0.5
+  font-color: $brand-muted
+  font-size: 8
+  recto:
+    left:
+      content: image:{brand-logo}[width=28]
+    right:
+      content: '{docstatus}'
+  verso:
+    left:
+      content: image:{brand-logo}[width=28]
+    right:
+      content: '{docstatus}'
+
+footer:
+  height: 17mm
+  border-color: $brand-border
+  border-width: 0.5
+  font-color: $brand-muted
+  font-size: 8
+  recto:
+    left:
+      content: |
+        {customer} +
+        {confidentiality}
+    center:
+      content: '{document-title}'
+    right:
+      content: |
+        {page-number} +
+        v{revnumber}
+  verso:
+    left:
+      content: |
+        {customer} +
+        {confidentiality}
+    center:
+      content: '{document-title}'
+    right:
+      content: |
+        {page-number} +
+        v{revnumber}
+
+caption:
+  align: center
+  font-color: $brand-muted
+  font-size: 8.5
+  font-style: italic
+
+table:
+  border-color: $brand-border
+  border-width: 0.5
+  grid-width: 0.5
+  cell:
+    padding: [5, 6, 5, 6]
+  head:
+    background-color: $brand-ink
+    font-color: FFFFFF
+    font-style: bold
+  body:
+    stripe-background-color: F4F7FB
+
+code:
+  font-family: M+ 1mn
+  font-color: $brand-ink
+  font-size: 8.5
+  background-color: $brand-code-background
+  border-color: $brand-border
+  border-width: 0.5
+  padding: 10
+
+admonition:
+  border-color: $brand-primary
+  border-width: [0, 0, 0, 3]
+  background-color: $brand-code-background
+  padding: [8, 10, 8, 10]
+  label:
+    font-color: $brand-secondary
+
+quote:
+  border-color: $brand-primary
+  border-width: 0
+  border-left-width: 3
+  font-color: $brand-muted
+  padding: [0, 0, 0, 12]
+
+image:
+  align: center
+
+thematic-break:
+  border-color: $brand-border
+  border-width: 0.5

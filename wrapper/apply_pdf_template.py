@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Aplica o template Red Hat Consulting a um Markdown e gera um PDF A4."""
+"""Aplica o template ShiftWise AI a um Markdown e gera um PDF A4."""
 
 import argparse
 import base64
@@ -296,40 +296,6 @@ def apply_image_size_constraints(content: str, base_dir: Path) -> str:
     return content
 
 
-def convert_preface_to_asciidoc(
-    temp_dir: Path,
-    customer: str,
-    locale: str,
-) -> str:
-    preface_content = i18n.render_preface_markdown(locale, customer)
-    prepared_preface = temp_dir / "prefacio.md"
-    prepared_preface.write_text(preface_content, encoding="utf-8")
-    asciidoc_preface = temp_dir / "prefacio.adoc"
-    run_command(
-        resolve_pandoc()
-        + [
-            str(prepared_preface),
-            "--from=gfm-yaml_metadata_block",
-            "--to=asciidoc",
-            "--wrap=none",
-            "--output",
-            str(asciidoc_preface),
-        ],
-        timeout=120,
-    )
-
-    content = asciidoc_preface.read_text(encoding="utf-8")
-    content = re.sub(r"^\[\[[^\n]+\]\]\n", "", content, flags=re.MULTILINE)
-    content = re.sub(
-        r"^== (?P<title>[^\n]+)$",
-        r"[preface]\n== \g<title>",
-        content,
-        count=1,
-        flags=re.MULTILINE,
-    )
-    return content.strip()
-
-
 def format_template_table_rows(
     content: str,
     placeholder: str,
@@ -430,7 +396,10 @@ def convert_to_asciidoc(
     customers: list[dict[str, str]],
     locale: str,
 ) -> None:
-    preface = convert_preface_to_asciidoc(asciidoc_path.parent, customer, locale)
+    terms = convert_template_to_asciidoc(
+        i18n.render_terms_markdown(locale),
+        asciidoc_path.parent / "terms.adoc",
+    )
     version_template = format_version_history_rows(
         i18n.render_version_history_template(locale),
         versions,
@@ -496,9 +465,8 @@ def convert_to_asciidoc(
             ":icons: font",
             ":source-highlighter: rouge",
             ":pdf-page-size: A4",
-            ":pdf-theme: redhat",
+            ":pdf-theme: shiftwise",
             f":pdf-themesdir: {template_dir / 'styles' / 'pdf'}",
-            f":pdf-fontsdir: {template_dir / 'fonts'}",
             f":customer: {quote_attribute(customer)}",
             f":confidentiality: {quote_attribute(confidentiality)}",
             f":document-title: {quote_attribute(source_title)}",
@@ -507,13 +475,15 @@ def convert_to_asciidoc(
             f":revnumber: {quote_attribute(version)}",
             f":docstatus: {quote_attribute(status)}",
     ]
-    if company_logo:
-        logo_width = company_logo_width(company_logo)
-        attribute_lines.append(
-            f":customerlogo: image:{company_logo}"
-            f"[Logomarca da empresa,width={logo_width},align=center]"
+    brand_logo = company_logo or template_dir / "styles" / "pdf" / "shiftwise-logo.png"
+    logo_width = company_logo_width(brand_logo)
+    attribute_lines.extend(
+        (
+            f":brand-logo: {brand_logo}",
+            f":title-logo-image: image:{{brand-logo}}"
+            f"[ShiftWise AI,width={logo_width},align=center]",
         )
-        attribute_lines.append(":title-logo-image: {customerlogo}")
+    )
     if project_manager:
         attribute_lines.append(
             f":project-manager: {quote_attribute(project_manager)}"
@@ -526,7 +496,7 @@ def convert_to_asciidoc(
     report_content = content[title_end:].lstrip()
     content = (
         f"= {cover_title}\n{author_line}{attributes}\n\n"
-        f"{preface}\n\n<<<\n\n{version_history}\n\n<<<\n\n{participants}\n\n<<<\n\ntoc::[]\n\n<<<\n\n{report_content}"
+        f"{terms}\n\n<<<\n\n{version_history}\n\n<<<\n\n{participants}\n\n<<<\n\ntoc::[]\n\n<<<\n\n{report_content}"
     )
     asciidoc_path.write_text(content, encoding="utf-8")
 
@@ -554,12 +524,12 @@ def render_pdf(
     except i18n.UnsupportedLocaleError as exc:
         raise TemplateError(str(exc)) from exc
 
-    theme = template_dir / "styles" / "pdf" / "redhat-theme.yml"
-    fonts_dir = template_dir / "fonts"
+    theme = template_dir / "styles" / "pdf" / "shiftwise-theme.yml"
+    brand_logo = template_dir / "styles" / "pdf" / "shiftwise-logo.png"
     if not theme.is_file():
         raise TemplateError(f"Tema nao encontrado: {theme}")
-    if not fonts_dir.is_dir():
-        raise TemplateError(f"Pasta de fontes nao encontrada: {fonts_dir}")
+    if not brand_logo.is_file():
+        raise TemplateError(f"Logomarca nao encontrada: {brand_logo}")
 
     resolve_pandoc()
     asciidoctor_command = resolve_asciidoctor_pdf()
@@ -624,7 +594,7 @@ def parse_args() -> argparse.Namespace:
         "--template-dir",
         type=Path,
         default=project_root / "template",
-        help="Pasta que contem styles/pdf/redhat-theme.yml e fonts/",
+        help="Pasta que contem styles/pdf/shiftwise-theme.yml e shiftwise-logo.png",
     )
     parser.add_argument("--customer", default="Cliente", help="Nome do cliente")
     parser.add_argument(

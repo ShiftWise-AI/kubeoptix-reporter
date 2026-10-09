@@ -1,3 +1,0 @@
-[id="ha_{context}"]
-= Alta Disponibilidade
-#TODO#
