@@ -72,3 +72,19 @@ rebuilt/scanned locally. No changed workflows were committed, pushed, or execute
 remotely, and no new image was published during the audit. Final acceptance
 requires a deliberately failing PR to remain blocked, a reviewed green promotion
 to main, and a successful main run whose Quay digest matches the scanned image.
+
+## PR Failure Remediation (2026-10-09)
+
+PR #32 reached the image gate and correctly blocked vulnerable Pillow, Starlette,
+WeasyPrint, CairoSVG, and css_parser. Runtime dependencies are now fixed to
+patched versions. The stable Asciidoctor PDF 2.3.27 source is pinned to commit
+39a97554fbd2c27cdd919bde3091dc048b174ce6. Its gem specification has an explicit
+compatibility patch for prawn-svg 0.40.4, allowing css_parser 3.3.0 instead of
+installing the vulnerable 1.x dependency. This is a maintained local packaging
+patch, not an upstream release change; revisit it when upstream adopts the fix.
+
+The corrected UBI image passed strict vulnerability/configuration/secret scans,
+all 39 tests on its Python 3.12 runtime, dependency resolution/import checks,
+and actual PDF generation containing SVG. No mandatory scan was disabled and
+no application assertions were skipped. The updated PR still needs its new
+GitHub run and independent review before promotion.

@@ -46,7 +46,16 @@ COPY requeriments.txt /app/requeriments.txt
 
 RUN python3 -m pip install --no-cache-dir -r /app/requeriments.txt
 
-RUN gem install asciidoctor-pdf rouge --no-document
+RUN gem install css_parser --version 3.3.0 --no-document \
+    && curl --fail --silent --show-error --location \
+        https://github.com/asciidoctor/asciidoctor-pdf/archive/39a97554fbd2c27cdd919bde3091dc048b174ce6.tar.gz \
+        --output /tmp/asciidoctor-pdf.tar.gz \
+    && mkdir /tmp/asciidoctor-pdf \
+    && tar -xzf /tmp/asciidoctor-pdf.tar.gz --strip-components=1 -C /tmp/asciidoctor-pdf \
+    && cd /tmp/asciidoctor-pdf \
+    && ruby -rrubygems/package -e 'spec = Gem::Specification.load("asciidoctor-pdf.gemspec"); spec.dependencies.delete_if { |dependency| dependency.name == "prawn-svg" }; spec.add_runtime_dependency "prawn-svg", "~> 0.40.4"; Gem::Package.build(spec, false, false, "/tmp/asciidoctor-pdf.gem")' \
+    && gem install /tmp/asciidoctor-pdf.gem rouge --no-document \
+    && rm -rf /tmp/asciidoctor-pdf /tmp/asciidoctor-pdf.tar.gz /tmp/asciidoctor-pdf.gem
 
 COPY src/ /app/src/
 COPY template/ /app/template/
