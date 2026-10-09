@@ -2,7 +2,7 @@
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the branch workflow and contribution process.
 
-KubeOptix Reporter is a FastAPI service that stores Markdown reports and generates Red Hat Consulting-style PDF documents. It is designed to run as a non-root container on OpenShift and can be deployed with the Helm chart in this repository.
+KubeOptix Reporter is a FastAPI service that stores Markdown reports and generates ShiftWise AI PDF documents. It is designed to run as a non-root container on OpenShift and can be deployed with the Helm chart in this repository.
 
 ## Overview
 
@@ -10,7 +10,7 @@ The project combines:
 
 - a FastAPI API for saving and retrieving Markdown reports
 - a PDF endpoint that resolves document versions and metadata from a configurations API
-- a PDF rendering pipeline with Red Hat report formatting, images, captions, and optional logo support
+- a PDF rendering pipeline with ShiftWise AI formatting, images, captions, and optional logo support
 - command-line utilities to convert Markdown into PDF, DOCX, Excel tables, and PNG images
 - an OpenShift-oriented Helm chart with a BuildConfig, ImageStream, StatefulSet, Service, probes, and persistent storage
 
@@ -24,7 +24,7 @@ The project combines:
   - `md2images.py`: extract images from Markdown and convert them to PNG
   - `apply_pdf_template.py`: applies the report template and generates the final PDF
   - `i18n/`: locale catalogs and rendering helpers used to localize the generated report (`pt-BR`, `en-US`, `es-ES`, `it-IT`)
-- `template/`: template assets, styles, fonts, and Markdown documents used for report generation
+- `template/`: the ShiftWise PDF theme and logo
 - `helm/kubeoptix-reporter/`: Helm chart for deployment
 - `install.sh`: validates access to OpenShift, installs or upgrades the Helm release, starts the build, and waits for the rollout
 - `requeriments.txt`: pinned Python runtime dependencies
@@ -36,7 +36,7 @@ The project combines:
 - local PDF generation also requires the tools used by the selected wrapper:
    - `pandoc` (the API can use the bundled copy supplied by `pypandoc_binary`)
    - `weasyprint` for `wrapper/md2pdf.py`
-   - Ruby and the `asciidoctor-pdf` and `rouge` gems for the Red Hat template renderer
+   - Ruby and the `asciidoctor-pdf` and `rouge` gems for the ShiftWise AI template renderer
    - `cairosvg`, Pillow, and the other Python packages in `requeriments.txt` for template image processing
 
 The provided `Containerfile` installs Python, Ruby, the required native libraries, Python dependencies, and the `asciidoctor-pdf` and `rouge` gems. The local host still needs any commands required by the wrapper being run.
@@ -131,7 +131,7 @@ This endpoint does not render the Markdown file stored by the upload endpoint. I
 5. `GET /authors/{authorId}` and `GET /costumers-list/{customerListId}` for report participants.
 6. `GET /system-settings/logo` for an optional PNG, JPEG, WebP, or SVG logo.
 
-The Markdown content returned by `/versions` is rendered with the template under `PDF_TEMPLATE_DIR`. All fixed report text (preface, participants and version-history sections, table of contents/figure/table captions, and the cover date) is generated from the locale resolved above via [`wrapper/i18n`](wrapper/i18n). A missing document version returns `404`; an unsupported/missing locale returns `400`; an unreachable `/system-settings` or rendering failures return `503`.
+The Markdown content returned by `/versions` is rendered with the template under `PDF_TEMPLATE_DIR`. All fixed report text (terms of use, participants and version-history sections, table of contents/figure/table captions, and the cover date) is generated from the locale resolved above via [`wrapper/i18n`](wrapper/i18n). A missing document version returns `404`; an unsupported/missing locale returns `400`; an unreachable `/system-settings` or rendering failures return `503`.
 
 ```bash
 curl -f -o report.pdf \
@@ -178,7 +178,7 @@ python wrapper/md2pdf.py input.md output.pdf
 python wrapper/md2pdf.py ./docs ./pdf-output
 ```
 
-This standalone wrapper uses Pandoc with WeasyPrint and is separate from the API's Red Hat template flow.
+This standalone wrapper uses Pandoc with WeasyPrint and is separate from the API's ShiftWise AI template flow.
 
 ### Convert Markdown to DOCX
 
@@ -200,7 +200,7 @@ python wrapper/md2excel.py --md-file report.md --files-dir ./files --inventory-e
 
 ## PDF generation details
 
-The PDF renderer reads Markdown input, removes front matter if present, materializes embedded images, applies the Red Hat report template, and generates an A4 PDF using `pandoc` and `asciidoctor-pdf`. All fixed report text is localized through [`wrapper/i18n`](wrapper/i18n) based on the locale resolved from `/system-settings` (see [Report localization (i18n)](#report-localization-i18n)).
+The PDF renderer reads Markdown input, removes front matter if present, materializes embedded images, applies the ShiftWise AI report template, and generates an A4 PDF using `pandoc` and `asciidoctor-pdf`. All fixed report text is localized through [`wrapper/i18n`](wrapper/i18n) based on the locale resolved from `/system-settings` (see [Report localization (i18n)](#report-localization-i18n)). The experimental open source terms of use replace the old preface and appear immediately after the cover. Colors, typography, spacing, cover, headers, footers, tables, links, and code blocks are centralized in [`template/styles/pdf/shiftwise-theme.yml`](template/styles/pdf/shiftwise-theme.yml).
 
 ## Running tests
 
@@ -253,7 +253,7 @@ helm upgrade --install kubeoptix-reporter helm/kubeoptix-reporter \
 
 Unless otherwise noted, the original source code and project configuration in this repository are licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full text.
 
-The `template/` directory is excluded from this license because it contains Red Hat report-template content and third-party assets. Those materials, as well as third-party dependencies and components, remain subject to their respective license terms. The Apache License does not grant permission to use Red Hat or other trademarks.
+Technical product names and links in report content remain the property of their respective trademark owners. Third-party dependencies and components remain subject to their respective license terms.
 
 ## Notes
 
