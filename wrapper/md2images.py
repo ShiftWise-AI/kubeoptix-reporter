@@ -11,6 +11,7 @@ import os
 import sys
 import re
 import subprocess
+import shutil
 import hashlib
 from pathlib import Path
 from typing import List
@@ -81,12 +82,7 @@ class MDToImagesConverter:
     
     def _command_exists(self, cmd: str) -> bool:
         """Verifica se um comando existe"""
-        result = subprocess.run(
-            f'which {cmd}',
-            shell=True,
-            capture_output=True
-        )
-        return result.returncode == 0
+        return shutil.which(cmd) is not None
     
     def _extract_image_references(self, md_file: Path) -> List[str]:
         """Extrai referências de imagem ![alt](path) do markdown"""
