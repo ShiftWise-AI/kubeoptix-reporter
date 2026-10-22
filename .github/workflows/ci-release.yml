@@ -101,7 +101,7 @@ jobs:
           fi
 
   release:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: always() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && needs.ci-required.result == 'success'
     needs: [ci-required]
     runs-on: ubuntu-24.04
     timeout-minutes: 90
