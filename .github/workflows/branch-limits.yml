@@ -2,37 +2,31 @@ name: Validate Branch Flow
 
 on:
   workflow_call:
-  merge_group:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   check-flow:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      - name: Validate PR Source and Target
-        env:
-          BASE_REF: ${{ github.base_ref }}
-          HEAD_REF: ${{ github.head_ref }}
-          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
-        run: |
-          echo "Merge attempt: from '$HEAD_REF' to '$BASE_REF'"
-
-          if [[ -z "$BASE_REF" ]]; then
-            exit 0
-          fi
-
-          if [[ "$BASE_REF" == "develop" && "$HEAD_REF" =~ ^feature/.+ ]]; then
-            exit 0
-          fi
-
-          if [[ "$BASE_REF" == "main" && "$HEAD_REF" == "develop" && "$HEAD_REPOSITORY" == "$GITHUB_REPOSITORY" ]]; then
-            exit 0
-          fi
-
-          echo "::error::Only 'feature/*' -> 'develop' and same-repository 'develop' -> 'main' pull requests are allowed."
-          exit 1
+      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea9
+        with:
+          script: |
+            const {data: pr} = await github.rest.pulls.get({
+              ...context.repo, pull_number: context.issue.number
+            });
+            const repository = `${context.repo.owner}/${context.repo.repo}`;
+            const local = pr.base.repo.full_name === repository &&
+              pr.head.repo?.id === pr.base.repo.id;
+            const base = pr.base.ref;
+            const head = pr.head.ref;
+            const allowed = local && (
+              (base === 'develop' && /^(feature|fix)\/\S+$/.test(head)) ||
+              (base === 'main' && (head === 'develop' || /^fix\/\S+$/.test(head))));
+            if (!allowed) core.setFailed('Invalid PR repository/source/target. Only local feature/* or fix/* -> develop; develop or fix/* -> main.');
