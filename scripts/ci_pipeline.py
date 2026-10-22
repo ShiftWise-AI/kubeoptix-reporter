@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import time
 
 
 REPOSITORY = "ShiftWise-AI/kubeoptix-reporter"
@@ -20,9 +21,24 @@ def api(path, method="GET", payload=None):
     command = ["gh", "api", path, "--method", method]
     if payload is not None:
         command += ["--input", "-"]
-    return json.loads(subprocess.check_output(
-        command, input=None if payload is None else json.dumps(payload), text=True
-    ))
+    attempts = 3 if method.upper() == "GET" else 1
+    for attempt in range(attempts):
+        response = subprocess.run(
+            command,
+            input=None if payload is None else json.dumps(payload),
+            text=True,
+            capture_output=True,
+        )
+        if response.returncode == 0:
+            try:
+                return json.loads(response.stdout)
+            except json.JSONDecodeError as error:
+                detail = f"invalid JSON response: {error}"
+        else:
+            detail = response.stderr.strip() or f"gh exited with status {response.returncode}"
+        if attempt + 1 < attempts:
+            time.sleep(attempt + 1)
+    raise RuntimeError(f"GitHub API {method} {path} failed after {attempts} attempt(s): {detail}")
 
 
 def allowed_pr(pr, repository=REPOSITORY):

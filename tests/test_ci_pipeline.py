@@ -1,6 +1,18 @@
 import pytest
 
+from scripts import ci_pipeline
 from scripts.ci_pipeline import allowed_pr, next_version, operator_image, version_tuple
+
+
+def test_api_retries_transient_get_response(monkeypatch):
+    responses = iter([
+        ci_pipeline.subprocess.CompletedProcess([], 1, "", "unexpected end of JSON input"),
+        ci_pipeline.subprocess.CompletedProcess([], 0, '[{"number": 42}]', ""),
+    ])
+    monkeypatch.setattr(ci_pipeline.subprocess, "run", lambda *args, **kwargs: next(responses))
+    monkeypatch.setattr(ci_pipeline.time, "sleep", lambda _: None)
+
+    assert ci_pipeline.api("repos/example/project/pulls") == [{"number": 42}]
 
 
 def test_next_version_increments_highest_semver_tag():
