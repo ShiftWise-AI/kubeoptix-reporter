@@ -92,8 +92,8 @@ def reserve(source):
         raise ValueError("Multiple releases reserved for the same source")
     if matches:
         tag = matches[0]
-        if run("git", "rev-parse", f"{tag}^1") != source:
-            raise ValueError("Reserved release has an unexpected source parent")
+        if run("git", "rev-parse", f"{tag}^{{commit}}") != source:
+            raise ValueError("Reserved release has an unexpected source commit")
     else:
         version = next_version(releases)
         tag = f"v{version}"
